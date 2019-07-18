@@ -25,6 +25,15 @@ class Header extends Component {
                                 <NavLink className="dropdown-item" to="/add">Ajouter un nouveau lex</NavLink>
                             </div>
                         </li>
+                        <li className="nav-item dropdown">
+                            <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Admin
+                            </a>
+                            <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <NavLink className="nav-link" to="/admin">Admin</NavLink>
+                                <NavLink className="nav-link" to="/admin/users">Gestion des rôles</NavLink>
+                            </div>
+                        </li>
                     </ul>                                  
                 </div>
             </header>

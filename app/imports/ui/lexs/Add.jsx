@@ -1,9 +1,9 @@
-{/* 
 import React from 'react';
+import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import { Formik, Field, ErrorMessage } from 'formik';
-import { Lex } from '../../../api/lex';
-import { CustomSingleCheckbox, CustomCheckbox, CustomError, CustomInput, CustomSelect, CustomTextarea } from '../CustomFields';
+import { Lexs } from '../../api/collections';
+import { CustomError, CustomInput, CustomTextarea } from '../CustomFields';
 
 class Add extends React.Component {
 
@@ -30,12 +30,11 @@ class Add extends React.Component {
   }
 
   getLex = async () => {
-    let lex = await Lex.findOne({_id: this.props.match.params._id});
+    let lex = await Lexs.findOne({_id: this.props.match.params._id});
     return lex;
   }
 
   componentDidMount() {
-    
     if (this.state.action === 'edit') {
       let lex = this.getLex().then((lex) => {
         this.setState({lex: lex});
@@ -45,6 +44,7 @@ class Add extends React.Component {
     
   submit = (values, actions) => {
     if (this.state.action === 'add') {
+        //console.log(values);
       Meteor.call(
         'insertLex',
         values, 
@@ -113,28 +113,15 @@ class Add extends React.Component {
       if (this.state.action === 'edit') {
       
         title = 'Modifier le lex ci-dessous'
-        initialValues = this.state.site;
+        initialValues = this.state.lex;
       
       } else { 
       
         title = 'Ajouter un nouveau lex';
         initialValues = { 
-          url: '',
-          slug: '',
-          tagline: '', 
+          lex: '',
           title: '', 
-          openshiftEnv: 'www', 
-          type: 'public', 
-          theme:'2018',
-          category:'GeneralPublic',
-          faculty: '',
-          languages: [], 
-          unitId: '', 
-          snowNumber: '',
-          status:'requested',
-          comment: '',
-          plannedClosingDate: '',
-          tags: []
+          url: '',
         }
       }
 
@@ -142,13 +129,15 @@ class Add extends React.Component {
           
         <div className="card my-2">
             <h5 className="card-header">{title}</h5> 
+            
             { this.state.addSuccess && msgAddSuccess }
             { this.state.editSuccess && msgEditSuccess }
+
             <Formik
-            onSubmit={ this.submit }
-            initialValues={ initialValues }
-            validateOnBlur={ false }
-            validateOnChange={ false }
+                onSubmit={ this.submit }
+                initialValues={ initialValues }
+                validateOnBlur={ false }
+                validateOnChange={ false }
             >
             { ({
                 handleSubmit,
@@ -172,9 +161,30 @@ class Add extends React.Component {
                     <Field
                         onChange={e => { handleChange(e); this.updateUserMsg();}}
                         onBlur={e => { handleBlur(e); this.updateUserMsg();}}
-                        placeholder="Titre du lex à ajouter" label="Titre" name="title" type="text" component={ CustomInput } 
+                        placeholder="Titre du LEX à ajouter" label="Titre" name="title" type="text" component={ CustomInput } 
                     />
                     <ErrorMessage name="title" component={ CustomError } />
+
+                    <Field
+                        onChange={e => { handleChange(e); this.updateUserMsg();}}
+                        onBlur={e => { handleBlur(e); this.updateUserMsg();}}
+                        placeholder="URL du LEX à ajouter" label="URL" name="url" type="text" component={ CustomInput } 
+                    />
+                    <ErrorMessage name="url" component={ CustomError } />
+
+                    <Field
+                        onChange={e => { handleChange(e); this.updateUserMsg();}}
+                        onBlur={e => { handleBlur(e); this.updateUserMsg();}}
+                        placeholder="Description du LEX à ajouter" label="Description" name="description" type="text" component={ CustomTextarea } 
+                    />
+                    <ErrorMessage name="description" component={ CustomError } />
+
+                    <Field
+                        onChange={e => { handleChange(e); this.updateUserMsg();}}
+                        onBlur={e => { handleBlur(e); this.updateUserMsg();}}
+                        placeholder="Date de publication du LEX à ajouter" label="Date de publication" name="publicationDate" type="date" component={ CustomInput } 
+                    />
+                    <ErrorMessage name="publicationDate" component={ CustomError } />
 
                     <div className="my-1 text-right">
                         <button 
@@ -183,9 +193,7 @@ class Add extends React.Component {
                             className="btn btn-primary"
                         >Enregistrer</button>
                     </div>
-   
-                    </form>
-                
+                </form>
             )}
             </Formik>
             { this.state.addSuccess && msgAddSuccess }
@@ -198,10 +206,11 @@ class Add extends React.Component {
 }
 
 export default withTracker(() => {
-   
+    
+    Meteor.subscribe('lex.list');
 
     return {
-        lexList: Lex.find({}, {sort: {lex: 1}}).fetch(),
+        lexs: Lexs.find({}, {sort: {lex: 1}}).fetch(),
     };  
+
 })(Add);
-*/}

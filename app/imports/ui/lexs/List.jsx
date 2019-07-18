@@ -1,7 +1,7 @@
-import { withTracker } from 'meteor/react-meteor-data';
 import React from 'react';
+import { withTracker } from 'meteor/react-meteor-data';
 import { Link } from 'react-router-dom';
-import Lexs from '../../api/lexs';
+import { Lexs } from '../../api/collections';
 
 class Cells extends React.Component {
     render() {
@@ -28,7 +28,7 @@ class Cells extends React.Component {
 class List extends React.Component {
 
     deleteLex = (lexId) => {
-        const lexs = [...this.props.lex.filter(lex => lex._id !== lexId)];
+        const lexs = [...this.props.lexs.filter(lex => lex._id !== lexId)];
         Meteor.call(
             'removeLex',
             lexId, 
@@ -43,27 +43,26 @@ class List extends React.Component {
     render() {
         let content = (
             <div className="">
-            
-            <h4 className="py-4 float-left">Polylex</h4>
-            <table className="table table-striped">
-                <thead>
-                    <tr>
-                        <th scope="col">LEX</th>
-                        <th scope="col">Title</th>
-                        <th scope="col">URL</th>
-                        <th className="w-50">Actions</th>
-                    </tr>
-                </thead>
-                <Cells lexs={this.props.lexs} deleteSite={ this.deleteLex }/>
-            </table>
-        </div>
+                <h4 className="py-4 float-left">Polylex</h4>
+                <table className="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">LEX</th>
+                            <th scope="col">Title</th>
+                            <th scope="col">URL</th>
+                            <th className="w-50">Actions</th>
+                        </tr>
+                    </thead>
+                    <Cells lexs={this.props.lexs} deleteLex={ this.deleteLex }/>
+                </table>
+            </div>
         )
         return content;
     }
 }
 
 export default withTracker(() => {
-    // Meteor.subscribe('lex.list');
+    Meteor.subscribe('lex.list');
     
     return {
         lexs: Lexs.find({}).fetch()
