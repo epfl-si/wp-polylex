@@ -43,8 +43,9 @@ class Add extends React.Component {
   }
     
   submit = (values, actions) => {
+      //console.log(values);
     if (this.state.action === 'add') {
-        //console.log(values);
+        
       Meteor.call(
         'insertLex',
         values, 
@@ -88,6 +89,7 @@ class Add extends React.Component {
   }
 
   render() {
+
     let content;
     const isLoading = (this.state.lex === undefined || this.state.lex === '')  && this.state.action === 'edit';
     
@@ -122,6 +124,8 @@ class Add extends React.Component {
           lex: '',
           title: '', 
           url: '',
+          description: '',
+          publicationDate: '',
         }
       }
 

@@ -56,9 +56,10 @@ Meteor.methods({
         }
         */
 
-        console.log(`LEX ${lex}`);
+        //console.log(`LEX ${lex}`);
 
         lexSchema.validate(lex);
+        
         lex = prepareUpdateInsert(lex, 'insert');
 
         let lexDocument = {
