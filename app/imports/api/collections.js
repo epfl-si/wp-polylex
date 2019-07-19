@@ -1,6 +1,7 @@
 import { Mongo } from 'meteor/mongo';
 import SimpleSchema from 'simpl-schema';
-import { isRequired } from './common';
+import { check } from 'meteor/check';
+import messageBox, { isRequired } from './ValidationMessage';
 
 export const lexSchema = new SimpleSchema({
     // _id use to update a lex
@@ -12,8 +13,7 @@ export const lexSchema = new SimpleSchema({
         type: String,
         label: "LEX",
         optional: false,
-        max: 100,
-        min: 1,
+        
         custom: isRequired
     },
     title: {
@@ -61,6 +61,8 @@ export const lexSchema = new SimpleSchema({
     },
     
 }, { check });
+
+lexSchema.messageBox = messageBox;
 
 export const categoriesSchema = new SimpleSchema({
     // _id use to update 

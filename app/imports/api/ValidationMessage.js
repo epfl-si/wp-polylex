@@ -1,18 +1,6 @@
 import MessageBox from 'message-box';
 
-export function isRequired() {
-    if (this.value === '') {
-        return "required";
-    }
-}
-
-export function isRequiredUnderCondition() {    
-    if (this.obj.type != 'field-of-research' && this.value === '') {
-        return "required";
-    }
-}
-
-export const messageBox = new MessageBox({
+const messageBox = new MessageBox({
     messages: {
         fr: {
           required: 'Le champ "{{label}}" est obligatoire',
@@ -44,3 +32,10 @@ export const messageBox = new MessageBox({
 
 messageBox.setLanguage('fr');
 
+export function isRequired() {
+    if (this.value === '') {
+        return "required";
+    }
+}
+
+export default messageBox;

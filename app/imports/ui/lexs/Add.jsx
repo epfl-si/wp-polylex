@@ -44,13 +44,11 @@ class Add extends React.Component {
     
   submit = (values, actions) => {
     if (this.state.action === 'add') {
-        //console.log(values);
       Meteor.call(
         'insertLex',
         values, 
         (errors, lexId) => {
           if (errors) {
-            console.log(errors);
             let formErrors = {};
             errors.details.forEach(function(error) {
               formErrors[error.name] = error.message;                        
@@ -71,7 +69,6 @@ class Add extends React.Component {
         values, 
         (errors, lexId) => {
           if (errors) {
-            console.log(errors);
             let formErrors = {};
             errors.details.forEach(function(error) {
               formErrors[error.name] = error.message;                        
@@ -88,6 +85,7 @@ class Add extends React.Component {
   }
 
   render() {
+
     let content;
     const isLoading = (this.state.lex === undefined || this.state.lex === '')  && this.state.action === 'edit';
     
@@ -122,6 +120,8 @@ class Add extends React.Component {
           lex: '',
           title: '', 
           url: '',
+          description: '',
+          publicationDate: '',
         }
       }
 
@@ -156,7 +156,7 @@ class Add extends React.Component {
                         onBlur={e => { handleBlur(e); this.updateUserMsg();}}
                         placeholder="LEX à ajouter" label="LEX" name="lex" type="text" component={ CustomInput } 
                     />
-                    <ErrorMessage name="url" component={ CustomError } />
+                    <ErrorMessage name="lex" component={ CustomError } />
                     
                     <Field
                         onChange={e => { handleChange(e); this.updateUserMsg();}}
