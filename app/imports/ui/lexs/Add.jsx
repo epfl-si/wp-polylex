@@ -43,15 +43,12 @@ class Add extends React.Component {
   }
     
   submit = (values, actions) => {
-      //console.log(values);
     if (this.state.action === 'add') {
-        
       Meteor.call(
         'insertLex',
         values, 
         (errors, lexId) => {
           if (errors) {
-            console.log(errors);
             let formErrors = {};
             errors.details.forEach(function(error) {
               formErrors[error.name] = error.message;                        
@@ -72,7 +69,6 @@ class Add extends React.Component {
         values, 
         (errors, lexId) => {
           if (errors) {
-            console.log(errors);
             let formErrors = {};
             errors.details.forEach(function(error) {
               formErrors[error.name] = error.message;                        

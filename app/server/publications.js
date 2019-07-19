@@ -15,8 +15,6 @@ Meteor.publish('lex.list', function() {
 
 Meteor.publish('lex.single', function(lexId) {
 
-    console.log(lexId);
-
     check(lexId, String);
     
     let lexCursor = Lexs.find({ _id: lexId });
