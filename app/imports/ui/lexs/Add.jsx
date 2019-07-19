@@ -156,7 +156,7 @@ class Add extends React.Component {
                         onBlur={e => { handleBlur(e); this.updateUserMsg();}}
                         placeholder="LEX à ajouter" label="LEX" name="lex" type="text" component={ CustomInput } 
                     />
-                    <ErrorMessage name="url" component={ CustomError } />
+                    <ErrorMessage name="lex" component={ CustomError } />
                     
                     <Field
                         onChange={e => { handleChange(e); this.updateUserMsg();}}
