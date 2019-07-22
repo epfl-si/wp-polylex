@@ -19,6 +19,8 @@ class Add extends React.Component {
 
     this.state = {
         lex: '',
+        defaultCategoryId: '',
+        defaultSubcategoryId: '',
         action: action,
         addSuccess: false,
         editSuccess: false,
@@ -34,11 +36,21 @@ class Add extends React.Component {
     return lex;
   }
 
+
   componentDidMount() {
     if (this.state.action === 'edit') {
       let lex = this.getLex().then((lex) => {
         this.setState({lex: lex});
       });
+    }
+    if (this.state.action === 'add') {
+
+        // TODO: Déterminer dynamiquement l'id de la catégorie 'Autres'
+        // et l'id de la sous catégorie 'Achats'
+        this.setState({ 
+            defaultCategoryId: '8yfqLTx9XydCvmbsQ', 
+            defaultSubcategoryId: 'Xdye2zh7RLfGwdG9Q',
+        });
     }
   }
     
@@ -87,9 +99,14 @@ class Add extends React.Component {
   render() {
 
     let content;
-    const isLoading = (this.state.lex === undefined || this.state.lex === '')  && this.state.action === 'edit';
+    const isLoadingEdit = (this.state.lex === undefined || this.state.lex === '')  && this.state.action === 'edit';
+    const isLoadingAdd = (
+            this.state.defaultCategoryId === undefined || this.state.defaultCategoryId === ''
+        )  && (
+            this.state.defaultSubcategoryId === undefined || this.state.defaultSubcategoryId === ''
+        ) && this.state.action === 'add';
     
-    if (isLoading) {
+    if (isLoadingAdd || isLoadingEdit) {
       content = <h1>Loading....</h1>
     } else {
 
@@ -114,7 +131,7 @@ class Add extends React.Component {
         initialValues = this.state.lex;
       
       } else { 
-      
+
         title = 'Ajouter un nouveau lex';
         initialValues = { 
           lex: '',
@@ -122,8 +139,8 @@ class Add extends React.Component {
           url: '',
           description: '',
           publicationDate: '',
-          category: 'Autres',
-          subcategory: 'Achats',
+          category: this.state.defaultCategoryId,
+          subcategory: this.state.defaultSubcategoryId,
         }
       }
 
@@ -197,7 +214,7 @@ class Add extends React.Component {
                         ))}
                     </Field>
                     <ErrorMessage name="category" component={ CustomError } />
-
+                    
                     <Field 
                         onChange={e => { handleChange(e); this.updateUserMsg();}}
                         onBlur={e => { handleBlur(e); this.updateUserMsg();}}
@@ -207,7 +224,7 @@ class Add extends React.Component {
                         ))}
                     </Field>
                     <ErrorMessage name="subcategory" component={ CustomError } />
-                    
+
                     <div className="my-1 text-right">
                         <button 
                             type="submit" 
@@ -233,10 +250,13 @@ export default withTracker(() => {
     Meteor.subscribe('category.list');
     Meteor.subscribe('subcategory.list');
 
+    let categories = Categories.find({}, {sort: {name:1 }}).fetch();
+    let subcategories = Subcategories.find({}, {sort: {name:1 }}).fetch();
+
     return {
         lexs: Lexs.find({}, {sort: {lex: 1}}).fetch(),
-        categories: Categories.find({}, {sort: {name:1 }}).fetch(),
-        subcategories: Subcategories.find({}, {sort: {name:1 }}).fetch(),
+        categories: categories,
+        subcategories: subcategories,
     };  
 
 })(Add);
