@@ -2,8 +2,8 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import { Formik, Field, ErrorMessage } from 'formik';
-import { Lexs } from '../../api/collections';
-import { CustomError, CustomInput, CustomTextarea } from '../CustomFields';
+import { Lexs, Categories, Subcategories } from '../../api/collections';
+import { CustomError, CustomInput, CustomTextarea, CustomSelect } from '../CustomFields';
 
 class Add extends React.Component {
 
@@ -122,6 +122,8 @@ class Add extends React.Component {
           url: '',
           description: '',
           publicationDate: '',
+          category: 'Autres',
+          subcategory: 'Achats',
         }
       }
 
@@ -186,6 +188,26 @@ class Add extends React.Component {
                     />
                     <ErrorMessage name="publicationDate" component={ CustomError } />
 
+                    <Field 
+                        onChange={e => { handleChange(e); this.updateUserMsg();}}
+                        onBlur={e => { handleBlur(e); this.updateUserMsg();}}
+                        label="Catégorie" name="category" component={ CustomSelect } >
+                        {this.props.categories.map( (category, index) => (
+                        <option key={category._id} value={category._id}>{category.name}</option>
+                        ))}
+                    </Field>
+                    <ErrorMessage name="category" component={ CustomError } />
+
+                    <Field 
+                        onChange={e => { handleChange(e); this.updateUserMsg();}}
+                        onBlur={e => { handleBlur(e); this.updateUserMsg();}}
+                        label="Sous-catégorie" name="subcategory" component={ CustomSelect } >
+                        {this.props.subcategories.map( (subcategory, index) => (
+                        <option key={subcategory._id} value={subcategory._id}>{subcategory.name}</option>
+                        ))}
+                    </Field>
+                    <ErrorMessage name="subcategory" component={ CustomError } />
+                    
                     <div className="my-1 text-right">
                         <button 
                             type="submit" 
@@ -208,9 +230,13 @@ class Add extends React.Component {
 export default withTracker(() => {
     
     Meteor.subscribe('lex.list');
+    Meteor.subscribe('category.list');
+    Meteor.subscribe('subcategory.list');
 
     return {
         lexs: Lexs.find({}, {sort: {lex: 1}}).fetch(),
+        categories: Categories.find({}, {sort: {name:1 }}).fetch(),
+        subcategories: Subcategories.find({}, {sort: {name:1 }}).fetch(),
     };  
 
 })(Add);

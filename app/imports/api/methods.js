@@ -66,6 +66,8 @@ Meteor.methods({
             url: lex.url,
             description: lex.description,
             publicationDate: lex.publicationDate,
+            category: lex.category,
+            subcategory: lex.subcategory,
         }
         return Lexs.insert(lexDocument);
     },
@@ -99,6 +101,8 @@ Meteor.methods({
             url: lex.url,
             description: lex.description,
             publicationDate: lex.publicationDate,
+            category: lex.category,
+            subcategory: lex.subcategory,
         }
         
         Lexs.update(
