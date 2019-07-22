@@ -1,6 +1,15 @@
 import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check'; 
-import { Lexs, lexSchema, Categories, categoriesSchema, Subcategories, subcategoriesSchema } from './collections';
+import { 
+    Lexs, 
+    lexSchema, 
+    Categories, 
+    categoriesSchema, 
+    Subcategories, 
+    subcategoriesSchema, 
+    Authors, 
+    authorsSchema,
+} from './collections';
 import { throwMeteorError } from './error';
 
 function prepareUpdateInsert(lex, action) {
@@ -257,5 +266,66 @@ Meteor.methods({
         check(subcategoryId, String);
 
         Subcategories.remove({_id: subcategoryId});
+    },
+
+    insertAuthor(author) {
+
+        /*
+        if (!this.userId) {
+            throw new Meteor.Error('not connected');
+        }
+
+        const canInsert = Roles.userIsInRole(
+            this.userId,
+            ['admin'], 
+            Roles.GLOBAL_GROUP
+        );
+
+        if (! canInsert) {
+            throw new Meteor.Error('unauthorized',
+              'Only admins can insert category.');
+        }
+        */
+
+        // Check if name is unique
+        // TODO: Move this code to SimpleSchema custom validation function
+        if (Authors.find({lastname: author.lastname, firstname: author.firstname}).count()>0) {
+            throwMeteorError('name', 'Un auteur avec les mêmes nom et prénom existe déjà !');
+        }
+
+        authorsSchema.validate(author);
+
+        let authorDocument = {
+            firstname: author.firstname,
+            lastname: author.lastname,
+            url: author.url,
+        };
+
+        return Authors.insert(authorDocument);
+
+    },
+
+    removeAuthor(authorId){
+
+        /*
+        if (!this.userId) {
+            throw new Meteor.Error('not connected');
+        }
+
+        const canRemove = Roles.userIsInRole(
+            this.userId,
+            ['admin'], 
+            Roles.GLOBAL_GROUP
+        );
+
+        if (! canRemove) {
+            throw new Meteor.Error('unauthorized',
+              'Only admins can remove Category.');
+        }
+        */
+
+        check(authorId, String);
+
+        Authors.remove({_id: authorId});
     },
 });

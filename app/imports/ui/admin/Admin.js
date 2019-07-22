@@ -2,7 +2,7 @@ import { withTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import { Formik, Field, ErrorMessage } from 'formik';
-import { Categories, Subcategories } from '../../api/collections';
+import { Categories, Subcategories, Authors } from '../../api/collections';
 import { CustomError, CustomInput } from '../CustomFields';
 
 class Admin extends React.Component {
@@ -16,6 +16,9 @@ class Admin extends React.Component {
         }
         if (collection._name === 'subcategories') {
             meteorMethodName = 'insertSubcategory';
+        }
+        if (collection._name === 'authors') {
+            meteorMethodName = 'insertAuthor';
         }
 
         Meteor.call(
@@ -45,6 +48,10 @@ class Admin extends React.Component {
         this.submit(Subcategories, values, actions);
     }
 
+    submitAuthor = (values, actions) => {
+        this.submit(Authors, values, actions);
+    }
+
     delete = (collection, elementID) => {
 
         let meteorMethodName;
@@ -54,6 +61,9 @@ class Admin extends React.Component {
         }
         if (collection._name === 'subcategories') {
             meteorMethodName = 'removeSubcategory';
+        }
+        if (collection._name === 'authors') {
+            meteorMethodName = 'removeAuthor';
         }
 
         Meteor.call(
@@ -75,10 +85,57 @@ class Admin extends React.Component {
         this.delete(Subcategories, subcategoryID);
     }
 
+    deleteAuthor = (authorID) => {
+        this.delete(Authors, authorID);
+    }
+
     render() {
         return (
         <div>
             <div className="card my-2">
+
+                <h5 className="card-header">Liste des aueurs des LEXs</h5>
+
+                <ul className="list-group">
+                    {this.props.authors.map( (author, index) => (
+                        <li key={author._id} value={author.lastname} className="list-group-item">
+                            {author.lastname} {author.firstname} {author.url}
+                            <button type="button" className="close" aria-label="Close">
+                                <span  onClick={() => this.deleteAuthor(author._id)} aria-hidden="true">&times;</span>
+                            </button>
+                        </li>
+                    ))}
+                </ul>
+
+                <div className="card-body">
+                    <Formik
+                            onSubmit={ this.submitAuthor }
+                            initialValues={ { name: ''} }
+                            validationSchema={ this.nameSchema }
+                            validateOnBlur={ false }
+                            validateOnChange={ false }
+                        >
+                        {({
+                            handleSubmit,
+                            isSubmitting,
+                        }) => (    
+                            <form onSubmit={ handleSubmit } className="">
+                                <Field placeholder="Nom de l'auteur à ajouter" name="lastname" type="text" component={ CustomInput } />
+                                <ErrorMessage name="lastname" component={ CustomError } />
+                                
+                                <Field placeholder="Prénom de l'auteur à ajouter" name="firstname" type="text" component={ CustomInput } />
+                                <ErrorMessage name="firstname" component={ CustomError } />
+
+                                <Field placeholder="URL de l'auteur à ajouter" name="url" type="text" component={ CustomInput } />
+                                <ErrorMessage name="url" component={ CustomError } />
+
+                                <div className="my-1 text-right">
+                                    <button type="submit" disabled={ isSubmitting } className="btn btn-primary">Enregistrer</button>
+                                </div>
+                            </form>
+                        )}
+                    </Formik>
+                </div>
 
                 <h5 className="card-header">Liste des catégories des LEXs</h5>
     
@@ -163,10 +220,12 @@ export default withTracker(() => {
     
     Meteor.subscribe('category.list');
     Meteor.subscribe('subcategory.list');
+    Meteor.subscribe('author.list');
 
     return {
         categories: Categories.find({}, {sort: {name:1 }}).fetch(),
         subcategories: Subcategories.find({}, {sort: {name:1 }}).fetch(),
+        authors: Authors.find({}, {sort: {lastname: 1}}).fetch(),
     };
     
 })(Admin);
