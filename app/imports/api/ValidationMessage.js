@@ -1,4 +1,5 @@
 import MessageBox from 'message-box';
+import SimpleSchema from 'simpl-schema';
 
 const messageBox = new MessageBox({
     messages: {

@@ -139,8 +139,8 @@ class Add extends React.Component {
           url: '',
           description: '',
           publicationDate: '',
-          category: this.state.defaultCategoryId,
-          subcategory: this.state.defaultSubcategoryId,
+          categoryId: this.state.defaultCategoryId,
+          subcategoryId: this.state.defaultSubcategoryId,
         }
       }
 
@@ -208,7 +208,7 @@ class Add extends React.Component {
                     <Field 
                         onChange={e => { handleChange(e); this.updateUserMsg();}}
                         onBlur={e => { handleBlur(e); this.updateUserMsg();}}
-                        label="Catégorie" name="category" component={ CustomSelect } >
+                        label="Catégorie" name="categoryId" component={ CustomSelect } >
                         {this.props.categories.map( (category, index) => (
                         <option key={category._id} value={category._id}>{category.name}</option>
                         ))}
@@ -218,7 +218,7 @@ class Add extends React.Component {
                     <Field 
                         onChange={e => { handleChange(e); this.updateUserMsg();}}
                         onBlur={e => { handleBlur(e); this.updateUserMsg();}}
-                        label="Sous-catégorie" name="subcategory" component={ CustomSelect } >
+                        label="Sous-catégorie" name="subcategoryId" component={ CustomSelect } >
                         {this.props.subcategories.map( (subcategory, index) => (
                         <option key={subcategory._id} value={subcategory._id}>{subcategory.name}</option>
                         ))}

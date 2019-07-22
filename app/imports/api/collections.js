@@ -33,14 +33,14 @@ export const lexSchema = new SimpleSchema({
         custom: isRequired,
         regEx: SimpleSchema.RegEx.Url,
     },    
-    category: {
+    categoryId: {
         type: String,
         label: "Catégorie",
         optional: false,
         max: 100,
         min: 1,
     },
-    subcategory: {
+    subcategoryId: {
         type: String,
         label: "Sous-catégorie",
         optional: false,

@@ -37,6 +37,8 @@ function prepareUpdateInsert(lex, action) {
 Meteor.methods({
 
     insertLex(lex){
+
+        console.log(lex);
         
         /*
         if (!this.userId) {
@@ -66,9 +68,10 @@ Meteor.methods({
             url: lex.url,
             description: lex.description,
             publicationDate: lex.publicationDate,
-            category: lex.category,
-            subcategory: lex.subcategory,
+            categoryId: lex.categoryId,
+            subcategoryId: lex.subcategoryId,
         }
+
         return Lexs.insert(lexDocument);
     },
 
@@ -91,6 +94,8 @@ Meteor.methods({
         }
         */
 
+        console.log(lex);
+
         lexSchema.validate(lex);
 
         lex = prepareUpdateInsert(lex, 'update');
@@ -101,8 +106,8 @@ Meteor.methods({
             url: lex.url,
             description: lex.description,
             publicationDate: lex.publicationDate,
-            category: lex.category,
-            subcategory: lex.subcategory,
+            categoryId: lex.categoryId,
+            subcategoryId: lex.subcategoryId,
         }
         
         Lexs.update(
