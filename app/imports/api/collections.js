@@ -32,30 +32,28 @@ export const lexSchema = new SimpleSchema({
         min: 1, 
         custom: isRequired,
         regEx: SimpleSchema.RegEx.Url,
-    },  
-    /*  
-    category: {
+    },    
+    categoryId: {
         type: String,
         label: "Catégorie",
         optional: false,
         max: 100,
         min: 1,
     },
-    subCategory: {
+    subcategoryId: {
         type: String,
         label: "Sous-catégorie",
         optional: false,
         max: 100,
         min: 1,
     },
-    */
     description: {
         type: String,
         label: "Description",
         optional: true,
     },
     publicationDate: {
-        type: Date,
+        type: String,
         label: "Date de publication",
         optional: true,
     },

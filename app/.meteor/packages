@@ -26,3 +26,4 @@ accounts-password             # To use Meteor.user()
 alexwine:bootstrap-4          # bootstrap 4
 peppelg:bootstrap-3-modal     # bootstrap 3 modal but works with bootstrap 4
 check                         # Check schema mongoDB
+harrison:papa-parse           # parse csv

@@ -52,6 +52,9 @@ class Admin extends React.Component {
         if (collection._name === 'categories') {
             meteorMethodName = 'removeCategory';
         }
+        if (collection._name === 'subcategories') {
+            meteorMethodName = 'removeSubcategory';
+        }
 
         Meteor.call(
             meteorMethodName,
