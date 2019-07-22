@@ -19,8 +19,6 @@ class Add extends React.Component {
 
     this.state = {
         lex: '',
-        defaultCategoryId: '',
-        defaultSubcategoryId: '',
         action: action,
         addSuccess: false,
         editSuccess: false,
@@ -36,25 +34,16 @@ class Add extends React.Component {
     return lex;
   }
 
-
   componentDidMount() {
     if (this.state.action === 'edit') {
-      let lex = this.getLex().then((lex) => {
-        this.setState({lex: lex});
-      });
-    }
-    if (this.state.action === 'add') {
-
-        // TODO: Déterminer dynamiquement l'id de la catégorie 'Autres'
-        // et l'id de la sous catégorie 'Achats'
-        this.setState({ 
-            defaultCategoryId: '8yfqLTx9XydCvmbsQ', 
-            defaultSubcategoryId: 'Xdye2zh7RLfGwdG9Q',
+        this.getLex().then((lex) => {
+            this.setState({lex: lex});
         });
     }
   }
     
   submit = (values, actions) => {
+
     if (this.state.action === 'add') {
       Meteor.call(
         'insertLex',
@@ -99,13 +88,12 @@ class Add extends React.Component {
   render() {
 
     let content;
-    const isLoadingEdit = (this.state.lex === undefined || this.state.lex === '')  && this.state.action === 'edit';
+    const isLoadingEdit = (this.state.lex === undefined || this.state.lex === '') 
+        && this.state.action === 'edit';
     const isLoadingAdd = (
-            this.state.defaultCategoryId === undefined || this.state.defaultCategoryId === ''
-        )  && (
-            this.state.defaultSubcategoryId === undefined || this.state.defaultSubcategoryId === ''
-        ) && this.state.action === 'add';
-    
+            this.props.defaultCategoryId === undefined || 
+            this.props.defaultSubcategoryId === undefined
+            ) && this.state.action === 'add';
     if (isLoadingAdd || isLoadingEdit) {
       content = <h1>Loading....</h1>
     } else {
@@ -139,8 +127,8 @@ class Add extends React.Component {
           url: '',
           description: '',
           publicationDate: '',
-          categoryId: this.state.defaultCategoryId,
-          subcategoryId: this.state.defaultSubcategoryId,
+          categoryId: this.props.defaultCategoryId,
+          subcategoryId: this.props.defaultSubcategoryId,
         }
       }
 
@@ -253,10 +241,21 @@ export default withTracker(() => {
     let categories = Categories.find({}, {sort: {name:1 }}).fetch();
     let subcategories = Subcategories.find({}, {sort: {name:1 }}).fetch();
 
+    let defaultCategoryId = Categories.findOne({name:"Autres"});
+    if (defaultCategoryId != undefined) {
+        defaultCategoryId = defaultCategoryId["_id"];
+    }
+    let defaultSubcategoryId = Subcategories.findOne({name:"Achats"});
+    if (defaultSubcategoryId != undefined) {
+        defaultSubcategoryId = defaultSubcategoryId["_id"];
+    }
+
     return {
         lexs: Lexs.find({}, {sort: {lex: 1}}).fetch(),
         categories: categories,
         subcategories: subcategories,
+        defaultCategoryId: defaultCategoryId,
+        defaultSubcategoryId: defaultSubcategoryId,
     };  
 
 })(Add);
