@@ -57,7 +57,10 @@ export const lexSchema = new SimpleSchema({
         label: "Date de publication",
         optional: true,
     },
-    
+    authors: {  
+        type: Array,
+        label: "Auteurs",
+    },
 }, { check });
 
 lexSchema.messageBox = messageBox;

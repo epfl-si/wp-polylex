@@ -8,7 +8,10 @@ import { CustomError, CustomInput } from '../CustomFields';
 class Admin extends React.Component {
 
     submit = (collection, values, actions) => {
-        
+        /*
+        console.log(collection);
+        console.log(values);
+        */
         let meteorMethodName;
 
         if (collection._name === 'categories') {
@@ -89,6 +92,10 @@ class Admin extends React.Component {
         this.delete(Authors, authorID);
     }
 
+    capitalizeFirstLetter = (s) => {
+        return s.charAt(0).toUpperCase() + s.slice(1)
+      }
+
     render() {
         return (
         <div>
@@ -99,7 +106,7 @@ class Admin extends React.Component {
                 <ul className="list-group">
                     {this.props.authors.map( (author, index) => (
                         <li key={author._id} value={author.lastName} className="list-group-item">
-                            {author.lastName} {author.firstName} {author.url}
+                            <a href={author.url} target="_blank">{this.capitalizeFirstLetter(author.lastName)} {this.capitalizeFirstLetter(author.firstName)}</a>
                             <button type="button" className="close" aria-label="Close">
                                 <span  onClick={() => this.deleteAuthor(author._id)} aria-hidden="true">&times;</span>
                             </button>

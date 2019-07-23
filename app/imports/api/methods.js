@@ -10,7 +10,7 @@ import {
     Authors, 
     authorsSchema,
 } from './collections';
-import { throwMeteorError } from './error';
+import { throwMeteorError, throwMeteorErrors } from './error';
 
 function prepareUpdateInsert(lex, action) {
 
@@ -79,6 +79,7 @@ Meteor.methods({
             publicationDate: lex.publicationDate,
             categoryId: lex.categoryId,
             subcategoryId: lex.subcategoryId,
+            authors: lex.authors,
         }
 
         return Lexs.insert(lexDocument);
@@ -286,18 +287,20 @@ Meteor.methods({
               'Only admins can insert category.');
         }
         */
-
+        
         // Check if name is unique
         // TODO: Move this code to SimpleSchema custom validation function
-        if (Authors.find({lastname: author.lastname, firstname: author.firstname}).count()>0) {
-            throwMeteorError('name', 'Un auteur avec les mêmes nom et prénom existe déjà !');
+        if (Authors.find({lastName: author.lastName.toLowerCase(), firstName: author.firstName.toLowerCase()}).count() > 0) {
+            throwMeteorErrors(['lastName', 'firstName'], 'Un auteur avec les mêmes nom et prénom existe déjà !');
         }
-
+        
         authorsSchema.validate(author);
 
+        console.log(author);
+
         let authorDocument = {
-            firstname: author.firstname,
-            lastname: author.lastname,
+            firstName: author.firstName.toLowerCase(),
+            lastName: author.lastName.toLowerCase(),
             url: author.url,
         };
 
