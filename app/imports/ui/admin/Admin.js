@@ -232,7 +232,7 @@ export default withTracker(() => {
     return {
         categories: Categories.find({}, {sort: {name:1 }}).fetch(),
         subcategories: Subcategories.find({}, {sort: {name:1 }}).fetch(),
-        authors: Authors.find({}, {sort: {lastname: 1}}).fetch(),
+        authors: Authors.find({}, {sort: {lastName: 1}}).fetch(),
     };
     
 })(Admin);

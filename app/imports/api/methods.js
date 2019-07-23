@@ -66,11 +66,11 @@ Meteor.methods({
               'Only admins can insert sites.');
         }
         */
-
+        //console.log(lex);
         lexSchema.validate(lex);
-        
+        console.log(lex);
         lex = prepareUpdateInsert(lex, 'insert');
-
+        console.log(lex);
         let lexDocument = {
             lex: lex.lex,
             title: lex.title,
@@ -118,6 +118,7 @@ Meteor.methods({
             publicationDate: lex.publicationDate,
             categoryId: lex.categoryId,
             subcategoryId: lex.subcategoryId,
+            authors: lex.authors,
         }
         
         Lexs.update(

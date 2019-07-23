@@ -20,6 +20,7 @@ export function throwMeteorErrors(fieldNameList, message) {
 }
 
 export default SimpleSchema.defineValidationErrorTransform(error => {
+    console.log(error);
     const ddpError = new Meteor.Error(error.message);
     ddpError.error = 'validation-error';
     ddpError.details = error.details;

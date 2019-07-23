@@ -61,6 +61,26 @@ export const lexSchema = new SimpleSchema({
         type: Array,
         label: "Auteurs",
     },
+    'authors.$': {
+        type: Object,
+        optional: true
+    },
+    'authors.$._id': {
+        type: String,
+        optional: true
+    },
+    'authors.$.lastName': {
+        type: String,
+        optional: true
+    },
+    'authors.$.firstName': {
+        type: String,
+        optional: true
+    },
+    'authors.$.url': {
+        type: String,
+        optional: true
+    },
 }, { check });
 
 lexSchema.messageBox = messageBox;

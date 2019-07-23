@@ -1,8 +1,9 @@
 import React from 'react';
+import Select from 'react-select';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import { Formik, Field, ErrorMessage } from 'formik';
-import { Lexs, Categories, Subcategories } from '../../api/collections';
+import { Lexs, Categories, Subcategories, Authors } from '../../api/collections';
 import { CustomError, CustomInput, CustomTextarea, CustomSelect } from '../CustomFields';
 
 class Add extends React.Component {
@@ -18,12 +19,17 @@ class Add extends React.Component {
     }
 
     this.state = {
+        saveSuccess: false,
         lex: '',
         action: action,
         addSuccess: false,
         editSuccess: false,
     }
   }
+
+  updateSaveSuccess = (newValue) => {
+    this.setState({ saveSuccess: newValue });
+}
 
   updateUserMsg = () => {
     this.setState({addSuccess: false, editSuccess: false});
@@ -43,6 +49,8 @@ class Add extends React.Component {
   }
     
   submit = (values, actions) => {
+    
+    console.log(values);
 
     if (this.state.action === 'add') {
       Meteor.call(
@@ -50,6 +58,7 @@ class Add extends React.Component {
         values, 
         (errors, lexId) => {
           if (errors) {
+            console.log(errors);
             let formErrors = {};
             errors.details.forEach(function(error) {
               formErrors[error.name] = error.message;                        
@@ -86,6 +95,8 @@ class Add extends React.Component {
   }
 
   render() {
+    
+    
 
     let content;
     const isLoadingEdit = (this.state.lex === undefined || this.state.lex === '') 
@@ -93,7 +104,7 @@ class Add extends React.Component {
     const isLoadingAdd = (
             this.props.defaultCategoryId === undefined || 
             this.props.defaultSubcategoryId === undefined
-            ) && this.state.action === 'add';
+            ) && (this.props.authors === undefined) && this.state.action === 'add';
     if (isLoadingAdd || isLoadingEdit) {
       content = <h1>Loading....</h1>
     } else {
@@ -119,7 +130,6 @@ class Add extends React.Component {
         initialValues = this.state.lex;
       
       } else { 
-
         title = 'Ajouter un nouveau lex';
         initialValues = { 
           lex: '',
@@ -129,6 +139,7 @@ class Add extends React.Component {
           publicationDate: '',
           categoryId: this.props.defaultCategoryId,
           subcategoryId: this.props.defaultSubcategoryId,
+          authors: [],
         }
       }
 
@@ -146,14 +157,19 @@ class Add extends React.Component {
                 validateOnBlur={ false }
                 validateOnChange={ false }
             >
-            { ({
+            {({
                 handleSubmit,
-                handleChange,
-                handleBlur,
                 isSubmitting,
                 values,
+                touched,
+                dirty,
+                errors,
+                handleChange,
+                handleBlur,
+                handleReset,
+                setFieldValue,
+                setFieldTouched,
             }) => (
-              
                 <form onSubmit={ handleSubmit } className="bg-white border p-4">
                     <div className="my-1 text-right">
                         <button type="submit" disabled={ isSubmitting } className="btn btn-primary">Enregistrer</button>
@@ -213,6 +229,18 @@ class Add extends React.Component {
                     </Field>
                     <ErrorMessage name="subcategory" component={ CustomError } />
 
+                    <MySelect
+                        value={values.authors}
+                        onChange={setFieldValue}
+                        onBlur={setFieldTouched}
+                        error={errors.authors}
+                        touched={touched.authors}
+                        options={this.props.authors}
+                        saveSuccess={this.updateSaveSuccess}
+                        placeholder="Sélectionner un auteur"
+                        name="authors"
+                    />
+
                     <div className="my-1 text-right">
                         <button 
                             type="submit" 
@@ -237,6 +265,7 @@ export default withTracker(() => {
     Meteor.subscribe('lex.list');
     Meteor.subscribe('category.list');
     Meteor.subscribe('subcategory.list');
+    Meteor.subscribe('author.list');
 
     let categories = Categories.find({}, {sort: {name:1 }}).fetch();
     let subcategories = Subcategories.find({}, {sort: {name:1 }}).fetch();
@@ -256,6 +285,51 @@ export default withTracker(() => {
         subcategories: subcategories,
         defaultCategoryId: defaultCategoryId,
         defaultSubcategoryId: defaultSubcategoryId,
+        authors: Authors.find({}, {sort: {lastName: 1}}).fetch(),
     };  
 
 })(Add);
+
+
+
+class MySelect extends React.Component {
+    handleChange = value => {
+        // this is going to call setFieldValue and manually update values.topcis
+        this.props.onChange(this.props.name, value);
+        this.props.saveSuccess(!this.props.saveSuccess);
+    };
+
+    handleBlur = () => {
+        // this is going to call setFieldTouched and manually update touched.topcis
+        this.props.onBlur(this.props.name, true);
+        this.props.saveSuccess(!this.props.saveSuccess);
+    };
+
+    render() {
+    let content;
+
+    content = 
+    (
+      <div style={{ margin: '1rem 0' }}>
+       
+        <Select
+          isMulti
+          onChange={this.handleChange}
+          onBlur={this.handleBlur}
+          value={this.props.value}
+          options={this.props.options}
+          getOptionLabel ={(option)=>option.lastName}
+          getOptionValue ={(option)=>option._id}
+          placeholder={this.props.placeholder}
+
+        />
+        {!!this.props.error &&
+          this.props.touched && (
+            <div style={{ color: 'red', marginTop: '.5rem' }}>{this.props.error}</div>
+          )}
+      </div>
+    );
+
+    return content;
+  }
+}
