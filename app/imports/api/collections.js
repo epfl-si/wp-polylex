@@ -127,6 +127,8 @@ export const authorsSchema = new SimpleSchema({
     },   
 });
 
+authorsSchema.messageBox = messageBox;
+
 export const Lexs = new Mongo.Collection('lexs');
 export const Categories = new Mongo.Collection('categories');
 export const Subcategories = new Mongo.Collection('subcategories');

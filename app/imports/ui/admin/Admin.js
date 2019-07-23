@@ -94,12 +94,12 @@ class Admin extends React.Component {
         <div>
             <div className="card my-2">
 
-                <h5 className="card-header">Liste des aueurs des LEXs</h5>
+                <h5 className="card-header">Liste des auteurs des LEXs</h5>
 
                 <ul className="list-group">
                     {this.props.authors.map( (author, index) => (
-                        <li key={author._id} value={author.lastname} className="list-group-item">
-                            {author.lastname} {author.firstname} {author.url}
+                        <li key={author._id} value={author.lastName} className="list-group-item">
+                            {author.lastName} {author.firstName} {author.url}
                             <button type="button" className="close" aria-label="Close">
                                 <span  onClick={() => this.deleteAuthor(author._id)} aria-hidden="true">&times;</span>
                             </button>
@@ -110,7 +110,7 @@ class Admin extends React.Component {
                 <div className="card-body">
                     <Formik
                             onSubmit={ this.submitAuthor }
-                            initialValues={ { name: ''} }
+                            initialValues={ { firstName: '', lastName: '', url: ''} }
                             validationSchema={ this.nameSchema }
                             validateOnBlur={ false }
                             validateOnChange={ false }
@@ -120,13 +120,13 @@ class Admin extends React.Component {
                             isSubmitting,
                         }) => (    
                             <form onSubmit={ handleSubmit } className="">
-                                <Field placeholder="Nom de l'auteur à ajouter" name="lastname" type="text" component={ CustomInput } />
-                                <ErrorMessage name="lastname" component={ CustomError } />
+                                <Field label="Nom" placeholder="Nom de l'auteur à ajouter" name="lastName" type="text" component={ CustomInput } />
+                                <ErrorMessage name="lastName" component={ CustomError } />
                                 
-                                <Field placeholder="Prénom de l'auteur à ajouter" name="firstname" type="text" component={ CustomInput } />
-                                <ErrorMessage name="firstname" component={ CustomError } />
+                                <Field label="Prénom" placeholder="Prénom de l'auteur à ajouter" name="firstName" type="text" component={ CustomInput } />
+                                <ErrorMessage name="firstName" component={ CustomError } />
 
-                                <Field placeholder="URL de l'auteur à ajouter" name="url" type="text" component={ CustomInput } />
+                                <Field label="URL" placeholder="URL de l'auteur à ajouter" name="url" type="text" component={ CustomInput } />
                                 <ErrorMessage name="url" component={ CustomError } />
 
                                 <div className="my-1 text-right">
