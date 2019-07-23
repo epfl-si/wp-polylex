@@ -47,7 +47,7 @@ Meteor.methods({
 
     insertLex(lex){
 
-        console.log(lex);
+        //console.log(lex);
         
         /*
         if (!this.userId) {
@@ -103,7 +103,7 @@ Meteor.methods({
         }
         */
 
-        console.log(lex);
+        //console.log(lex);
 
         lexSchema.validate(lex);
 
