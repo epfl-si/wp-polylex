@@ -6,7 +6,7 @@ import './publications';
 
 Meteor.startup(() => {
     let needImportData = true;
-    let activeTequila = true;
+    let activeTequila = false;
 
     if (needImportData) {
         importData();

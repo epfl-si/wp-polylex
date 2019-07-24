@@ -117,7 +117,7 @@ class Admin extends React.Component {
                 <div className="card-body">
                     <Formik
                             onSubmit={ this.submitAuthor }
-                            initialValues={ { firstName: '', lastName: '', url: ''} }
+                            initialValues={ { firstName: '', lastName: '', urlFr: '', urlEn: ''} }
                             validationSchema={ this.nameSchema }
                             validateOnBlur={ false }
                             validateOnChange={ false }
@@ -133,8 +133,11 @@ class Admin extends React.Component {
                                 <Field label="Prénom" placeholder="Prénom de l'auteur à ajouter" name="firstName" type="text" component={ CustomInput } />
                                 <ErrorMessage name="firstName" component={ CustomError } />
 
-                                <Field label="URL" placeholder="URL de l'auteur à ajouter" name="url" type="text" component={ CustomInput } />
-                                <ErrorMessage name="url" component={ CustomError } />
+                                <Field label="URL en français" placeholder="URL de l'auteur en français à ajouter" name="urlFr" type="text" component={ CustomInput } />
+                                <ErrorMessage name="urlFr" component={ CustomError } />
+
+                                <Field label="URL en anglais" placeholder="URL de l'auteur en anglais à ajouter" name="urlEn" type="text" component={ CustomInput } />
+                                <ErrorMessage name="urlEn" component={ CustomError } />
 
                                 <div className="my-1 text-right">
                                     <button type="submit" disabled={ isSubmitting } className="btn btn-primary">Enregistrer</button>
