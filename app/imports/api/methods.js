@@ -58,6 +58,8 @@ Meteor.methods({
         
         lexSchema.validate(lex);
         lex = prepareUpdateInsert(lex, 'insert');
+        console.log(lex.authors);
+        
         let lexDocument = {
             lex: lex.lex,
             titleFr: lex.titleFr,

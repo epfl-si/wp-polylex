@@ -1,4 +1,4 @@
-import { Categories, Subcategories } from '../imports/api/collections';
+import { Categories, Subcategories, Lexs } from '../imports/api/collections';
 
 importData = () => {
 
@@ -15,6 +15,73 @@ importData = () => {
   } else {
     console.log("Subcategories already exist");
   }
+
+  if (Lexs.find({}).count() == 0) {
+      console.log("Import lexs");
+      importLexs();
+  } else {
+      console.log("Lexs already exist");
+  }
+
+}
+
+importLexs = () => {
+
+    const path = 'lexs.csv';
+    const file = Assets.getText(path);
+    Papa.parse(file, {
+        delimiter: ",",
+        header: true,
+        complete: function(results) {
+        let data = JSON.parse(JSON.stringify(results.data));
+        data.forEach(lex => {
+            let categoryId;
+            let category = Categories.find({name: lex.categoryName}).fetch();
+            if (category.length == 1) {
+                categoryId = category[0]["_id"];
+            }
+
+            let subcategoryId;
+            let subcategory = Subcategories.find({name: lex.subcategoryName}).fetch();
+            if (subcategory.length == 1) {
+                subcategoryId = subcategory[0]["_id"];
+            }
+
+            console.log(categoryId);
+            console.log(subcategoryId);
+
+            // Todo: Récupérer les datas via le lex.
+            authors = [{ 
+                _id: '2sY3Go2xnxu9nopXn',
+                firstName: 'grégory',
+                lastName: 'charmier',
+                urlFr: 'https://people.epfl.ch/gregory.charmier/?lang=fr',
+                urlEn: 'https://people.epfl.ch/gregory.charmier/?lang=en' 
+            }]
+
+            let lexDocument = {
+                lex: lex.lex,
+                titleFr: lex.titleFr,
+                titleEn: lex.titleEn,
+                urlFr: lex.urlFr,
+                urlEn: lex.urlEn,
+                descriptionFr: lex.descriptionFr,
+                descriptionEn: lex.descriptionEn,
+                publicationDateFr: lex.publicationDateFr,
+                publicationDateEn: lex.publicationDateEn,
+                categoryId: categoryId,
+                subcategoryId: subcategoryId,
+                authors: authors,
+            }
+            
+            // Check if category already exist
+            if (!Lexs.findOne({lex: lexDocument.lex})) {
+                Lexs.insert(lexDocument);
+            }
+        });
+        console.log("Importation LEXs finished");
+        }    
+    });
 
 }
 
