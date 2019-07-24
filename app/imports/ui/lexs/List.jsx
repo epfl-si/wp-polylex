@@ -10,8 +10,8 @@ class Cells extends React.Component {
                 {this.props.lexs.map( (lex, index) => (
                     <tr key={lex._id}>
                         <td>{lex.lex}</td>
-                        <td>{lex.title}</td>
-                        <td><a href={lex.url} target="_blank">{lex.url}</a></td>
+                        <td>{lex.titleFr}</td>
+                        <td><a href={lex.urlFr} target="_blank">{lex.urlFr}</a></td>
                         <td>
                             <Link className="mr-2" to={`/edit/${lex._id}`}>
                                 <button type="button" className="btn btn-outline-primary">Éditer</button>

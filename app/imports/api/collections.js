@@ -16,17 +16,34 @@ export const lexSchema = new SimpleSchema({
         
         custom: isRequired
     },
-    title: {
+    titleFr: {
         type: String,
-        label: "Titre",
+        label: "Titre en français",
         optional: false,
         max: 100,
         min: 1,
         custom: isRequired
     },
-    url: {
+    titleEn: {
         type: String,
-        label: "URL",
+        label: "Titre en anglais",
+        optional: false,
+        max: 100,
+        min: 1,
+        custom: isRequired
+    },
+    urlFr: {
+        type: String,
+        label: "URL en français",
+        optional: false,
+        max: 255,
+        min: 1, 
+        custom: isRequired,
+        regEx: SimpleSchema.RegEx.Url,
+    },
+    urlEn: {
+        type: String,
+        label: "URL en anglais",
         optional: false,
         max: 255,
         min: 1, 
@@ -47,14 +64,24 @@ export const lexSchema = new SimpleSchema({
         max: 100,
         min: 1,
     },
-    description: {
+    descriptionFr: {
         type: String,
-        label: "Description",
+        label: "Description en francais",
         optional: true,
     },
-    publicationDate: {
+    descriptionEn: {
         type: String,
-        label: "Date de publication",
+        label: "Description en anglais",
+        optional: true,
+    },
+    publicationDateFr: {
+        type: String,
+        label: "Date de publication en français",
+        optional: true,
+    },
+    publicationDateEn: {
+        type: String,
+        label: "Date de publication en anglais",
         optional: true,
     },
     authors: {  
@@ -78,7 +105,11 @@ export const lexSchema = new SimpleSchema({
         type: String,
         optional: false
     },
-    'authors.$.url': {
+    'authors.$.urlFr': {
+        type: String,
+        optional: false
+    },
+    'authors.$.urlEn': {
         type: String,
         optional: false
     },
@@ -140,7 +171,16 @@ export const authorsSchema = new SimpleSchema({
         min: 1,
         custom: isRequired
     },
-    url: {
+    urlFr: {
+        type: String,
+        label: "URL",
+        optional: false,
+        max: 255,
+        min: 1, 
+        custom: isRequired,
+        regEx: SimpleSchema.RegEx.Url,
+    },   
+    urlEn: {
         type: String,
         label: "URL",
         optional: false,

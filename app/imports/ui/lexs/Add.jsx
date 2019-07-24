@@ -131,10 +131,14 @@ class Add extends React.Component {
         title = 'Ajouter un nouveau lex';
         initialValues = { 
           lex: '',
-          title: '', 
-          url: '',
-          description: '',
-          publicationDate: '',
+          titleFr: '',
+          titleEn: '',
+          urlFr: '',
+          urlEn: '',
+          descriptionFr: '',
+          descriptionEn: '',
+          publicationDateFr: '',
+          publicationDateEn: '',
           categoryId: this.props.defaultCategoryId,
           subcategoryId: this.props.defaultSubcategoryId,
           authors: [],
@@ -182,30 +186,58 @@ class Add extends React.Component {
                     <Field
                         onChange={e => { handleChange(e); this.updateUserMsg();}}
                         onBlur={e => { handleBlur(e); this.updateUserMsg();}}
-                        placeholder="Titre du LEX à ajouter" label="Titre" name="title" type="text" component={ CustomInput } 
+                        placeholder="Titre en français du LEX à ajouter" label="Titre en français" name="titleFr" type="text" component={ CustomInput } 
                     />
-                    <ErrorMessage name="title" component={ CustomError } />
+                    <ErrorMessage name="titleFr" component={ CustomError } />
 
                     <Field
                         onChange={e => { handleChange(e); this.updateUserMsg();}}
                         onBlur={e => { handleBlur(e); this.updateUserMsg();}}
-                        placeholder="URL du LEX à ajouter" label="URL" name="url" type="text" component={ CustomInput } 
+                        placeholder="Titre en anglais du LEX à ajouter" label="Titre en anglais" name="titleEn" type="text" component={ CustomInput } 
                     />
-                    <ErrorMessage name="url" component={ CustomError } />
+                    <ErrorMessage name="titleEn" component={ CustomError } />
 
                     <Field
                         onChange={e => { handleChange(e); this.updateUserMsg();}}
                         onBlur={e => { handleBlur(e); this.updateUserMsg();}}
-                        placeholder="Description du LEX à ajouter" label="Description" name="description" type="text" component={ CustomTextarea } 
+                        placeholder="URL en français du LEX à ajouter" label="URL en français" name="urlFr" type="text" component={ CustomInput } 
                     />
-                    <ErrorMessage name="description" component={ CustomError } />
+                    <ErrorMessage name="urlFr" component={ CustomError } />
 
                     <Field
                         onChange={e => { handleChange(e); this.updateUserMsg();}}
                         onBlur={e => { handleBlur(e); this.updateUserMsg();}}
-                        placeholder="Date de publication du LEX à ajouter" label="Date de publication" name="publicationDate" type="text" component={ CustomInput } 
+                        placeholder="URL en anglais du LEX à ajouter" label="URL en anglais" name="urlEn" type="text" component={ CustomInput } 
                     />
-                    <ErrorMessage name="publicationDate" component={ CustomError } />
+                    <ErrorMessage name="urlEn" component={ CustomError } />
+
+                    <Field
+                        onChange={e => { handleChange(e); this.updateUserMsg();}}
+                        onBlur={e => { handleBlur(e); this.updateUserMsg();}}
+                        placeholder="Description en français du LEX à ajouter" label="Description en Français" name="descriptionFr" type="text" component={ CustomTextarea } 
+                    />
+                    <ErrorMessage name="descriptionFr" component={ CustomError } />
+
+                    <Field
+                        onChange={e => { handleChange(e); this.updateUserMsg();}}
+                        onBlur={e => { handleBlur(e); this.updateUserMsg();}}
+                        placeholder="Description en anglais du LEX à ajouter" label="Description en anglais" name="descriptionEn" type="text" component={ CustomTextarea } 
+                    />
+                    <ErrorMessage name="descriptionEn" component={ CustomError } />
+
+                    <Field
+                        onChange={e => { handleChange(e); this.updateUserMsg();}}
+                        onBlur={e => { handleBlur(e); this.updateUserMsg();}}
+                        placeholder="Date de publication en français du LEX à ajouter" label="Date de publication en français" name="publicationDateFr" type="text" component={ CustomInput } 
+                    />
+                    <ErrorMessage name="publicationDateFr" component={ CustomError } />
+
+                    <Field
+                        onChange={e => { handleChange(e); this.updateUserMsg();}}
+                        onBlur={e => { handleBlur(e); this.updateUserMsg();}}
+                        placeholder="Date de publication en anglais du LEX à ajouter" label="Date de publication en anglais" name="publicationDateEn" type="text" component={ CustomInput } 
+                    />
+                    <ErrorMessage name="publicationDateEn" component={ CustomError } />
 
                     <Field 
                         onChange={e => { handleChange(e); this.updateUserMsg();}}

@@ -15,9 +15,13 @@ import { throwMeteorError, throwMeteorErrors } from './error';
 function prepareUpdateInsert(lex, action) {
 
     // Delete "/" at the end of URL 
-    let url = lex.url;
-    if (url.endsWith('/')) {
-        lex.url = url.slice(0, -1);
+    let urlFr = lex.urlFr;
+    if (urlFr.endsWith('/')) {
+        lex.urlFr = urlFr.slice(0, -1);
+    }
+    let urlEn = lex.urlEn;
+    if (urlEn.endsWith('/')) {
+        lex.urlEn = urlEn.slice(0, -1);
     }
 
     // Check if LEX is unique
@@ -56,9 +60,12 @@ Meteor.methods({
         lex = prepareUpdateInsert(lex, 'insert');
         let lexDocument = {
             lex: lex.lex,
-            title: lex.title,
-            url: lex.url,
-            description: lex.description,
+            titleFr: lex.titleFr,
+            titleEn: lex.titleEn,
+            urlFr: lex.urlFr,
+            urlEn: lex.urlEn,
+            descriptionFr: lex.descriptionFr,
+            descriptionEn: lex.descriptionEn,
             publicationDate: lex.publicationDate,
             categoryId: lex.categoryId,
             subcategoryId: lex.subcategoryId,
@@ -93,9 +100,12 @@ Meteor.methods({
 
         let lexDocument = {
             lex: lex.lex,
-            title: lex.title,
-            url: lex.url,
-            description: lex.description,
+            titleFr: lex.titleFr,
+            titleEn: lex.titleEn,
+            urlFr: lex.urlFr,
+            urlEn: lex.urlEn,
+            descriptionFr: lex.descriptionFr,
+            descriptionEn: lex.descriptionEn,
             publicationDate: lex.publicationDate,
             categoryId: lex.categoryId,
             subcategoryId: lex.subcategoryId,
@@ -271,7 +281,8 @@ Meteor.methods({
         let authorDocument = {
             firstName: author.firstName.toLowerCase(),
             lastName: author.lastName.toLowerCase(),
-            url: author.url,
+            urlFr: author.urlFr,
+            urlEn: author.urlEn,
         };
 
         return Authors.insert(authorDocument);
