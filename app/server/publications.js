@@ -41,7 +41,7 @@ Meteor.publish('subcategory.list', function() {
 
 Meteor.publish('author.list', function() {
     
-    let authorCursor = Authors.find({}, {sort: {name:1}});
+    let authorCursor = Authors.find({}, {sort: {lastName:1}});
     return [
         authorCursor,
     ]
