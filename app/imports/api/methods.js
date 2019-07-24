@@ -19,23 +19,6 @@ function prepareUpdateInsert(lex, action) {
     if (url.endsWith('/')) {
         lex.url = url.slice(0, -1);
     }
-    
-    // Check if url is unique 
-    // TODO: Move this code to SimpleSchema custom validation function
-    if (action === 'update') {
-        let lexs = Lexs.find({url:lex.url});
-        if (lexs.count() > 1) {
-            throwMeteorError('url', 'Cette URL existe déjà !');
-        } else if (lexs.count() == 1) {
-            if (lexs.fetch()[0]._id != lex._id) {
-                throwMeteorError('url', 'Cette URL existe déjà !');
-            }
-        }
-    } else {
-        if (Lexs.find({url:lex.url}).count() > 0) {
-            throwMeteorError('url', 'Cette URL existe déjà !');
-        }
-    }
 
     // Check if LEX is unique
     // todo
@@ -54,7 +37,6 @@ Meteor.methods({
 
         //console.log(lex);
         
-        /*
         if (!this.userId) {
             throw new Meteor.Error('not connected');
         }
@@ -64,13 +46,12 @@ Meteor.methods({
             ['admin'], 
             Roles.GLOBAL_GROUP
         );
-        
 
         if (! canInsert) {
             throw new Meteor.Error('unauthorized',
               'Only admins can insert sites.');
         }
-        */
+        
         lexSchema.validate(lex);
         lex = prepareUpdateInsert(lex, 'insert');
         let lexDocument = {
@@ -89,7 +70,6 @@ Meteor.methods({
 
     updateLex(lex) {
 
-        /*
         if (!this.userId) {
             throw new Meteor.Error('not connected');
         }
@@ -104,7 +84,6 @@ Meteor.methods({
             throw new Meteor.Error('unauthorized',
               'Only admins can update sites.');
         }
-        */
 
         //console.log(lex);
 
@@ -132,7 +111,6 @@ Meteor.methods({
     
     removeLex(lexId){
 
-        /*
         if (!this.userId) {
             throw new Meteor.Error('not connected');
         }
@@ -147,7 +125,6 @@ Meteor.methods({
             throw new Meteor.Error('unauthorized',
               'Only admins can remove sites.');
         }
-        */
 
         check(lexId, String);
 
@@ -156,7 +133,6 @@ Meteor.methods({
 
     insertCategory(category) {
 
-        /*
         if (!this.userId) {
             throw new Meteor.Error('not connected');
         }
@@ -171,7 +147,6 @@ Meteor.methods({
             throw new Meteor.Error('unauthorized',
               'Only admins can insert category.');
         }
-        */
 
         // Check if name is unique
         // TODO: Move this code to SimpleSchema custom validation function
@@ -191,7 +166,6 @@ Meteor.methods({
 
     removeCategory(categoryId){
 
-        /*
         if (!this.userId) {
             throw new Meteor.Error('not connected');
         }
@@ -206,7 +180,6 @@ Meteor.methods({
             throw new Meteor.Error('unauthorized',
               'Only admins can remove Category.');
         }
-        */
 
         check(categoryId, String);
 
@@ -215,7 +188,6 @@ Meteor.methods({
 
     insertSubcategory(subcategory) {
 
-        /*
         if (!this.userId) {
             throw new Meteor.Error('not connected');
         }
@@ -230,7 +202,6 @@ Meteor.methods({
             throw new Meteor.Error('unauthorized',
               'Only admins can insert category.');
         }
-        */
 
         // Check if name is unique
         // TODO: Move this code to SimpleSchema custom validation function
@@ -250,7 +221,6 @@ Meteor.methods({
 
     removeSubcategory(subcategoryId){
 
-        /*
         if (!this.userId) {
             throw new Meteor.Error('not connected');
         }
@@ -265,7 +235,6 @@ Meteor.methods({
             throw new Meteor.Error('unauthorized',
               'Only admins can remove Category.');
         }
-        */
 
         check(subcategoryId, String);
 
@@ -274,7 +243,6 @@ Meteor.methods({
 
     insertAuthor(author) {
 
-        /*
         if (!this.userId) {
             throw new Meteor.Error('not connected');
         }
@@ -289,7 +257,6 @@ Meteor.methods({
             throw new Meteor.Error('unauthorized',
               'Only admins can insert category.');
         }
-        */
         
         // Check if name is unique
         // TODO: Move this code to SimpleSchema custom validation function
@@ -313,7 +280,6 @@ Meteor.methods({
 
     removeAuthor(authorId){
 
-        /*
         if (!this.userId) {
             throw new Meteor.Error('not connected');
         }
@@ -328,7 +294,6 @@ Meteor.methods({
             throw new Meteor.Error('unauthorized',
               'Only admins can remove Category.');
         }
-        */
 
         check(authorId, String);
 
