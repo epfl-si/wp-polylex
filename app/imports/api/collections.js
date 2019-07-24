@@ -57,7 +57,31 @@ export const lexSchema = new SimpleSchema({
         label: "Date de publication",
         optional: true,
     },
-    
+    authors: {  
+        type: Array,
+        label: "Auteurs",
+        optional: false,
+    },
+    'authors.$': {
+        type: Object,
+        optional: false
+    },
+    'authors.$._id': {
+        type: String,
+        optional: false
+    },
+    'authors.$.lastName': {
+        type: String,
+        optional: false
+    },
+    'authors.$.firstName': {
+        type: String,
+        optional: false
+    },
+    'authors.$.url': {
+        type: String,
+        optional: false
+    },
 }, { check });
 
 lexSchema.messageBox = messageBox;
@@ -126,6 +150,8 @@ export const authorsSchema = new SimpleSchema({
         regEx: SimpleSchema.RegEx.Url,
     },   
 });
+
+authorsSchema.messageBox = messageBox;
 
 export const Lexs = new Mongo.Collection('lexs');
 export const Categories = new Mongo.Collection('categories');

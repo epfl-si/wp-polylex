@@ -1,7 +1,16 @@
 import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check'; 
-import { Lexs, lexSchema, Categories, categoriesSchema, Subcategories, subcategoriesSchema } from './collections';
-import { throwMeteorError } from './error';
+import { 
+    Lexs, 
+    lexSchema, 
+    Categories, 
+    categoriesSchema, 
+    Subcategories, 
+    subcategoriesSchema, 
+    Authors, 
+    authorsSchema,
+} from './collections';
+import { throwMeteorError, throwMeteorErrors } from './error';
 
 function prepareUpdateInsert(lex, action) {
 
@@ -31,6 +40,11 @@ function prepareUpdateInsert(lex, action) {
     // Check if LEX is unique
     // todo
 
+    // Check if authot is empty
+    if (lex.authors.length == 0) {
+        throwMeteorError('authors', 'Vous devez sélectionner au moins 1 auteur');
+    }
+
     return lex;
 }
 
@@ -57,11 +71,8 @@ Meteor.methods({
               'Only admins can insert sites.');
         }
         */
-
         lexSchema.validate(lex);
-        
         lex = prepareUpdateInsert(lex, 'insert');
-
         let lexDocument = {
             lex: lex.lex,
             title: lex.title,
@@ -70,6 +81,7 @@ Meteor.methods({
             publicationDate: lex.publicationDate,
             categoryId: lex.categoryId,
             subcategoryId: lex.subcategoryId,
+            authors: lex.authors,
         }
 
         return Lexs.insert(lexDocument);
@@ -108,6 +120,7 @@ Meteor.methods({
             publicationDate: lex.publicationDate,
             categoryId: lex.categoryId,
             subcategoryId: lex.subcategoryId,
+            authors: lex.authors,
         }
         
         Lexs.update(
@@ -257,5 +270,68 @@ Meteor.methods({
         check(subcategoryId, String);
 
         Subcategories.remove({_id: subcategoryId});
+    },
+
+    insertAuthor(author) {
+
+        /*
+        if (!this.userId) {
+            throw new Meteor.Error('not connected');
+        }
+
+        const canInsert = Roles.userIsInRole(
+            this.userId,
+            ['admin'], 
+            Roles.GLOBAL_GROUP
+        );
+
+        if (! canInsert) {
+            throw new Meteor.Error('unauthorized',
+              'Only admins can insert category.');
+        }
+        */
+        
+        // Check if name is unique
+        // TODO: Move this code to SimpleSchema custom validation function
+        if (Authors.find({lastName: author.lastName.toLowerCase(), firstName: author.firstName.toLowerCase()}).count() > 0) {
+            throwMeteorErrors(['lastName', 'firstName'], 'Un auteur avec les mêmes nom et prénom existe déjà !');
+        }
+        
+        authorsSchema.validate(author);
+
+        console.log(author);
+
+        let authorDocument = {
+            firstName: author.firstName.toLowerCase(),
+            lastName: author.lastName.toLowerCase(),
+            url: author.url,
+        };
+
+        return Authors.insert(authorDocument);
+
+    },
+
+    removeAuthor(authorId){
+
+        /*
+        if (!this.userId) {
+            throw new Meteor.Error('not connected');
+        }
+
+        const canRemove = Roles.userIsInRole(
+            this.userId,
+            ['admin'], 
+            Roles.GLOBAL_GROUP
+        );
+
+        if (! canRemove) {
+            throw new Meteor.Error('unauthorized',
+              'Only admins can remove Category.');
+        }
+        */
+
+        check(authorId, String);
+
+        Authors.remove({_id: authorId});
     },
 });

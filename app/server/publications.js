@@ -1,4 +1,4 @@
-import { Lexs, Categories, Subcategories } from "../imports/api/collections";
+import { Lexs, Categories, Subcategories, Authors } from "../imports/api/collections";
 import { check } from "meteor/check";
 
 Meteor.publish('lex.list', function() {
@@ -36,6 +36,14 @@ Meteor.publish('subcategory.list', function() {
     let subcategoryCursor = Subcategories.find({}, {sort: {name:1}});
     return [
         subcategoryCursor,
+    ]
+});
+
+Meteor.publish('author.list', function() {
+    
+    let authorCursor = Authors.find({}, {sort: {lastName:1}});
+    return [
+        authorCursor,
     ]
 });
 
