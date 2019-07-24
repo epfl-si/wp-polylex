@@ -1,5 +1,6 @@
 accounts-base@1.4.4
 accounts-password@1.5.1
+alanning:roles@1.2.16
 alexwine:bootstrap-4@4.1.0
 allow-deny@1.1.0
 autoupdate@1.6.0
@@ -28,6 +29,7 @@ ecmascript-runtime-client@0.8.0
 ecmascript-runtime-server@0.7.1
 ejson@1.1.0
 email@1.2.3
+epfl:accounts-tequila@0.2.0
 es5-shim@4.8.0
 fetch@0.1.1
 geojson-utils@1.0.10

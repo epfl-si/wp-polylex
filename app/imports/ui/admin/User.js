@@ -14,6 +14,7 @@ class User extends React.Component {
             values.role,
             (errors, objectId) => {
                 if (errors) {
+                    console.log(errors);
                     let formErrors = {};
                     errors.details.forEach(function(error) {
                         formErrors[error.name] = error.message;                        
@@ -75,18 +76,16 @@ class User extends React.Component {
 
                             }) => (    
                                 <form onSubmit={ handleSubmit }>
-
-                                <Field name="userId" type="hidden" component={ CustomInput } />
-
-                                <Field
-                                    name="role" 
-                                    component={ CustomSelect }>
-                                        {this.props.roles.map((role, index) => (
-                                            <option key={role._id} value={role.name}>{role.name}</option>
-                                        ))}
-                                </Field>
-                                <button type="submit" disabled={ isSubmitting } className="btn btn-primary">Enregistrer</button>
-                            </form>
+                                    <Field name="userId" type="hidden" component={ CustomInput } />
+                                    <Field
+                                        name="role" 
+                                        component={ CustomSelect }>
+                                            {this.props.roles.map((role, index) => (
+                                                <option key={role._id} value={role.name}>{role.name}</option>
+                                            ))}
+                                    </Field>
+                                    <button type="submit" disabled={ isSubmitting } className="btn btn-primary">Enregistrer</button>
+                                </form>
                                     )}
                                     </Formik>
                                 </td>

@@ -94,7 +94,7 @@ class Admin extends React.Component {
 
     capitalizeFirstLetter = (s) => {
         return s.charAt(0).toUpperCase() + s.slice(1)
-      }
+    }
 
     render() {
         return (
