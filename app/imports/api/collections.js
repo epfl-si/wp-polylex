@@ -60,26 +60,27 @@ export const lexSchema = new SimpleSchema({
     authors: {  
         type: Array,
         label: "Auteurs",
+        optional: false,
     },
     'authors.$': {
         type: Object,
-        optional: true
+        optional: false
     },
     'authors.$._id': {
         type: String,
-        optional: true
+        optional: false
     },
     'authors.$.lastName': {
         type: String,
-        optional: true
+        optional: false
     },
     'authors.$.firstName': {
         type: String,
-        optional: true
+        optional: false
     },
     'authors.$.url': {
         type: String,
-        optional: true
+        optional: false
     },
 }, { check });
 

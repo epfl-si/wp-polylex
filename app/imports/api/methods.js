@@ -40,6 +40,11 @@ function prepareUpdateInsert(lex, action) {
     // Check if LEX is unique
     // todo
 
+    // Check if authot is empty
+    if (lex.authors.length == 0) {
+        throwMeteorError('authors', 'Vous devez sélectionner au moins 1 auteur');
+    }
+
     return lex;
 }
 
@@ -66,11 +71,8 @@ Meteor.methods({
               'Only admins can insert sites.');
         }
         */
-        //console.log(lex);
         lexSchema.validate(lex);
-        console.log(lex);
         lex = prepareUpdateInsert(lex, 'insert');
-        console.log(lex);
         let lexDocument = {
             lex: lex.lex,
             title: lex.title,

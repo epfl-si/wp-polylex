@@ -95,16 +95,14 @@ class Add extends React.Component {
   }
 
   render() {
-    
-    
 
     let content;
     const isLoadingEdit = (this.state.lex === undefined || this.state.lex === '') 
         && this.state.action === 'edit';
     const isLoadingAdd = (
             this.props.defaultCategoryId === undefined || 
-            this.props.defaultSubcategoryId === undefined
-            ) && (this.props.authors === undefined) && this.state.action === 'add';
+            this.props.defaultSubcategoryId === undefined || 
+            this.props.authors === undefined) && this.state.action === 'add';
     if (isLoadingAdd || isLoadingEdit) {
       content = <h1>Loading....</h1>
     } else {
@@ -205,7 +203,7 @@ class Add extends React.Component {
                     <Field
                         onChange={e => { handleChange(e); this.updateUserMsg();}}
                         onBlur={e => { handleBlur(e); this.updateUserMsg();}}
-                        placeholder="Date de publication du LEX à ajouter" label="Date de publication" name="publicationDate" type="date" component={ CustomInput } 
+                        placeholder="Date de publication du LEX à ajouter" label="Date de publication" name="publicationDate" type="text" component={ CustomInput } 
                     />
                     <ErrorMessage name="publicationDate" component={ CustomError } />
 
@@ -228,8 +226,10 @@ class Add extends React.Component {
                         ))}
                     </Field>
                     <ErrorMessage name="subcategory" component={ CustomError } />
-
+                    
+                    <label htmlFor="authors">Auteurs</label>
                     <MySelect
+                        id="authors"
                         value={values.authors}
                         onChange={setFieldValue}
                         onBlur={setFieldTouched}
@@ -237,7 +237,7 @@ class Add extends React.Component {
                         touched={touched.authors}
                         options={this.props.authors}
                         saveSuccess={this.updateSaveSuccess}
-                        placeholder="Sélectionner un auteur"
+                        placeholder="Sélectionner un ou plusieurs auteurs"
                         name="authors"
                     />
 
@@ -290,8 +290,6 @@ export default withTracker(() => {
 
 })(Add);
 
-
-
 class MySelect extends React.Component {
     handleChange = value => {
         // this is going to call setFieldValue and manually update values.topcis
@@ -310,24 +308,21 @@ class MySelect extends React.Component {
 
     content = 
     (
-      <div style={{ margin: '1rem 0' }}>
-       
-        <Select
-          isMulti
-          onChange={this.handleChange}
-          onBlur={this.handleBlur}
-          value={this.props.value}
-          options={this.props.options}
-          getOptionLabel ={(option)=>option.lastName}
-          getOptionValue ={(option)=>option._id}
-          placeholder={this.props.placeholder}
-
-        />
-        {!!this.props.error &&
-          this.props.touched && (
-            <div style={{ color: 'red', marginTop: '.5rem' }}>{this.props.error}</div>
-          )}
-      </div>
+        <div style={ {marginBottom: '40px'} }>
+            <Select
+                isMulti
+                onChange={this.handleChange}
+                onBlur={this.handleBlur}
+                value={this.props.value}
+                options={this.props.options}
+                getOptionLabel ={(option)=>option.lastName}
+                getOptionValue ={(option)=>option._id}
+                placeholder={this.props.placeholder}
+            />
+            {!!this.props.error && this.props.touched && (
+                <div style={{ color: 'red', marginTop: '.5rem' }}>{this.props.error}</div>
+            )}
+        </div>
     );
 
     return content;
