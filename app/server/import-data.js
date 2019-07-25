@@ -1,27 +1,34 @@
-import { Categories, Subcategories, Lexs } from '../imports/api/collections';
+import { Categories, Subcategories, Authors, Lexs } from '../imports/api/collections';
 
 importData = () => {
 
-  if (Categories.find({}).count() == 0) {
-    console.log("Import categories");
-    importCategories();
-  } else {
-    console.log("Categories already exist");
-  }
+    if (Categories.find({}).count() == 0) {
+        console.log("Import categories");
+        importCategories();
+    } else {
+        console.log("Categories already exist");
+    }
 
-  if (Subcategories.find({}).count() == 0) {
-    console.log("Import subcategories");
-    importSubcategories();
-  } else {
-    console.log("Subcategories already exist");
-  }
+    if (Subcategories.find({}).count() == 0) {
+        console.log("Import subcategories");
+        importSubcategories();
+    } else {
+        console.log("Subcategories already exist");
+    }
 
-  if (Lexs.find({}).count() == 0) {
-      console.log("Import lexs");
-      importLexs();
-  } else {
-      console.log("Lexs already exist");
-  }
+    if (Authors.find({}).count() == 0) {
+        console.log("Import authors");
+        importAuthors();
+    } else {
+        console.log("Authors already exist");
+    }
+
+    if (Lexs.find({}).count() == 0) {
+        console.log("Import lexs");
+        importLexs();
+    } else {
+        console.log("Lexs already exist");
+    }
 
 }
 
@@ -71,7 +78,6 @@ importLexs = () => {
                 publicationDateEn: lex.publicationDateEn,
                 categoryId: categoryId,
                 subcategoryId: subcategoryId,
-                authors: authors,
             }
             
             // Check if category already exist
@@ -85,47 +91,72 @@ importLexs = () => {
 
 }
 
+importAuthors = () => {
+    const path = 'authors.csv';
+    const file = Assets.getText(path);
+    Papa.parse(file, {
+        delimiter: ",",
+        header: true,
+        complete: function(results) {
+            let data = JSON.parse(JSON.stringify(results.data));
+            data.forEach(author => {
+                let authorDocument = {
+                    lastName: author.lastName.toLowerCase(),
+                    firstName: author.firstName.toLowerCase(),
+                    urlFr: author.urlFr,
+                    urlEn: author.urlEn,
+                }   
+                // Check if authors already exist
+                if (Authors.find({lastName: author.lastName.toLowerCase(), firstName: author.firstName.toLowerCase()}).count() == 0) {
+                    Authors.insert(authorDocument);
+                }
+            });
+            console.log("Importation authors finished");
+        }    
+    });
+}
+
 importCategories = () => {
-  const path = 'categories.csv';
-  const file = Assets.getText(path);
-  Papa.parse(file, {
-    delimiter: ",",
-    header: true,
-    complete: function(results) {
-      let data = JSON.parse(JSON.stringify(results.data));
-      data.forEach(category => {
-        let categoryDocument = {
-          name: category.name,
-        }
-        // Check if category already exist
-        if (!Categories.findOne({name: categoryDocument.name})) {
-          Categories.insert(categoryDocument);
-        }
-      });
-      console.log("Importation categories finished");
-    }    
-  });
+    const path = 'categories.csv';
+    const file = Assets.getText(path);
+    Papa.parse(file, {
+        delimiter: ",",
+        header: true,
+        complete: function(results) {
+        let data = JSON.parse(JSON.stringify(results.data));
+        data.forEach(category => {
+            let categoryDocument = {
+                name: category.name,
+            }
+            // Check if category already exist
+            if (!Categories.findOne({name: categoryDocument.name})) {
+                Categories.insert(categoryDocument);
+            }
+        });
+        console.log("Importation categories finished");
+        }    
+    });
 }
 
 importSubcategories = () => {
     const path = 'subcategories.csv';
     const file = Assets.getText(path);
     Papa.parse(file, {
-      delimiter: ",",
-      header: true,
-      complete: function(results) {
+    delimiter: ",",
+    header: true,
+    complete: function(results) {
         let data = JSON.parse(JSON.stringify(results.data));
         data.forEach(subcategory => {
-          let subcategoryDocument = {
+        let subcategoryDocument = {
             name: subcategory.name,
-          }
-          // Check if subcategory already exist
-          if (!Subcategories.findOne({name: subcategoryDocument.name})) {
+        }
+        // Check if subcategory already exist
+        if (!Subcategories.findOne({name: subcategoryDocument.name})) {
             Subcategories.insert(subcategoryDocument);
-          }
+        }
         });
         console.log("Importation subcategories finished");
-      }    
+    }    
     });
 }
 
