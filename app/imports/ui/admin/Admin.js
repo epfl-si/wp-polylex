@@ -106,7 +106,7 @@ class Admin extends React.Component {
                 <ul className="list-group">
                     {this.props.authors.map( (author, index) => (
                         <li key={author._id} value={author.lastName} className="list-group-item">
-                            <a href={author.url} target="_blank">{this.capitalizeFirstLetter(author.lastName)} {this.capitalizeFirstLetter(author.firstName)}</a>
+                            <a href={author.urlFr} target="_blank">{this.capitalizeFirstLetter(author.lastName)} {this.capitalizeFirstLetter(author.firstName)}</a>
                             <button type="button" className="close" aria-label="Close">
                                 <span  onClick={() => this.deleteAuthor(author._id)} aria-hidden="true">&times;</span>
                             </button>
