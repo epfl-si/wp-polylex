@@ -335,6 +335,10 @@ class MySelect extends React.Component {
         this.props.saveSuccess(!this.props.saveSuccess);
     };
 
+    capitalizeFirstLetter = (s) => {
+        return s.charAt(0).toUpperCase() + s.slice(1)
+    }
+
     render() {
     let content;
 
@@ -347,7 +351,7 @@ class MySelect extends React.Component {
                 onBlur={this.handleBlur}
                 value={this.props.value}
                 options={this.props.options}
-                getOptionLabel ={(option)=>option.lastName}
+                getOptionLabel ={(option)=> { return this.capitalizeFirstLetter(option.lastName) + " " + this.capitalizeFirstLetter(option.firstName)} }
                 getOptionValue ={(option)=>option._id}
                 placeholder={this.props.placeholder}
             />

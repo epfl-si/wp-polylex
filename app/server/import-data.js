@@ -30,6 +30,34 @@ importData = () => {
         console.log("Lexs already exist");
     }
 
+    importAuthorsInLexs();
+}
+
+importAuthorsInLexs = () => {
+    const path = 'lexs-authors.csv';
+    const file = Assets.getText(path);
+    Papa.parse(file, {
+        delimiter: ",",
+        header: true,
+        complete: function(results) {
+        let data = JSON.parse(JSON.stringify(results.data));
+        data.forEach(line => {
+            let lex = Lexs.findOne({lex: line.lex});        
+            let authors = Authors.find(
+                { 
+                    "lastName": line.lastName.toLowerCase(),
+                    "firstName": line.firstName.toLowerCase()
+                }
+            ).fetch();
+            Lexs.update(
+                {_id: lex._id}, 
+                { $set: {authors: authors} }
+            );
+            
+        });
+        console.log("Update LEXs to add authors - finished");
+        }    
+    });
 }
 
 importLexs = () => {
