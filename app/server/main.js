@@ -1,8 +1,8 @@
 import { Meteor } from 'meteor/meteor';
-import { Lexs } from '../imports/api/collections.js';
 import { importData } from './import-data';
 import '../imports/api/methods';
 import './publications';
+import './rest-api';
 
 Meteor.startup(() => {
     let needImportData = true;
@@ -36,5 +36,7 @@ Meteor.startup(() => {
           
           return tequilaResponse.uniqueid;
         }; 
-      }
+    }
+
+
 });
