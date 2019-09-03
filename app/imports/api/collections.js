@@ -37,7 +37,7 @@ export const lexSchema = new SimpleSchema({
         label: "URL en français",
         optional: false,
         max: 255,
-        min: 1, 
+        min: 1,
         custom: isRequired,
         regEx: SimpleSchema.RegEx.Url,
     },
@@ -67,22 +67,24 @@ export const lexSchema = new SimpleSchema({
     descriptionFr: {
         type: String,
         label: "Description en francais",
-        optional: true,
+        optional: false,
+        min: 1,
     },
     descriptionEn: {
         type: String,
         label: "Description en anglais",
-        optional: true,
+        optional: false,
+        min: 1,
     },
-    publicationDateFr: {
-        type: String,
-        label: "Date de publication en français",
-        optional: true,
+    effectiveDate: {
+        type: Date,
+        label: "Date d entrées en vigueur",
+        optional: false,
     },
-    publicationDateEn: {
-        type: String,
-        label: "Date de publication en anglais",
-        optional: true,
+    revisionDate: {
+        type: Date,
+        label: "Date de révision",
+        optional: false,
     },
     authors: {  
         type: Array,

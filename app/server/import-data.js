@@ -102,8 +102,8 @@ importLexs = () => {
                 urlEn: lex.urlEn,
                 descriptionFr: lex.descriptionFr,
                 descriptionEn: lex.descriptionEn,
-                publicationDateFr: lex.publicationDateFr,
-                publicationDateEn: lex.publicationDateEn,
+                effectiveDate: lex.effectiveDate,
+                revisionDate: lex.revisionDate,
                 categoryId: categoryId,
                 subcategoryId: subcategoryId,
             }

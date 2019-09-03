@@ -137,8 +137,8 @@ class Add extends React.Component {
           urlEn: '',
           descriptionFr: '',
           descriptionEn: '',
-          publicationDateFr: '',
-          publicationDateEn: '',
+          effectiveDate: '',
+          revisionDate: '',
           categoryId: this.props.defaultCategoryId,
           subcategoryId: this.props.defaultSubcategoryId,
           authors: [],
@@ -228,16 +228,16 @@ class Add extends React.Component {
                     <Field
                         onChange={e => { handleChange(e); this.updateUserMsg();}}
                         onBlur={e => { handleBlur(e); this.updateUserMsg();}}
-                        placeholder="Date de publication en français du LEX à ajouter" label="Date de publication en français" name="publicationDateFr" type="text" component={ CustomInput } 
+                        placeholder="Date d'entrée en vigueur à ajouter" label="Date d'entrée en vigueur" name="effectiveDate" type="text" component={ CustomInput } 
                     />
-                    <ErrorMessage name="publicationDateFr" component={ CustomError } />
+                    <ErrorMessage name="effectiveDate" component={ CustomError } />
 
                     <Field
                         onChange={e => { handleChange(e); this.updateUserMsg();}}
                         onBlur={e => { handleBlur(e); this.updateUserMsg();}}
-                        placeholder="Date de publication en anglais du LEX à ajouter" label="Date de publication en anglais" name="publicationDateEn" type="text" component={ CustomInput } 
+                        placeholder="Date de révision à ajouter" label="Date de révision" name="revisionDate" type="text" component={ CustomInput } 
                     />
-                    <ErrorMessage name="publicationDateEn" component={ CustomError } />
+                    <ErrorMessage name="revisionDate" component={ CustomError } />
 
                     <Field 
                         onChange={e => { handleChange(e); this.updateUserMsg();}}
