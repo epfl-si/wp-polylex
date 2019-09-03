@@ -1,4 +1,4 @@
-import { Categories, Subcategories, Authors, Lexs } from '../imports/api/collections';
+import { Categories, Subcategories, Responsibles, Lexes } from '../imports/api/collections';
 
 importData = () => {
 
@@ -16,25 +16,27 @@ importData = () => {
         console.log("Subcategories already exist");
     }
 
-    if (Authors.find({}).count() == 0) {
-        console.log("Import authors");
-        importAuthors();
+    /*
+    if (Responsibles.find({}).count() == 0) {
+        console.log("Import responsibles");
+        importResponsibles();
     } else {
-        console.log("Authors already exist");
+        console.log("Responsibles already exist");
     }
 
-    if (Lexs.find({}).count() == 0) {
-        console.log("Import lexs");
-        importLexs();
+    if (Lexes.find({}).count() == 0) {
+        console.log("Import lexes");
+        importLexes();
     } else {
-        console.log("Lexs already exist");
+        console.log("Lexes already exist");
     }
 
-    importAuthorsInLexs();
+    importResponsiblesInLexes();
+    */
 }
 
-importAuthorsInLexs = () => {
-    const path = 'lexs-authors.csv';
+importResponsiblesInLexes = () => {
+    const path = 'lexes-responsibles.csv';
     const file = Assets.getText(path);
     Papa.parse(file, {
         delimiter: ",",
@@ -42,27 +44,27 @@ importAuthorsInLexs = () => {
         complete: function(results) {
         let data = JSON.parse(JSON.stringify(results.data));
         data.forEach(line => {
-            let lex = Lexs.findOne({lex: line.lex});        
-            let authors = Authors.find(
+            let lex = Lexes.findOne({lex: line.lex});        
+            let responsibles = Responsibles.find(
                 { 
                     "lastName": line.lastName.toLowerCase(),
                     "firstName": line.firstName.toLowerCase()
                 }
             ).fetch();
-            Lexs.update(
+            Lexes.update(
                 {_id: lex._id}, 
-                { $set: {authors: authors} }
+                { $set: {responsibles: responsibles} }
             );
             
         });
-        console.log("Update LEXs to add authors - finished");
+        console.log("Update Lexes to add responsibles - finished");
         }    
     });
 }
 
-importLexs = () => {
+importLexes = () => {
 
-    const path = 'lexs.csv';
+    const path = 'lexes.csv';
     const file = Assets.getText(path);
     Papa.parse(file, {
         delimiter: ",",
@@ -85,15 +87,6 @@ importLexs = () => {
             console.log(categoryId);
             console.log(subcategoryId);
 
-            // Todo: Récupérer les datas via le lex.
-            authors = [{ 
-                _id: '2sY3Go2xnxu9nopXn',
-                firstName: 'grégory',
-                lastName: 'charmier',
-                urlFr: 'https://people.epfl.ch/gregory.charmier/?lang=fr',
-                urlEn: 'https://people.epfl.ch/gregory.charmier/?lang=en' 
-            }]
-
             let lexDocument = {
                 lex: lex.lex,
                 titleFr: lex.titleFr,
@@ -109,37 +102,37 @@ importLexs = () => {
             }
             
             // Check if category already exist
-            if (!Lexs.findOne({lex: lexDocument.lex})) {
-                Lexs.insert(lexDocument);
+            if (!Lexes.findOne({lex: lexDocument.lex})) {
+                Lexes.insert(lexDocument);
             }
         });
-        console.log("Importation LEXs finished");
+        console.log("Importation Lexes finished");
         }    
     });
 
 }
 
-importAuthors = () => {
-    const path = 'authors.csv';
+importResponsibles = () => {
+    const path = 'responsibles.csv';
     const file = Assets.getText(path);
     Papa.parse(file, {
         delimiter: ",",
         header: true,
         complete: function(results) {
             let data = JSON.parse(JSON.stringify(results.data));
-            data.forEach(author => {
-                let authorDocument = {
-                    lastName: author.lastName.toLowerCase(),
-                    firstName: author.firstName.toLowerCase(),
-                    urlFr: author.urlFr,
-                    urlEn: author.urlEn,
+            data.forEach(responsible => {
+                let responsibleDocument = {
+                    lastName: responsible.lastName.toLowerCase(),
+                    firstName: responsible.firstName.toLowerCase(),
+                    urlFr: responsible.urlFr,
+                    urlEn: responsible.urlEn,
                 }   
-                // Check if authors already exist
-                if (Authors.find({lastName: author.lastName.toLowerCase(), firstName: author.firstName.toLowerCase()}).count() == 0) {
-                    Authors.insert(authorDocument);
+                // Check if responsibles already exist
+                if (Responsibles.find({lastName: responsible.lastName.toLowerCase(), firstName: responsibleDocument.firstName.toLowerCase()}).count() == 0) {
+                    Responsibles.insert(responsibleDocument);
                 }
             });
-            console.log("Importation authors finished");
+            console.log("Importation responsibles finished");
         }    
     });
 }

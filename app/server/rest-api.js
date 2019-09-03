@@ -1,4 +1,4 @@
-import { Lexs } from '../imports/api/collections.js';
+import { Lexes } from '../imports/api/collections.js';
 
 // Global API configuration
 let Api = new Restivus({
@@ -7,17 +7,17 @@ let Api = new Restivus({
     version: 'v1'
 });
 
-// Maps to: /api/v1/lexs
-Api.addRoute('lexs', {authRequired: false}, {
+// Maps to: /api/v1/lexes
+Api.addRoute('lexes', {authRequired: false}, {
     get: function () {
-        return Lexs.find({}).fetch();
+        return Lexes.find({}).fetch();
     }
 });
 
-// Maps to: /api/v1/lexs/:id
-Api.addRoute('lexs/:id', {authRequired: false}, {
+// Maps to: /api/v1/lexes/:id
+Api.addRoute('lexes/:id', {authRequired: false}, {
     get: function () {
-        return Lexs.findOne(this.urlParams.id);
+        return Lexes.findOne(this.urlParams.id);
     }
 });
 

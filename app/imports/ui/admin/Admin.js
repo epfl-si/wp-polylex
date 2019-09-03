@@ -2,7 +2,7 @@ import { withTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import { Formik, Field, ErrorMessage } from 'formik';
-import { Categories, Subcategories, Authors } from '../../api/collections';
+import { Categories, Subcategories, Responsibles } from '../../api/collections';
 import { CustomError, CustomInput } from '../CustomFields';
 
 class Admin extends React.Component {
@@ -20,8 +20,8 @@ class Admin extends React.Component {
         if (collection._name === 'subcategories') {
             meteorMethodName = 'insertSubcategory';
         }
-        if (collection._name === 'authors') {
-            meteorMethodName = 'insertAuthor';
+        if (collection._name === 'responsibles') {
+            meteorMethodName = 'insertResponsible';
         }
 
         Meteor.call(
@@ -51,8 +51,8 @@ class Admin extends React.Component {
         this.submit(Subcategories, values, actions);
     }
 
-    submitAuthor = (values, actions) => {
-        this.submit(Authors, values, actions);
+    submitResponsible = (values, actions) => {
+        this.submit(Responsibles, values, actions);
     }
 
     delete = (collection, elementID) => {
@@ -65,8 +65,8 @@ class Admin extends React.Component {
         if (collection._name === 'subcategories') {
             meteorMethodName = 'removeSubcategory';
         }
-        if (collection._name === 'authors') {
-            meteorMethodName = 'removeAuthor';
+        if (collection._name === 'responsibles') {
+            meteorMethodName = 'removeResponsible';
         }
 
         Meteor.call(
@@ -88,8 +88,8 @@ class Admin extends React.Component {
         this.delete(Subcategories, subcategoryID);
     }
 
-    deleteAuthor = (authorID) => {
-        this.delete(Authors, authorID);
+    deleteResponsible = (responsibleID) => {
+        this.delete(Responsibles, responsibleID);
     }
 
     capitalizeFirstLetter = (s) => {
@@ -101,14 +101,14 @@ class Admin extends React.Component {
         <div>
             <div className="card my-2">
 
-                <h5 className="card-header">Liste des auteurs des LEXs</h5>
+                <h5 className="card-header">Liste des responsables des Lexes</h5>
 
                 <ul className="list-group">
-                    {this.props.authors.map( (author, index) => (
-                        <li key={author._id} value={author.lastName} className="list-group-item">
-                            <a href={author.urlFr} target="_blank">{this.capitalizeFirstLetter(author.lastName)} {this.capitalizeFirstLetter(author.firstName)}</a>
+                    {this.props.responsibles.map( (responsible, index) => (
+                        <li key={responsible._id} value={responsible.lastName} className="list-group-item">
+                            <a href={responsible.urlFr} target="_blank">{responsible.lastName} {responsible.firstName}</a>
                             <button type="button" className="close" aria-label="Close">
-                                <span  onClick={() => this.deleteAuthor(author._id)} aria-hidden="true">&times;</span>
+                                <span  onClick={() => this.deleteResponsible(responsible._id)} aria-hidden="true">&times;</span>
                             </button>
                         </li>
                     ))}
@@ -116,7 +116,7 @@ class Admin extends React.Component {
 
                 <div className="card-body">
                     <Formik
-                            onSubmit={ this.submitAuthor }
+                            onSubmit={ this.submitResponsible }
                             initialValues={ { firstName: '', lastName: '', urlFr: '', urlEn: ''} }
                             validationSchema={ this.nameSchema }
                             validateOnBlur={ false }
@@ -127,16 +127,16 @@ class Admin extends React.Component {
                             isSubmitting,
                         }) => (    
                             <form onSubmit={ handleSubmit } className="">
-                                <Field label="Nom" placeholder="Nom de l'auteur à ajouter" name="lastName" type="text" component={ CustomInput } />
+                                <Field label="Nom" placeholder="Nom du responsable à ajouter" name="lastName" type="text" component={ CustomInput } />
                                 <ErrorMessage name="lastName" component={ CustomError } />
                                 
-                                <Field label="Prénom" placeholder="Prénom de l'auteur à ajouter" name="firstName" type="text" component={ CustomInput } />
+                                <Field label="Prénom" placeholder="Prénom du responsable à ajouter" name="firstName" type="text" component={ CustomInput } />
                                 <ErrorMessage name="firstName" component={ CustomError } />
 
-                                <Field label="URL en français" placeholder="URL de l'auteur en français à ajouter" name="urlFr" type="text" component={ CustomInput } />
+                                <Field label="URL en français" placeholder="URL du responsable en français à ajouter" name="urlFr" type="text" component={ CustomInput } />
                                 <ErrorMessage name="urlFr" component={ CustomError } />
 
-                                <Field label="URL en anglais" placeholder="URL de l'auteur en anglais à ajouter" name="urlEn" type="text" component={ CustomInput } />
+                                <Field label="URL en anglais" placeholder="URL du responsable en anglais à ajouter" name="urlEn" type="text" component={ CustomInput } />
                                 <ErrorMessage name="urlEn" component={ CustomError } />
 
                                 <div className="my-1 text-right">
@@ -147,7 +147,7 @@ class Admin extends React.Component {
                     </Formik>
                 </div>
 
-                <h5 className="card-header">Liste des catégories des LEXs</h5>
+                <h5 className="card-header">Liste des catégories des Lexes</h5>
     
                 <ul className="list-group">
                     {this.props.categories.map( (category, index) => (
@@ -185,7 +185,7 @@ class Admin extends React.Component {
             </div>
             <div className="card my-2">
 
-                <h5 className="card-header">Liste des sous-catégories des LEXs</h5>
+                <h5 className="card-header">Liste des sous-catégories des Lexes</h5>
     
                 <ul className="list-group">
                     {this.props.subcategories.map( (subcategory, index) => (
@@ -230,12 +230,12 @@ export default withTracker(() => {
     
     Meteor.subscribe('category.list');
     Meteor.subscribe('subcategory.list');
-    Meteor.subscribe('author.list');
+    Meteor.subscribe('responsible.list');
 
     return {
         categories: Categories.find({}, {sort: {name:1 }}).fetch(),
         subcategories: Subcategories.find({}, {sort: {name:1 }}).fetch(),
-        authors: Authors.find({}, {sort: {lastName: 1}}).fetch(),
+        responsibles: Responsibles.find({}, {sort: {lastName: 1}}).fetch(),
     };
     
 })(Admin);

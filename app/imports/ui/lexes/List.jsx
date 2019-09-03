@@ -1,13 +1,13 @@
 import React from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
 import { Link } from 'react-router-dom';
-import { Lexs } from '../../api/collections';
+import { Lexes } from '../../api/collections';
 
 class Cells extends React.Component {
     render() {
         return (
             <tbody>
-                {this.props.lexs.map( (lex, index) => (
+                {this.props.lexes.map( (lex, index) => (
                     <tr key={lex._id}>
                         <td>{lex.lex}</td>
                         <td>{lex.titleFr}</td>
@@ -28,7 +28,7 @@ class Cells extends React.Component {
 class List extends React.Component {
 
     deleteLex = (lexId) => {
-        const lexs = [...this.props.lexs.filter(lex => lex._id !== lexId)];
+        const lexes = [...this.props.lexes.filter(lex => lex._id !== lexId)];
         Meteor.call(
             'removeLex',
             lexId, 
@@ -53,7 +53,7 @@ class List extends React.Component {
                             <th className="w-50">Actions</th>
                         </tr>
                     </thead>
-                    <Cells lexs={this.props.lexs} deleteLex={ this.deleteLex }/>
+                    <Cells lexes={this.props.lexes} deleteLex={ this.deleteLex }/>
                 </table>
             </div>
         )
@@ -65,7 +65,7 @@ export default withTracker(() => {
     Meteor.subscribe('lex.list');
     
     return {
-        lexs: Lexs.find({}).fetch()
+        lexes: Lexes.find({}).fetch()
     };
 })(List);
 

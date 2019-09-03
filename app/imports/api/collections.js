@@ -3,7 +3,7 @@ import SimpleSchema from 'simpl-schema';
 import { check } from 'meteor/check';
 import messageBox, { isRequired } from './ValidationMessage';
 
-export const lexSchema = new SimpleSchema({
+export const lexesSchema = new SimpleSchema({
     // _id use to update a lex
     _id: {
         type: String,
@@ -13,7 +13,6 @@ export const lexSchema = new SimpleSchema({
         type: String,
         label: "LEX",
         optional: false,
-        
         custom: isRequired
     },
     titleFr: {
@@ -77,47 +76,25 @@ export const lexSchema = new SimpleSchema({
         min: 1,
     },
     effectiveDate: {
-        type: Date,
+        type: String,
         label: "Date d entrées en vigueur",
         optional: false,
     },
     revisionDate: {
-        type: Date,
+        type: String,
         label: "Date de révision",
         optional: false,
     },
-    authors: {  
-        type: Array,
-        label: "Auteurs",
+    responsibleId: {  
+        type: String,
+        label: "Responsable",
         optional: false,
-    },
-    'authors.$': {
-        type: Object,
-        optional: false
-    },
-    'authors.$._id': {
-        type: String,
-        optional: false
-    },
-    'authors.$.lastName': {
-        type: String,
-        optional: false
-    },
-    'authors.$.firstName': {
-        type: String,
-        optional: false
-    },
-    'authors.$.urlFr': {
-        type: String,
-        optional: false
-    },
-    'authors.$.urlEn': {
-        type: String,
-        optional: false
+        max: 100,
+        min: 1,
     },
 }, { check });
 
-lexSchema.messageBox = messageBox;
+lexesSchema.messageBox = messageBox;
 
 export const categoriesSchema = new SimpleSchema({
     // _id use to update 
@@ -151,7 +128,7 @@ export const subcategoriesSchema = new SimpleSchema({
     },
 });
 
-export const authorsSchema = new SimpleSchema({
+export const responsiblesSchema = new SimpleSchema({
     // _id use to update 
     _id: {
         type: String,
@@ -193,9 +170,9 @@ export const authorsSchema = new SimpleSchema({
     },   
 });
 
-authorsSchema.messageBox = messageBox;
+responsiblesSchema.messageBox = messageBox;
 
-export const Lexs = new Mongo.Collection('lexs');
+export const Lexes = new Mongo.Collection('lexes');
 export const Categories = new Mongo.Collection('categories');
 export const Subcategories = new Mongo.Collection('subcategories');
-export const Authors = new Mongo.Collection('authors');
+export const Responsibles = new Mongo.Collection('responsibles');

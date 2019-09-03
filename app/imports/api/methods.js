@@ -1,14 +1,14 @@
 import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check'; 
 import { 
-    Lexs, 
-    lexSchema, 
+    Lexes, 
+    lexesSchema, 
     Categories, 
     categoriesSchema, 
     Subcategories, 
     subcategoriesSchema, 
-    Authors, 
-    authorsSchema,
+    Responsibles, 
+    responsiblesSchema,
 } from './collections';
 import { throwMeteorError, throwMeteorErrors } from './error';
 
@@ -27,9 +27,9 @@ function prepareUpdateInsert(lex, action) {
     // Check if LEX is unique
     // todo
 
-    // Check if authot is empty
-    if (lex.authors.length == 0) {
-        throwMeteorError('authors', 'Vous devez sélectionner au moins 1 auteur');
+    // Check if responsible is empty
+    if (lex.responsibleId.length == 0) {
+        throwMeteorError('responsibles', 'Vous devez sélectionner au moins 1 responsable');
     }
 
     return lex;
@@ -56,9 +56,9 @@ Meteor.methods({
               'Only admins can insert sites.');
         }
         
-        lexSchema.validate(lex);
+        lexesSchema.validate(lex);
         lex = prepareUpdateInsert(lex, 'insert');
-        console.log(lex.authors);
+        console.log(lex.responsibleId);
         
         let lexDocument = {
             lex: lex.lex,
@@ -71,10 +71,10 @@ Meteor.methods({
             publicationDate: lex.publicationDate,
             categoryId: lex.categoryId,
             subcategoryId: lex.subcategoryId,
-            authors: lex.authors,
+            responsibleId: lex.responsibleId,
         }
 
-        return Lexs.insert(lexDocument);
+        return Lexes.insert(lexDocument);
     },
 
     updateLex(lex) {
@@ -96,7 +96,7 @@ Meteor.methods({
 
         //console.log(lex);
 
-        lexSchema.validate(lex);
+        lexesSchema.validate(lex);
 
         lex = prepareUpdateInsert(lex, 'update');
 
@@ -111,10 +111,10 @@ Meteor.methods({
             publicationDate: lex.publicationDate,
             categoryId: lex.categoryId,
             subcategoryId: lex.subcategoryId,
-            authors: lex.authors,
+            responsibleId: lex.responsibleId,
         }
         
-        Lexs.update(
+        Lexes.update(
             {_id: lex._id}, 
             { $set: lexDocument }
         );
@@ -140,7 +140,7 @@ Meteor.methods({
 
         check(lexId, String);
 
-        Lexs.remove({_id: lexId});
+        Lexes.remove({_id: lexId});
     },
 
     insertCategory(category) {
@@ -253,7 +253,7 @@ Meteor.methods({
         Subcategories.remove({_id: subcategoryId});
     },
 
-    insertAuthor(author) {
+    insertResponsible(responsible) {
 
         if (!this.userId) {
             throw new Meteor.Error('not connected');
@@ -272,26 +272,26 @@ Meteor.methods({
         
         // Check if name is unique
         // TODO: Move this code to SimpleSchema custom validation function
-        if (Authors.find({lastName: author.lastName.toLowerCase(), firstName: author.firstName.toLowerCase()}).count() > 0) {
-            throwMeteorErrors(['lastName', 'firstName'], 'Un auteur avec les mêmes nom et prénom existe déjà !');
+        if (Responsibles.find({lastName: responsible.lastName, firstName: responsible.firstName}).count() > 0) {
+            throwMeteorErrors(['lastName', 'firstName'], 'Un responsable avec les mêmes nom et prénom existe déjà !');
         }
         
-        authorsSchema.validate(author);
+        responsiblesSchema.validate(responsible);
 
-        console.log(author);
+        console.log(responsible);
 
-        let authorDocument = {
-            firstName: author.firstName.toLowerCase(),
-            lastName: author.lastName.toLowerCase(),
-            urlFr: author.urlFr,
-            urlEn: author.urlEn,
+        let responsibleDocument = {
+            firstName: responsible.firstName,
+            lastName: responsible.lastName,
+            urlFr: responsible.urlFr,
+            urlEn: responsible.urlEn,
         };
 
-        return Authors.insert(authorDocument);
+        return Responsibles.insert(responsibleDocument);
 
     },
 
-    removeAuthor(authorId){
+    removeResponsible(responsibleId){
 
         if (!this.userId) {
             throw new Meteor.Error('not connected');
@@ -308,8 +308,8 @@ Meteor.methods({
               'Only admins can remove Category.');
         }
 
-        check(authorId, String);
+        check(responsibleId, String);
 
-        Authors.remove({_id: authorId});
+        Responsibles.remove({_id: responsibleId});
     },
 });
