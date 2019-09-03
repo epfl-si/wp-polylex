@@ -147,10 +147,11 @@ importCategories = () => {
         let data = JSON.parse(JSON.stringify(results.data));
         data.forEach(category => {
             let categoryDocument = {
-                name: category.name,
+                nameFr: category.nameFr,
+                nameEn: category.nameEn,
             }
             // Check if category already exist
-            if (!Categories.findOne({name: categoryDocument.name})) {
+            if (!Categories.findOne({nameFr: categoryDocument.nameFr})) {
                 Categories.insert(categoryDocument);
             }
         });
@@ -169,10 +170,11 @@ importSubcategories = () => {
         let data = JSON.parse(JSON.stringify(results.data));
         data.forEach(subcategory => {
         let subcategoryDocument = {
-            name: subcategory.name,
+            nameFr: subcategory.nameFr,
+            nameEn: subcategory.nameEn,
         }
         // Check if subcategory already exist
-        if (!Subcategories.findOne({name: subcategoryDocument.name})) {
+        if (!Subcategories.findOne({name: subcategoryDocument.nameFr})) {
             Subcategories.insert(subcategoryDocument);
         }
         });

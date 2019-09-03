@@ -162,14 +162,15 @@ Meteor.methods({
 
         // Check if name is unique
         // TODO: Move this code to SimpleSchema custom validation function
-        if (Categories.find({name: category.name}).count()>0) {
+        if (Categories.find({name: category.nameFr}).count()>0) {
             throwMeteorError('name', 'Nom de la catégorie existe déjà !');
         }
 
         categoriesSchema.validate(category);
 
         let categoryDocument = {
-            name: category.name,
+            nameFr: category.nameFr,
+            nameEn: category.nameEn,
         };
 
         return Categories.insert(categoryDocument);
@@ -217,14 +218,15 @@ Meteor.methods({
 
         // Check if name is unique
         // TODO: Move this code to SimpleSchema custom validation function
-        if (Subcategories.find({name: subcategory.name}).count()>0) {
+        if (Subcategories.find({name: subcategory.nameFr}).count()>0) {
             throwMeteorError('name', 'Nom de la sous catégorie existe déjà !');
         }
 
         subcategoriesSchema.validate(subcategory);
 
         let subcategoryDocument = {
-            name: subcategory.name,
+            nameFr: subcategory.nameFr,
+            nameEn: subcategory.nameEn,
         };
 
         return Subcategories.insert(subcategoryDocument);

@@ -246,7 +246,7 @@ class Add extends React.Component {
                         onBlur={e => { handleBlur(e); this.updateUserMsg();}}
                         label="Catégorie" name="categoryId" component={ CustomSelect } >
                         {this.props.categories.map( (category, index) => (
-                        <option key={category._id} value={category._id}>{category.name}</option>
+                        <option key={category._id} value={category._id}>{category.nameFr}</option>
                         ))}
                     </Field>
                     <ErrorMessage name="category" component={ CustomError } />
@@ -298,11 +298,11 @@ export default withTracker(() => {
     Meteor.subscribe('subcategory.list');
     Meteor.subscribe('responsible.list');
 
-    let categories = Categories.find({}, {sort: {name:1 }}).fetch();
+    let categories = Categories.find({}, {sort: {nameFr:1 }}).fetch();
     let subcategories = Subcategories.find({}, {sort: {name:1 }}).fetch();
     let responsibles = Responsibles.find({}, {sort: {name:1 }}).fetch()
 
-    let defaultCategoryId = Categories.findOne({name:"Autres"});
+    let defaultCategoryId = Categories.findOne({nameFr:"Autres"});
     if (defaultCategoryId != undefined) {
         defaultCategoryId = defaultCategoryId["_id"];
     }

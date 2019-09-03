@@ -102,9 +102,17 @@ export const categoriesSchema = new SimpleSchema({
         type: String,
         optional: true,
     },
-    name: {
+    nameFr: {
         type: String,
-        label: "Nom",
+        label: "Nom en français",
+        optional: false,
+        max: 100,
+        min: 1,
+        custom: isRequired
+    },
+    nameEn: {
+        type: String,
+        label: "Nom en anglais",
         optional: false,
         max: 100,
         min: 1,
@@ -118,9 +126,17 @@ export const subcategoriesSchema = new SimpleSchema({
         type: String,
         optional: true,
     },
-    name: {
+    nameFr: {
         type: String,
-        label: "Nom",
+        label: "Nom en français",
+        optional: false,
+        max: 100,
+        min: 1,
+        custom: isRequired
+    },
+    nameEn: {
+        type: String,
+        label: "Nom en anglais",
         optional: false,
         max: 100,
         min: 1,

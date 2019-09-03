@@ -151,8 +151,8 @@ class Admin extends React.Component {
     
                 <ul className="list-group">
                     {this.props.categories.map( (category, index) => (
-                        <li key={category._id} value={category.name} className="list-group-item">
-                            {category.name}
+                        <li key={category._id} value={category.nameFr} className="list-group-item">
+                            {category.nameFr} / {category.nameEn}
                             <button type="button" className="close" aria-label="Close">
                                 <span  onClick={() => this.deleteCategory(category._id)} aria-hidden="true">&times;</span>
                             </button>
@@ -163,7 +163,7 @@ class Admin extends React.Component {
                 <div className="card-body">
                     <Formik
                             onSubmit={ this.submitCategory }
-                            initialValues={ { name: ''} }
+                            initialValues={ { nameFr: '', nameEn: ''} }
                             validationSchema={ this.nameSchema }
                             validateOnBlur={ false }
                             validateOnChange={ false }
@@ -173,8 +173,13 @@ class Admin extends React.Component {
                             isSubmitting,
                         }) => (    
                             <form onSubmit={ handleSubmit } className="">
-                                <Field placeholder="Nom de la catégorie à ajouter" name="name" type="text" component={ CustomInput } />
-                                <ErrorMessage name="name" component={ CustomError } />
+
+                                <Field placeholder="Nom de la catégorie en français à ajouter" name="nameFr" type="text" component={ CustomInput } />
+                                <ErrorMessage name="nameFr" component={ CustomError } />
+
+                                <Field placeholder="Nom de la catégorie en anglais à ajouter" name="nameEn" type="text" component={ CustomInput } />
+                                <ErrorMessage name="nameEn" component={ CustomError } />
+
                                 <div className="my-1 text-right">
                                     <button type="submit" disabled={ isSubmitting } className="btn btn-primary">Enregistrer</button>
                                 </div>
@@ -189,10 +194,10 @@ class Admin extends React.Component {
     
                 <ul className="list-group">
                     {this.props.subcategories.map( (subcategory, index) => (
-                        <li key={subcategory._id} value={subcategory.name} className="list-group-item">
-                            {subcategory.name}
+                        <li key={subcategory._id} value={subcategory.nameFr} className="list-group-item">
+                            {subcategory.nameFr} / {subcategory.nameEn}
                             <button type="button" className="close" aria-label="Close">
-                                <span  onClick={() => this.deleteSubcategory(subcategory._id)} aria-hidden="true">&times;</span>
+                                <span onClick={() => this.deleteSubcategory(subcategory._id)} aria-hidden="true">&times;</span>
                             </button>
                         </li>
                     ))}
@@ -201,7 +206,7 @@ class Admin extends React.Component {
                 <div className="card-body">
                     <Formik
                             onSubmit={ this.submitSubcategory }
-                            initialValues={ { name: ''} }
+                            initialValues={ { nameFr: '', nameEn: ''} }
                             validationSchema={ this.nameSchema }
                             validateOnBlur={ false }
                             validateOnChange={ false }
@@ -211,8 +216,13 @@ class Admin extends React.Component {
                             isSubmitting,
                         }) => (    
                             <form onSubmit={ handleSubmit } className="">
-                                <Field placeholder="Nom de la sous catégorie à ajouter" name="name" type="text" component={ CustomInput } />
-                                <ErrorMessage name="name" component={ CustomError } />
+
+                                <Field placeholder="Nom de la sous catégorie en français à ajouter" name="nameFr" type="text" component={ CustomInput } />
+                                <ErrorMessage name="nameFr" component={ CustomError } />
+
+                                <Field placeholder="Nom de la sous catégorie en anglais à ajouter" name="nameEn" type="text" component={ CustomInput } />
+                                <ErrorMessage name="nameEn" component={ CustomError } />
+                                
                                 <div className="my-1 text-right">
                                     <button type="submit" disabled={ isSubmitting } className="btn btn-primary">Enregistrer</button>
                                 </div>
