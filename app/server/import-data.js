@@ -2,6 +2,57 @@ import { Categories, Subcategories, Responsibles, Lexes } from '../imports/api/c
 
 importData = () => {
 
+    const path = 'datas.csv';
+    const file = Assets.getText(path);
+    Papa.parse(file, {
+        delimiter: ";",
+        header: true,
+        complete: function(results) {
+        let data = JSON.parse(JSON.stringify(results.data));
+        data.forEach(line => {
+            let categoryId;
+            let subcategoryId;
+
+            console.log(line);
+
+            // Check if category already exist
+            if (!Categories.findOne({ nameFr: line.categoryFr, nameEn: line.categoryEn })) {
+                let categoryDocument = {
+                    nameFr: line.categoryFr,
+                    nameEn: line.categoryEn,
+                }
+                categoryId = Categories.insert(categoryDocument);
+            }
+
+            // Check if subcategory already exist
+            if (!Subcategories.findOne({ nameFr: line.subcategoryFr, nameEn: line.subcategoryEn })) {
+                let subcategoryDocument = {
+                    nameFr: line.subcategoryFr,
+                    nameEn: line.subcategoryEn,
+                }
+                subcategoryId = Subcategories.insert(subcategoryDocument);
+            }
+
+            let lexDocument = {
+                lex: line.lex,
+                titleFr: line.titleFr,
+                titleEn: line.titleEn,
+                urlFr: line.urlFr,
+                urlEn: line.urlEn,
+                descriptionFr: line.descriptionFr,
+                descriptionEn: line.descriptionEn,
+                effectiveDate: line.effectiveDate,
+                revisionDate: line.revisionDate,
+                categoryId: categoryId,
+                subcategoryId: subcategoryId,
+            }
+
+
+        });
+        console.log("Update Lexes to add responsibles - finished");
+        }    
+    });
+    /*
     if (Categories.find({}).count() == 0) {
         console.log("Import categories");
         importCategories();
@@ -16,7 +67,6 @@ importData = () => {
         console.log("Subcategories already exist");
     }
 
-    /*
     if (Responsibles.find({}).count() == 0) {
         console.log("Import responsibles");
         importResponsibles();
