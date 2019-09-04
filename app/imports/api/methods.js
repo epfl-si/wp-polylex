@@ -58,7 +58,7 @@ Meteor.methods({
         
         lexesSchema.validate(lex);
         lex = prepareUpdateInsert(lex, 'insert');
-        console.log(lex.responsibleId);
+        console.log(lex);
         
         let lexDocument = {
             lex: lex.lex,
@@ -68,7 +68,8 @@ Meteor.methods({
             urlEn: lex.urlEn,
             descriptionFr: lex.descriptionFr,
             descriptionEn: lex.descriptionEn,
-            publicationDate: lex.publicationDate,
+            effectiveDate: lex.effectiveDate,
+            revisionDate: lex.revisionDate,
             categoryId: lex.categoryId,
             subcategoryId: lex.subcategoryId,
             responsibleId: lex.responsibleId,
@@ -108,7 +109,8 @@ Meteor.methods({
             urlEn: lex.urlEn,
             descriptionFr: lex.descriptionFr,
             descriptionEn: lex.descriptionEn,
-            publicationDate: lex.publicationDate,
+            effectiveDate: lex.effectiveDate,
+            revisionDate: lex.revisionDate,
             categoryId: lex.categoryId,
             subcategoryId: lex.subcategoryId,
             responsibleId: lex.responsibleId,
