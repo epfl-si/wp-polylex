@@ -3,8 +3,8 @@ import React from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
 import Footer from './footer/Footer';
 import Header from './header/Header';
-import List from './lexs/List';
-import Add from './lexs/Add';
+import List from './lexes/List';
+import Add from './lexes/Add';
 import Admin from './admin/Admin';
 import User from './admin/User';
 

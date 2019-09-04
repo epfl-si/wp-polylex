@@ -1,9 +1,8 @@
 import React from 'react';
-import Select from 'react-select';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import { Formik, Field, ErrorMessage } from 'formik';
-import { Lexs, Categories, Subcategories, Authors } from '../../api/collections';
+import { lexes, Categories, Subcategories, Responsibles } from '../../api/collections';
 import { CustomError, CustomInput, CustomTextarea, CustomSelect } from '../CustomFields';
 
 class Add extends React.Component {
@@ -36,7 +35,7 @@ class Add extends React.Component {
   }
 
   getLex = async () => {
-    let lex = await Lexs.findOne({_id: this.props.match.params._id});
+    let lex = await Lexes.findOne({_id: this.props.match.params._id});
     return lex;
   }
 
@@ -96,15 +95,18 @@ class Add extends React.Component {
 
   render() {
 
+    console.log(`Action: ${this.state.action}`);
+    console.log(this.props);
+
     let content;
     const isLoadingEdit = (this.state.lex === undefined || this.state.lex === '') 
         && this.state.action === 'edit';
     const isLoadingAdd = (
             this.props.defaultCategoryId === undefined || 
             this.props.defaultSubcategoryId === undefined || 
-            this.props.authors === undefined) && this.state.action === 'add';
+            this.props.responsibles === undefined) && this.state.action === 'add';
     if (isLoadingAdd || isLoadingEdit) {
-      content = <h1>Loading....</h1>
+      content = <h1>Loading...</h1>
     } else {
 
       let initialValues;
@@ -137,11 +139,11 @@ class Add extends React.Component {
           urlEn: '',
           descriptionFr: '',
           descriptionEn: '',
-          publicationDateFr: '',
-          publicationDateEn: '',
+          effectiveDate: '',
+          revisionDate: '',
           categoryId: this.props.defaultCategoryId,
           subcategoryId: this.props.defaultSubcategoryId,
-          authors: [],
+          responsibleId: '',
         }
       }
 
@@ -228,23 +230,23 @@ class Add extends React.Component {
                     <Field
                         onChange={e => { handleChange(e); this.updateUserMsg();}}
                         onBlur={e => { handleBlur(e); this.updateUserMsg();}}
-                        placeholder="Date de publication en français du LEX à ajouter" label="Date de publication en français" name="publicationDateFr" type="text" component={ CustomInput } 
+                        placeholder="Date d'entrée en vigueur à ajouter" label="Date d'entrée en vigueur" name="effectiveDate" type="date" component={ CustomInput } 
                     />
-                    <ErrorMessage name="publicationDateFr" component={ CustomError } />
+                    <ErrorMessage name="effectiveDate" component={ CustomError } />
 
                     <Field
                         onChange={e => { handleChange(e); this.updateUserMsg();}}
                         onBlur={e => { handleBlur(e); this.updateUserMsg();}}
-                        placeholder="Date de publication en anglais du LEX à ajouter" label="Date de publication en anglais" name="publicationDateEn" type="text" component={ CustomInput } 
+                        placeholder="Date de révision à ajouter" label="Date de révision" name="revisionDate" type="date" component={ CustomInput } 
                     />
-                    <ErrorMessage name="publicationDateEn" component={ CustomError } />
+                    <ErrorMessage name="revisionDate" component={ CustomError } />
 
                     <Field 
                         onChange={e => { handleChange(e); this.updateUserMsg();}}
                         onBlur={e => { handleBlur(e); this.updateUserMsg();}}
                         label="Catégorie" name="categoryId" component={ CustomSelect } >
                         {this.props.categories.map( (category, index) => (
-                        <option key={category._id} value={category._id}>{category.name}</option>
+                        <option key={category._id} value={category._id}>{category.nameFr}</option>
                         ))}
                     </Field>
                     <ErrorMessage name="category" component={ CustomError } />
@@ -254,24 +256,21 @@ class Add extends React.Component {
                         onBlur={e => { handleBlur(e); this.updateUserMsg();}}
                         label="Sous-catégorie" name="subcategoryId" component={ CustomSelect } >
                         {this.props.subcategories.map( (subcategory, index) => (
-                        <option key={subcategory._id} value={subcategory._id}>{subcategory.name}</option>
+                        <option key={subcategory._id} value={subcategory._id}>{subcategory.nameFr}</option>
                         ))}
                     </Field>
                     <ErrorMessage name="subcategory" component={ CustomError } />
                     
-                    <label htmlFor="authors">Auteurs</label>
-                    <MySelect
-                        id="authors"
-                        value={values.authors}
-                        onChange={setFieldValue}
-                        onBlur={setFieldTouched}
-                        error={errors.authors}
-                        touched={touched.authors}
-                        options={this.props.authors}
-                        saveSuccess={this.updateSaveSuccess}
-                        placeholder="Sélectionner un ou plusieurs auteurs"
-                        name="authors"
-                    />
+                    <Field 
+                        onChange={e => { handleChange(e); this.updateUserMsg();}}
+                        onBlur={e => { handleBlur(e); this.updateUserMsg();}}
+                        label="Responsable" name="responsibleId" component={ CustomSelect } >
+                        {this.props.responsibles.map( (responsible, index) => (
+                        <option key={responsible._id} value={responsible._id}>{responsible.firstName} {responsible.lastName}</option>
+                        ))}
+                    </Field>
+                    <ErrorMessage name="responsible" component={ CustomError } />
+                    
 
                     <div className="my-1 text-right">
                         <button 
@@ -297,70 +296,28 @@ export default withTracker(() => {
     Meteor.subscribe('lex.list');
     Meteor.subscribe('category.list');
     Meteor.subscribe('subcategory.list');
-    Meteor.subscribe('author.list');
+    Meteor.subscribe('responsible.list');
 
-    let categories = Categories.find({}, {sort: {name:1 }}).fetch();
+    let categories = Categories.find({}, {sort: {nameFr:1 }}).fetch();
     let subcategories = Subcategories.find({}, {sort: {name:1 }}).fetch();
+    let responsibles = Responsibles.find({}, {sort: {name:1 }}).fetch()
 
-    let defaultCategoryId = Categories.findOne({name:"Autres"});
+    let defaultCategoryId = Categories.findOne({nameFr:"Autres"});
     if (defaultCategoryId != undefined) {
         defaultCategoryId = defaultCategoryId["_id"];
     }
-    let defaultSubcategoryId = Subcategories.findOne({name:"Achats"});
+    let defaultSubcategoryId = Subcategories.findOne({nameFr:"Achats"});
     if (defaultSubcategoryId != undefined) {
         defaultSubcategoryId = defaultSubcategoryId["_id"];
     }
 
     return {
-        lexs: Lexs.find({}, {sort: {lex: 1}}).fetch(),
+        lexes: Lexes.find({}, {sort: {lex: 1}}).fetch(),
         categories: categories,
         subcategories: subcategories,
+        responsibles: responsibles,
         defaultCategoryId: defaultCategoryId,
         defaultSubcategoryId: defaultSubcategoryId,
-        authors: Authors.find({}, {sort: {lastName: 1}}).fetch(),
     };  
 
 })(Add);
-
-class MySelect extends React.Component {
-    handleChange = value => {
-        // this is going to call setFieldValue and manually update values.topcis
-        this.props.onChange(this.props.name, value);
-        this.props.saveSuccess(!this.props.saveSuccess);
-    };
-
-    handleBlur = () => {
-        // this is going to call setFieldTouched and manually update touched.topcis
-        this.props.onBlur(this.props.name, true);
-        this.props.saveSuccess(!this.props.saveSuccess);
-    };
-
-    capitalizeFirstLetter = (s) => {
-        return s.charAt(0).toUpperCase() + s.slice(1)
-    }
-
-    render() {
-    let content;
-
-    content = 
-    (
-        <div style={ {marginBottom: '40px'} }>
-            <Select
-                isMulti
-                onChange={this.handleChange}
-                onBlur={this.handleBlur}
-                value={this.props.value}
-                options={this.props.options}
-                getOptionLabel ={(option)=> { return this.capitalizeFirstLetter(option.lastName) + " " + this.capitalizeFirstLetter(option.firstName)} }
-                getOptionValue ={(option)=>option._id}
-                placeholder={this.props.placeholder}
-            />
-            {!!this.props.error && this.props.touched && (
-                <div style={{ color: 'red', marginTop: '.5rem' }}>{this.props.error}</div>
-            )}
-        </div>
-    );
-
-    return content;
-  }
-}

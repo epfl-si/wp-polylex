@@ -1,9 +1,9 @@
-import { Lexs, Categories, Subcategories, Authors } from "../imports/api/collections";
+import { Lexes, Categories, Subcategories, Responsibles } from "../imports/api/collections";
 import { check } from "meteor/check";
 
 Meteor.publish('lex.list', function() {
     
-    let lexCursor = Lexs.find(
+    let lexCursor = Lexes.find(
         {}, 
         { sort: {lex: 1}, }
     );
@@ -17,7 +17,7 @@ Meteor.publish('lex.single', function(lexId) {
 
     check(lexId, String);
     
-    let lexCursor = Lexs.find({ _id: lexId });
+    let lexCursor = Lexes.find({ _id: lexId });
     return [
         lexCursor,
     ];
@@ -39,11 +39,11 @@ Meteor.publish('subcategory.list', function() {
     ]
 });
 
-Meteor.publish('author.list', function() {
+Meteor.publish('responsible.list', function() {
     
-    let authorCursor = Authors.find({}, {sort: {lastName:1}});
+    let responsibleCursor = Responsibles.find({}, {sort: {lastName:1}});
     return [
-        authorCursor,
+        responsibleCursor,
     ]
 });
 

@@ -3,7 +3,7 @@ import SimpleSchema from 'simpl-schema';
 import { check } from 'meteor/check';
 import messageBox, { isRequired } from './ValidationMessage';
 
-export const lexSchema = new SimpleSchema({
+export const lexesSchema = new SimpleSchema({
     // _id use to update a lex
     _id: {
         type: String,
@@ -13,7 +13,6 @@ export const lexSchema = new SimpleSchema({
         type: String,
         label: "LEX",
         optional: false,
-        
         custom: isRequired
     },
     titleFr: {
@@ -37,7 +36,7 @@ export const lexSchema = new SimpleSchema({
         label: "URL en français",
         optional: false,
         max: 255,
-        min: 1, 
+        min: 1,
         custom: isRequired,
         regEx: SimpleSchema.RegEx.Url,
     },
@@ -67,55 +66,35 @@ export const lexSchema = new SimpleSchema({
     descriptionFr: {
         type: String,
         label: "Description en francais",
-        optional: true,
+        optional: false,
+        min: 1,
     },
     descriptionEn: {
         type: String,
         label: "Description en anglais",
-        optional: true,
+        optional: false,
+        min: 1,
     },
-    publicationDateFr: {
+    effectiveDate: {
         type: String,
-        label: "Date de publication en français",
-        optional: true,
-    },
-    publicationDateEn: {
-        type: String,
-        label: "Date de publication en anglais",
-        optional: true,
-    },
-    authors: {  
-        type: Array,
-        label: "Auteurs",
+        label: "Date d entrées en vigueur",
         optional: false,
     },
-    'authors.$': {
-        type: Object,
-        optional: false
-    },
-    'authors.$._id': {
+    revisionDate: {
         type: String,
-        optional: false
+        label: "Date de révision",
+        optional: false,
     },
-    'authors.$.lastName': {
+    responsibleId: {  
         type: String,
-        optional: false
-    },
-    'authors.$.firstName': {
-        type: String,
-        optional: false
-    },
-    'authors.$.urlFr': {
-        type: String,
-        optional: false
-    },
-    'authors.$.urlEn': {
-        type: String,
-        optional: false
+        label: "Responsable",
+        optional: false,
+        max: 100,
+        min: 1,
     },
 }, { check });
 
-lexSchema.messageBox = messageBox;
+lexesSchema.messageBox = messageBox;
 
 export const categoriesSchema = new SimpleSchema({
     // _id use to update 
@@ -123,9 +102,17 @@ export const categoriesSchema = new SimpleSchema({
         type: String,
         optional: true,
     },
-    name: {
+    nameFr: {
         type: String,
-        label: "Nom",
+        label: "Nom en français",
+        optional: false,
+        max: 100,
+        min: 1,
+        custom: isRequired
+    },
+    nameEn: {
+        type: String,
+        label: "Nom en anglais",
         optional: false,
         max: 100,
         min: 1,
@@ -139,9 +126,17 @@ export const subcategoriesSchema = new SimpleSchema({
         type: String,
         optional: true,
     },
-    name: {
+    nameFr: {
         type: String,
-        label: "Nom",
+        label: "Nom en français",
+        optional: false,
+        max: 100,
+        min: 1,
+        custom: isRequired
+    },
+    nameEn: {
+        type: String,
+        label: "Nom en anglais",
         optional: false,
         max: 100,
         min: 1,
@@ -149,7 +144,7 @@ export const subcategoriesSchema = new SimpleSchema({
     },
 });
 
-export const authorsSchema = new SimpleSchema({
+export const responsiblesSchema = new SimpleSchema({
     // _id use to update 
     _id: {
         type: String,
@@ -191,9 +186,9 @@ export const authorsSchema = new SimpleSchema({
     },   
 });
 
-authorsSchema.messageBox = messageBox;
+responsiblesSchema.messageBox = messageBox;
 
-export const Lexs = new Mongo.Collection('lexs');
+export const Lexes = new Mongo.Collection('lexes');
 export const Categories = new Mongo.Collection('categories');
 export const Subcategories = new Mongo.Collection('subcategories');
-export const Authors = new Mongo.Collection('authors');
+export const Responsibles = new Mongo.Collection('responsibles');
