@@ -106,7 +106,7 @@ class Add extends React.Component {
             this.props.defaultSubcategoryId === undefined || 
             this.props.responsibles === undefined) && this.state.action === 'add';
     if (isLoadingAdd || isLoadingEdit) {
-      content = <h1>Loading....</h1>
+      content = <h1>Loading...</h1>
     } else {
 
       let initialValues;
@@ -256,7 +256,7 @@ class Add extends React.Component {
                         onBlur={e => { handleBlur(e); this.updateUserMsg();}}
                         label="Sous-catégorie" name="subcategoryId" component={ CustomSelect } >
                         {this.props.subcategories.map( (subcategory, index) => (
-                        <option key={subcategory._id} value={subcategory._id}>{subcategory.name}</option>
+                        <option key={subcategory._id} value={subcategory._id}>{subcategory.nameFr}</option>
                         ))}
                     </Field>
                     <ErrorMessage name="subcategory" component={ CustomError } />
@@ -306,7 +306,7 @@ export default withTracker(() => {
     if (defaultCategoryId != undefined) {
         defaultCategoryId = defaultCategoryId["_id"];
     }
-    let defaultSubcategoryId = Subcategories.findOne({name:"Achats"});
+    let defaultSubcategoryId = Subcategories.findOne({nameFr:"Achats"});
     if (defaultSubcategoryId != undefined) {
         defaultSubcategoryId = defaultSubcategoryId["_id"];
     }
