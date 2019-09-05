@@ -19,24 +19,18 @@ export const lexesSchema = new SimpleSchema({
         type: String,
         label: "Titre en français",
         optional: false,
-        max: 100,
-        min: 1,
         custom: isRequired
     },
     titleEn: {
         type: String,
         label: "Titre en anglais",
         optional: false,
-        max: 100,
-        min: 1,
         custom: isRequired
     },
     urlFr: {
         type: String,
         label: "URL en français",
         optional: false,
-        max: 255,
-        min: 1,
         custom: isRequired,
         regEx: SimpleSchema.RegEx.Url,
     },
@@ -44,8 +38,6 @@ export const lexesSchema = new SimpleSchema({
         type: String,
         label: "URL en anglais",
         optional: false,
-        max: 255,
-        min: 1, 
         custom: isRequired,
         regEx: SimpleSchema.RegEx.Url,
     },    
@@ -53,44 +45,43 @@ export const lexesSchema = new SimpleSchema({
         type: String,
         label: "Catégorie",
         optional: false,
-        max: 100,
-        min: 1,
+        custom: isRequired
     },
     subcategoryId: {
         type: String,
         label: "Sous-catégorie",
         optional: false,
-        max: 100,
-        min: 1,
+        custom: isRequired
     },
     descriptionFr: {
         type: String,
         label: "Description en francais",
         optional: false,
-        min: 1,
+        custom: isRequired
     },
     descriptionEn: {
         type: String,
         label: "Description en anglais",
         optional: false,
-        min: 1,
+        custom: isRequired
     },
     effectiveDate: {
         type: String,
         label: "Date d entrées en vigueur",
         optional: false,
+        custom: isRequired
     },
     revisionDate: {
         type: String,
         label: "Date de révision",
         optional: false,
+        custom: isRequired
     },
     responsibleId: {  
         type: String,
         label: "Responsable",
         optional: false,
-        max: 100,
-        min: 1,
+        custom: isRequired
     },
 }, { check });
 

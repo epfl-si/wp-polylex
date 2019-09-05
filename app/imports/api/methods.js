@@ -25,11 +25,19 @@ function prepareUpdateInsert(lex, action) {
     }
 
     // Check if LEX is unique
-    // todo
+    if (Lexes.findOne({lex: lex.lex})) {
+        throwMeteorError('lex', 'Ce LEX existe déjà');
+    } else {
+        // Check if LEX is format x.x.x or x.x.x.x
+        var lexRE = /^\d.\d.\d|\d.\d.\d.\d$/;
+        if (!lex.lex.match(lexRE)) {
+            throwMeteorError('lex', 'Le format d\'un LEX doit être x.x.x ou x.x.x.x');
+        }
+    }
 
     // Check if responsible is empty
     if (lex.responsibleId.length == 0) {
-        throwMeteorError('responsibles', 'Vous devez sélectionner au moins 1 responsable');
+        throwMeteorError('responsibleId', 'Vous devez sélectionner au moins 1 responsable');
     }
 
     return lex;
