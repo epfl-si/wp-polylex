@@ -12,6 +12,7 @@ importData = () => {
         data.forEach(line => {
             let categoryId;
             let subcategoryId;
+            let responsibleId;
 
             console.log(line);
 
@@ -33,23 +34,36 @@ importData = () => {
                 subcategoryId = Subcategories.insert(subcategoryDocument);
             }
 
-            let lexDocument = {
-                lex: line.lex,
-                titleFr: line.titleFr,
-                titleEn: line.titleEn,
-                urlFr: line.urlFr,
-                urlEn: line.urlEn,
-                descriptionFr: line.descriptionFr,
-                descriptionEn: line.descriptionEn,
-                effectiveDate: line.effectiveDate,
-                revisionDate: line.revisionDate,
-                categoryId: categoryId,
-                subcategoryId: subcategoryId,
+            // Check if responsible already exist
+            if (!Responsibles.findOne({ firstName: line.responsibleFirstName, lastName: line.responsibleLastName })) {
+                let responsibleDocument = {
+                    firstName: line.responsibleFirstName,
+                    lastName: line.responsibleLastName,
+                    urlFr: line.responsibleUrlFr,
+                    urlEn: line.responsibleUrlEn,
+                }
+                responsibleId = Responsibles.insert(responsibleDocument);
             }
 
-
+            if (!Lexes.findOne({ lex: line.lex})) {
+                let lexDocument = {
+                    lex: line.lex,
+                    titleFr: line.titleFr,
+                    titleEn: line.titleEn,
+                    urlFr: line.urlFr,
+                    urlEn: line.urlEn,
+                    descriptionFr: line.descriptionFr,
+                    descriptionEn: line.descriptionEn,
+                    effectiveDate: line.effectiveDate,
+                    revisionDate: line.revisionDate,
+                    categoryId: categoryId,
+                    subcategoryId: subcategoryId,
+                    responsibleId: responsibleId,
+                }
+                Lexes.insert(lexDocument);
+            }
         });
-        console.log("Update Lexes to add responsibles - finished");
+        console.log("DATA IMPORTED");
         }    
     });
     /*
