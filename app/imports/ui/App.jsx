@@ -32,6 +32,7 @@ class App extends React.Component {
             <Route path="/edit/:_id" component={ Add } />
             <Route exact path="/admin" component={ Admin } />
             <Route exact path="/admin/users" component={ User } />
+            
             </React.Fragment>)
            : null}
           <Footer />

@@ -6,7 +6,7 @@ import './rest-api';
 
 Meteor.startup(() => {
     let needImportData = true;
-    let activeTequila = false;
+    let activeTequila = true;
 
     if (needImportData) {
         importData();
