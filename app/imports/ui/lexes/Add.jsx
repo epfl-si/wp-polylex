@@ -2,7 +2,7 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import { Formik, Field, ErrorMessage } from 'formik';
-import { lexes, Categories, Subcategories, Responsibles } from '../../api/collections';
+import { Lexes, Categories, Subcategories, Responsibles } from '../../api/collections';
 import { CustomError, CustomInput, CustomTextarea, CustomSelect } from '../CustomFields';
 
 class Add extends React.Component {

@@ -27,14 +27,14 @@ export const CustomTextarea = ({ field, form: { errors }, ...props}) => {
         { ...field} 
         { ...props } 
         id={field.name} 
-        className="form-control" 
+        className={errors[field.name] ? "is-invalid form-control" : "form-control"}
         rows="5" 
         cols="33" ></textarea>
     </div>
   )
 }
 
-export const CustomSelect = ({ field, form, ...props }) => {
+export const CustomSelect = ({ field, form: {errors}, ...props }) => {
   let cssClassName;
   if (field.name == 'role') {
     cssClassName = 'form-group float-left px-2 mb-0';
@@ -47,7 +47,8 @@ export const CustomSelect = ({ field, form, ...props }) => {
       <select 
         { ...field }
         { ...props }
-        className="form-control mt-0" />
+        className={errors[field.name] ? "is-invalid form-control" : "form-control mt-0"}
+      />
     </div>
   )
 }
