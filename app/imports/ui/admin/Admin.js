@@ -13,7 +13,7 @@ class Admin extends React.Component {
         
         console.log(this.props.match.path);
         //console.log(this.props.match.params._id);
-
+        
         
 
         let responsible = Responsibles.findOne("Kc9TvgewCyDu7wJQy");

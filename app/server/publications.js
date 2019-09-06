@@ -47,6 +47,16 @@ Meteor.publish('responsible.list', function() {
     ]
 });
 
+Meteor.publish('responsible.single', function(responsibleId) {
+
+    check(responsibleId, String);
+    
+    let responsibleCursor = Responsibles.find({ _id: responsibleId });
+    return [
+        responsibleCursor,
+    ];
+});
+
 Meteor.publish('user.list', function () { 
     return Meteor.users.find({});
 });
