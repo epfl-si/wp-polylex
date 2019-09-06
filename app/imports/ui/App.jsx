@@ -28,10 +28,15 @@ class App extends React.Component {
           { isAdmin ?   
             (<React.Fragment>
             <Route exact path="/" component={ List } />
-            <Route exact path="/add" component={ Add } />
-            <Route path="/edit/:_id" component={ Add } />
+            <Route exact path="/lex/add" component={ Add } />
+            <Route path="/lex/edit/:_id" component={ Add } />
             <Route exact path="/admin" component={ Admin } />
             <Route exact path="/admin/users" component={ User } />
+            <Route path="/admin/responsible/:_id/edit" component={ Admin } />
+            {/*
+            <Route path="/category/:_id" component={ Category }/>
+            <Route path="/subcategory/:_id" component={ Subcategory }/>
+            */}
             </React.Fragment>)
            : null}
           <Footer />
