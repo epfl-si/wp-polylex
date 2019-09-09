@@ -41,5 +41,32 @@ Les champs obligatoires sont :
 
 
 
+## Déployer une nouvelle version sur l'environnement de test d'openshift
+
+On commence par builder l'image :
+
+`docker build -t epflidevelop/polylex .`
+
+On crée un tag pour cette image 
+
+`docker tag epflidevelop/polylex:latest epflidevelop/polylex:0.1.10`
+
+On pousse l'image dans dockerhub
+
+`docker push epflidevelop/polylex:0.1.10`
+
+`docker push epflidevelop/polylex:latest`
+
+Ensuite on doit modifier la référence à cette image dans le déploiment openshift en éditant le fichier ansible/main.yml.
+
+`
+polylex_image_version: '0.1.10'
+`
+
+`cd ansible/`
+
+`ansible-playbook playbook.yml -i hosts-test`
+
+
 
 

@@ -2,6 +2,10 @@ import { Categories, Subcategories, Responsibles, Lexes } from '../imports/api/c
 
 importData = () => {
 
+    if (Roles) {
+
+    }
+
     if (Categories.find({}).count() == 0) {
         console.log("Import categories");
         importCategories();
