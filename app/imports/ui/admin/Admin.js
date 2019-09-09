@@ -2,16 +2,32 @@ import { withTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import { Formik, Field, ErrorMessage } from 'formik';
-import { Categories, Subcategories, Responsibles } from '../../api/collections';
+import { Lexes, Categories, Subcategories, Responsibles } from '../../api/collections';
 import { CustomError, CustomInput } from '../CustomFields';
 
 class Admin extends React.Component {
+
+    getResponsible = async () => {
+
+        let responsibleId = this.props.match.params._id;
+        console.log(`ID: ${responsibleId}`);
+        let responsible = await Responsibles.findOne({_id: responsibleId});
+        console.log(responsible);
+        return responsible;
+      }
+    
+      componentDidMount() {
+            this.getResponsible().then((responsible) => {
+                console.log(responsible);
+                //this.setState({responsible: responsible});
+            });
+      }
 
     submit = (collection, values, actions) => {
         /*
         console.log(collection);
         console.log(values);
-        */
+        */this.props.match.params
         let meteorMethodName;
 
         if (collection._name === 'categories') {
@@ -241,6 +257,7 @@ export default withTracker(() => {
     Meteor.subscribe('category.list');
     Meteor.subscribe('subcategory.list');
     Meteor.subscribe('responsible.list');
+    Meteor.subscribe('lex.list');
 
     return {
         categories: Categories.find({}, {sort: {name:1 }}).fetch(),

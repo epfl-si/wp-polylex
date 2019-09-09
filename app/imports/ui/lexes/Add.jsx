@@ -42,6 +42,7 @@ class Add extends React.Component {
   componentDidMount() {
     if (this.state.action === 'edit') {
         this.getLex().then((lex) => {
+            console.log(lex);
             this.setState({lex: lex});
         });
     }
@@ -95,8 +96,10 @@ class Add extends React.Component {
 
   render() {
 
+    /*
     console.log(`Action: ${this.state.action}`);
     console.log(this.props);
+    */
 
     let content;
     const isLoadingEdit = (this.state.lex === undefined || this.state.lex === '') 

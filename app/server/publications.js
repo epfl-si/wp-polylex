@@ -15,7 +15,8 @@ Meteor.publish('lex.list', function() {
 
 Meteor.publish('lex.single', function(lexId) {
 
-    check(lexId, String);
+    console.log(`Publication lexid: ${lexId}`);
+    check(lexId, String);   
     
     let lexCursor = Lexes.find({ _id: lexId });
     return [
@@ -45,6 +46,16 @@ Meteor.publish('responsible.list', function() {
     return [
         responsibleCursor,
     ]
+});
+
+Meteor.publish('responsible.single', function(responsibleId) {
+
+    check(responsibleId, String);
+
+    let responsibleCursor = Responsibles.find({ _id: responsibleId });
+    return [
+        responsibleCursor,
+    ];
 });
 
 Meteor.publish('user.list', function () { 

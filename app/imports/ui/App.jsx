@@ -7,6 +7,7 @@ import List from './lexes/List';
 import Add from './lexes/Add';
 import Admin from './admin/Admin';
 import User from './admin/User';
+import Responsible from './admin/Responsible';
 
 class App extends React.Component {
 
@@ -32,6 +33,7 @@ class App extends React.Component {
             <Route path="/edit/:_id" component={ Add } />
             <Route exact path="/admin" component={ Admin } />
             <Route exact path="/admin/users" component={ User } />
+            <Route path="/admin/responsible/:_id/edit" component={ Responsible } />
             </React.Fragment>)
            : null}
           <Footer />
@@ -44,7 +46,9 @@ class App extends React.Component {
 export default withTracker(() => {
   
   let user = Meteor.users.findOne({'_id': Meteor.userId()});
-  console.log(user);
+
+  // console.log(user);
+
   return {  
     currentUser: user,
   };
