@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: epflidevelop/polylex:0.1.13
+    ports:
+      - '80:3000'
+    links:
+      - mongo
+    volumes:
+      - .:/src
+    environment:
+      ROOT_URL: ${APP_ROOT_URL:-http://localhost}
+      MONGO_URL: mongodb://mongo:27017/meteor
+      PORT: 3000
+      METEOR_SETTINGS_FILE: /src/app/meteor-settings.json # See docker/entrypoint.sh
+
+  mongo:
+    image: mongo:latest
+    command:
+      - --storageEngine=wiredTiger
+    volumes:
+      - data:/data/db
+
+volumes:
+  data:
