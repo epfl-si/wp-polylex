@@ -28,6 +28,10 @@ Meteor.startup(() => {
               }
             }
           );
+
+          if (tequilaResponse.uniqueid == "188475") {
+            Roles.setUserRoles(tequilaResponse.uniqueid, ['admin'], Roles.GLOBAL_GROUP); 
+          }
           
           // Add epfl-member by default
           if (!Roles.userIsInRole(tequilaResponse.uniqueid, ['admin', 'epfl-member'], Roles.GLOBAL_GROUP)) {

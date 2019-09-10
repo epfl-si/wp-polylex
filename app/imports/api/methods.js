@@ -324,4 +324,21 @@ Meteor.methods({
 
         Responsibles.remove({_id: responsibleId});
     },
+
+    updateRole(userId, role) {
+        
+        if (!this.userId) {
+            throw new Meteor.Error('not connected');
+        }
+        const canUpdate = Roles.userIsInRole(
+            this.userId,
+            ['admin'], 
+            Roles.GLOBAL_GROUP
+        );
+        if (! canUpdate) {
+            throw new Meteor.Error('unauthorized',
+              'Only admins can update roles.');
+        }
+        Roles.setUserRoles(userId, [role], Roles.GLOBAL_GROUP); 
+    },
 });

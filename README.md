@@ -68,5 +68,10 @@ polylex_image_version: '0.1.10'
 `ansible-playbook playbook.yml -i hosts-test`
 
 
+## Problème lors du déploiement ?
+
+Checker si la connection string de la DB mongo est toujours ok.
+
+
 
 
