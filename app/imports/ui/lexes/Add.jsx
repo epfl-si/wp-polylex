@@ -78,6 +78,7 @@ class Add extends React.Component {
         values, 
         (errors, lexId) => {
           if (errors) {
+            console.log(errors);
             let formErrors = {};
             errors.details.forEach(function(error) {
               formErrors[error.name] = error.message;                        
