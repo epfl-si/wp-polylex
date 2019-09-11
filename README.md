@@ -88,3 +88,7 @@ polylex_image_version: '0.1.10'
 ## Déployer une nouvelle version sur l'environnement de prod d'openshift
 
 `ansible-playbook playbook.yml -i hosts-prod`
+
+## Plus d'info sur la configuration OpenShift
+
+https://docs.google.com/document/d/165DWXhxMyjb4EY8wQMwvGlTYUddYvgMnaAP2OR7-Foo
