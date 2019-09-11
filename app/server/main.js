@@ -35,13 +35,11 @@ Meteor.startup(() => {
           }
           
           // Add epfl-member by default
-          if (!Roles.userIsInRole(tequilaResponse.uniqueid, ['admin', 'epfl-member'], Roles.GLOBAL_GROUP)) {
+          if (!Roles.userIsInRole(tequilaResponse.uniqueid, ['admin', 'editor', 'epfl-member'], Roles.GLOBAL_GROUP)) {
             Roles.addUsersToRoles(tequilaResponse.uniqueid, 'epfl-member', Roles.GLOBAL_GROUP);  
           }
           
           return tequilaResponse.uniqueid;
         }; 
     }
-
-
 });
