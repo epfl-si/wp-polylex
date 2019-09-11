@@ -84,3 +84,7 @@ polylex_image_version: '0.1.10'
 `cd ansible/`
 
 `ansible-playbook playbook.yml -i hosts-test`
+
+## Déployer une nouvelle version sur l'environnement de prod d'openshift
+
+`ansible-playbook playbook.yml -i hosts-prod`
