@@ -32,8 +32,8 @@ class User extends React.Component {
 
         if (Roles.userIsInRole(userId, 'admin', Roles.GLOBAL_GROUP)) {
             return 'admin';
-        } else if (Roles.userIsInRole(userId, 'tags-editor', Roles.GLOBAL_GROUP)) {
-            return 'tags-editor';
+        } else if (Roles.userIsInRole(userId, 'editor', Roles.GLOBAL_GROUP)) {
+            return 'editor';
         }
     }
 
