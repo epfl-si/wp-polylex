@@ -30,11 +30,15 @@ class User extends React.Component {
 
     getRole = (userId) => {
 
+        let role = 'epfl-member';
         if (Roles.userIsInRole(userId, 'admin', Roles.GLOBAL_GROUP)) {
-            return 'admin';
+            role = 'admin';
         } else if (Roles.userIsInRole(userId, 'editor', Roles.GLOBAL_GROUP)) {
-            return 'editor';
-        }
+            role = 'editor';
+        } 
+        console.log(`userId: ${userId} role: ${role}`);
+
+        return role;
     }
 
     render() {
@@ -43,7 +47,7 @@ class User extends React.Component {
         if (!this.props.users) {
             content = 'Loading ...';
         } else {
-            
+                
             content = (
                 <table className="table table-striped">
                     <thead>
