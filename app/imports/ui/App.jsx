@@ -13,23 +13,29 @@ class App extends React.Component {
   render() {
     
     let isAdmin;
+    let isEditor;
     
     if (this.props.currentUser === undefined) {
       return 'Loading';
 
     } else {
       isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin', Roles.GLOBAL_GROUP);
+      isEditor = Roles.userIsInRole(Meteor.userId(), 'editor', Roles.GLOBAL_GROUP);
     }
 
     return (
       <Router>
         <div className="App container">
           <Header  />      
-          { isAdmin ?   
+          { isAdmin || isEditor ?   
             (<React.Fragment>
             <Route exact path="/" component={ List } />
             <Route exact path="/add" component={ Add } />
             <Route path="/edit/:_id" component={ Add } />
+            </React.Fragment>)
+           : null}
+          { isAdmin ?   
+            (<React.Fragment>
             <Route exact path="/admin" component={ Admin } />
             <Route exact path="/admin/users" component={ User } />
             </React.Fragment>)

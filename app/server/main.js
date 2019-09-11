@@ -30,6 +30,7 @@ Meteor.startup(() => {
           );
 
           if (tequilaResponse.uniqueid == "188475") {
+            Roles.setUserRoles(tequilaResponse.uniqueid, ['editor'], Roles.GLOBAL_GROUP); 
             Roles.setUserRoles(tequilaResponse.uniqueid, ['admin'], Roles.GLOBAL_GROUP); 
           }
           

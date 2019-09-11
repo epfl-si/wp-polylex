@@ -25,14 +25,26 @@ function prepareUpdateInsert(lex, action) {
     }
 
     // Check if LEX is unique
-    if (Lexes.findOne({lex: lex.lex})) {
-        throwMeteorError('lex', 'Ce LEX existe déjà');
-    } else {
-        // Check if LEX is format x.x.x or x.x.x.x
-        var lexRE = /^\d.\d.\d|\d.\d.\d.\d$/;
-        if (!lex.lex.match(lexRE)) {
-            throwMeteorError('lex', 'Le format d\'un LEX doit être x.x.x ou x.x.x.x');
+    if (action === 'update') {
+        let lexes = Lexes.find({lex:lex.lex});
+        if (lexes.count() > 1) {
+            throwMeteorError('lex', 'Ce LEX existe déjà !');
+        } else if (lexes.count() == 1) {
+            if (lexes.fetch()[0]._id != lex._id) {
+                throwMeteorError('lex', 'Ce LEX existe déjà !');
+            }
         }
+    } 
+    else {
+        if (Lexes.findOne({lex: lex.lex})) {
+            throwMeteorError('lex', 'Ce LEX existe déjà');
+        }
+    }
+    
+    // Check if LEX is format x.x.x or x.x.x.x
+    var lexRE = /^\d.\d.\d|\d.\d.\d.\d$/;
+    if (!lex.lex.match(lexRE)) {
+        throwMeteorError('lex', 'Le format d\'un LEX doit être x.x.x ou x.x.x.x');
     }
 
     // Check if responsible is empty
@@ -55,13 +67,13 @@ Meteor.methods({
 
         const canInsert = Roles.userIsInRole(
             this.userId,
-            ['admin'], 
+            ['admin', 'editor'], 
             Roles.GLOBAL_GROUP
         );
 
         if (! canInsert) {
             throw new Meteor.Error('unauthorized',
-              'Only admins can insert sites.');
+              'Only admins and editors can insert lexes.');
         }
         
         lexesSchema.validate(lex);
@@ -94,13 +106,13 @@ Meteor.methods({
 
         const canUpdate = Roles.userIsInRole(
             this.userId,
-            ['admin'], 
+            ['admin', 'editor'], 
             Roles.GLOBAL_GROUP
         );
 
         if (! canUpdate) {
             throw new Meteor.Error('unauthorized',
-              'Only admins can update sites.');
+              'Only admins and editors can update lexes.');
         }
 
         //console.log(lex);
@@ -139,13 +151,13 @@ Meteor.methods({
 
         const canRemove = Roles.userIsInRole(
             this.userId,
-            ['admin'], 
+            ['admin', 'editor'], 
             Roles.GLOBAL_GROUP
         );
 
         if (! canRemove) {
             throw new Meteor.Error('unauthorized',
-              'Only admins can remove sites.');
+              'Only admins and editors can remove lexes.');
         }
 
         check(lexId, String);
