@@ -41,17 +41,6 @@ class User extends React.Component {
         return role;
     }
 
-    getSelected = (roleName, currentName) => {
-
-        console.log(`ROLENAME : ${roleName}`);
-        console.log(currentName);
-
-        if (roleName == currentName) {
-            return "selected";
-        } 
-        return "";
-    }
-
     render() {
         let content;
 
