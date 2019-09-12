@@ -37,6 +37,7 @@ class App extends React.Component {
           { isAdmin ?   
             (<React.Fragment>
             <Route exact path="/admin" component={ Admin } />
+            <Route path="/admin/responsible/:_id/edit" component={ Admin } />
             <Route exact path="/admin/users" component={ User } />
             </React.Fragment>)
            : null}

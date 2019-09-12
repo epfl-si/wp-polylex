@@ -96,8 +96,37 @@ class Admin extends React.Component {
         return s.charAt(0).toUpperCase() + s.slice(1)
     }
 
+    isEditResponsible = () => {
+        return this.props.match.path.startsWith('/admin/responsible') && 
+            this.props.match.params._id != undefined && 
+            Responsibles.findOne({_id: this.props.match.params._id}) != undefined;
+    }
+
+    isAdd = () => {
+        return this.props.match.path == '/admin/' || this.props.match.path == '/admin';
+    }
+
+    getResponsibleFormInitValues = () => {
+        let responsibleFormInitialValues = { firstName: '', lastName: '', urlFr: '', urlEn: ''}
+
+        if (this.isEditResponsible()) {
+            let responsible = Responsibles.findOne({_id: this.props.match.params._id});      
+            responsibleFormInitialValues = { 
+                firstName: responsible.firstName, 
+                lastName: responsible.lastName, 
+                urlFr: responsible.urlFr, 
+                urlEn: responsible.urlEn
+            }
+        }
+        return responsibleFormInitialValues;
+    }
+
     render() {
-        return (
+
+        let responsibleFormInitialValues = this.getResponsibleFormInitValues();
+        
+        if (this.isEditResponsible() || this.isAdd()){
+            return (
         <div>
             <div className="card my-2">
 
@@ -117,7 +146,7 @@ class Admin extends React.Component {
                 <div className="card-body">
                     <Formik
                             onSubmit={ this.submitResponsible }
-                            initialValues={ { firstName: '', lastName: '', urlFr: '', urlEn: ''} }
+                            initialValues={ responsibleFormInitialValues }
                             validationSchema={ this.nameSchema }
                             validateOnBlur={ false }
                             validateOnChange={ false }
@@ -233,6 +262,10 @@ class Admin extends React.Component {
             </div>
         </div>
         )
+        } else {
+            return <h1>Loading</h1>;
+        }
+
     }
 }
 
@@ -246,6 +279,7 @@ export default withTracker(() => {
         categories: Categories.find({}, {sort: {name:1 }}).fetch(),
         subcategories: Subcategories.find({}, {sort: {name:1 }}).fetch(),
         responsibles: Responsibles.find({}, {sort: {lastName: 1}}).fetch(),
+        
     };
     
 })(Admin);

@@ -29,4 +29,4 @@ check                         # Check schema mongoDB
 harrison:papa-parse           # parse csv
 nimble:restivus               # Rest APi
 alanning:roles                # roles
-epfl:accounts-tequila         # Tequila
+# epfl:accounts-tequila         # Tequila
