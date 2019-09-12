@@ -1,167 +1,124 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
-import { Formik, Field, ErrorMessage } from 'formik';
+import { withFormik, Formik, Field, ErrorMessage } from 'formik';
 import { Lexes, Categories, Subcategories, Responsibles } from '../../api/collections';
 import { CustomError, CustomInput, CustomTextarea, CustomSelect } from '../CustomFields';
+import { EditorState } from 'draft-js';
+import { stateToHTML } from 'draft-js-export-html';
+import { stateFromHTML } from 'draft-js-import-html';
+import { RichEditorExample } from './RichEditor';
+import './rich-editor.css';
 
-class Add extends React.Component {
-
-  constructor(props){
-    super(props);
+const formikEnhancer = withFormik({
+    mapPropsToValues: props => ({
     
-    let action;
-    if (this.props.match.path.startsWith('/edit')) {
-      action = 'edit';
-    } else {
-      action = 'add';
-    }
-
-    this.state = {
-        saveSuccess: false,
-        lex: '',
-        action: action,
-        addSuccess: false,
-        editSuccess: false,
-    }
-  }
-
-  updateSaveSuccess = (newValue) => {
-    this.setState({ saveSuccess: newValue });
-}
-
-  updateUserMsg = () => {
-    this.setState({addSuccess: false, editSuccess: false});
-  }
-
-  getLex = async () => {
-    let lex = await Lexes.findOne({_id: this.props.match.params._id});
-    return lex;
-  }
-
-  componentDidMount() {
-    if (this.state.action === 'edit') {
-        this.getLex().then((lex) => {
-            this.setState({lex: lex});
-        });
-    }
-  }
+      // editorState: new EditorState.createEmpty(),
+      editorState: new EditorState.createWithContent(stateFromHTML('<p>Hello</p>'))
+        
+    }),
     
-  submit = (values, actions) => {
+    handleSubmit: (values, { setSubmitting }) => {
+      setTimeout(() => {
+        // you probably want to transform draftjs state to something else, but I'll leave that to you.
+        console.log(stateToHTML(values['editorState'].getCurrentContent()));
+        setSubmitting(false);
+      }, 1000);
+    },
+    displayName: 'AddForm',
+  });
+
+class AddForm extends React.Component {
+
+    submit = (values, actions) => {
     
-    console.log(values);
+        if (this.props.action === 'add') {
 
-    if (this.state.action === 'add') {
-      Meteor.call(
-        'insertLex',
-        values, 
-        (errors, lexId) => {
-          if (errors) {
-            console.log(errors);
-            let formErrors = {};
-            errors.details.forEach(function(error) {
-              formErrors[error.name] = error.message;                        
-            });
-            actions.setErrors(formErrors);
-            actions.setSubmitting(false);
-          } else {
-              actions.setSubmitting(false);
-              actions.resetForm();
-              this.setState({addSuccess: true});
-          }
-        }
-      );
-    } else if (this.state.action === 'edit') {
+            console.log(values);
+            let result = stateToHTML(values['editorState'].getCurrentContent())
+            console.log(result);
 
-      Meteor.call(
-        'updateLex',
-        values, 
-        (errors, lexId) => {
-          if (errors) {
-            console.log(errors);
-            let formErrors = {};
-            errors.details.forEach(function(error) {
-              formErrors[error.name] = error.message;                        
-            });
-            actions.setErrors(formErrors);
-            actions.setSubmitting(false);
-          } else {
-            actions.setSubmitting(false);
-            this.setState({editSuccess: true});
-          }
-        }
-      );
-    }
-  }
-
-  render() {
-
-    console.log(`Action: ${this.state.action}`);
-    console.log(this.props);
-
-    let content;
-    const isLoadingEdit = (this.state.lex === undefined || this.state.lex === '') 
-        && this.state.action === 'edit';
-    const isLoadingAdd = (
-            this.props.defaultCategoryId === undefined || 
-            this.props.defaultSubcategoryId === undefined || 
-            this.props.responsibles === undefined) && this.state.action === 'add';
-    if (isLoadingAdd || isLoadingEdit) {
-      content = <h1>Loading...</h1>
-    } else {
-
-      let initialValues;
-      let title;
-
-      let msgAddSuccess = (
-        <div className="alert alert-success" role="alert">
-          Le nouveau lex a été ajouté avec succès ! 
-        </div> 
-      )
-
-      let msgEditSuccess = (
-        <div className="alert alert-success" role="alert">
-          Le lex a été modifié avec succès ! 
-        </div> 
-      )
-      
-      if (this.state.action === 'edit') {
-      
-        title = 'Modifier le lex ci-dessous'
-        initialValues = this.state.lex;
-      
-      } else { 
-        title = 'Ajouter un nouveau lex';
-        initialValues = { 
-          lex: '',
-          titleFr: '',
-          titleEn: '',
-          urlFr: '',
-          urlEn: '',
-          descriptionFr: '',
-          descriptionEn: '',
-          effectiveDate: '',
-          revisionDate: '',
-          categoryId: this.props.defaultCategoryId,
-          subcategoryId: this.props.defaultSubcategoryId,
-          responsibleId: '',
+          Meteor.call(
+            'insertLex',
+            values, 
+            (errors, lexId) => {
+              if (errors) {
+                console.log(errors);
+                let formErrors = {};
+                errors.details.forEach(function(error) {
+                  formErrors[error.name] = error.message;                        
+                });
+                actions.setErrors(formErrors);
+                actions.setSubmitting(false);
+              } else {
+                  actions.setSubmitting(false);
+                  actions.resetForm();
+                  this.setState({addSuccess: true});
+              }
+            }
+          );
+        } else if (this.props.action === 'edit') {
+    
+          Meteor.call(
+            'updateLex',
+            values, 
+            (errors, lexId) => {
+              if (errors) {
+                console.log(errors);
+                let formErrors = {};
+                errors.details.forEach(function(error) {
+                  formErrors[error.name] = error.message;                        
+                });
+                actions.setErrors(formErrors);
+                actions.setSubmitting(false);
+              } else {
+                actions.setSubmitting(false);
+                this.setState({editSuccess: true});
+              }
+            }
+          );
         }
       }
+    
 
-      content = (
-          
-        <div className="card my-2">
-            <h5 className="card-header">{title}</h5> 
+    render() {
+        let initialValues;
+    
+        if (this.props.action === 'edit') {
             
-            { this.state.addSuccess && msgAddSuccess }
-            { this.state.editSuccess && msgEditSuccess }
+            console.log(this.props);
+            
+            initialValues = this.props.lex;
+            let editorState = EditorState.createWithContent(stateFromHTML(initalValues.descriptionFr)); 
+            initialValues['editorState'] = editorState;
+            
+        } else { 
 
-            <Formik
-                onSubmit={ this.submit }
-                initialValues={ initialValues }
-                validateOnBlur={ false }
-                validateOnChange={ false }
-            >
+            initialValues = { 
+                lex: '',
+                titleFr: '',
+                titleEn: '',
+                urlFr: '',
+                urlEn: '',
+                descriptionFr: '',
+                descriptionEn: '',
+                effectiveDate: '',
+                revisionDate: '',
+                categoryId: this.props.defaultCategoryId,
+                subcategoryId: this.props.defaultSubcategoryId,
+                responsibleId: '',
+                //editorState: this.props.initialValues.editorState,
+                // editorState: this.state.editorState,
+                editorState: new EditorState.createEmpty(),
+            }
+        }
+
+        return ( <Formik
+            onSubmit={ this.submit }
+            initialValues={ initialValues }
+            validateOnBlur={ false }
+            validateOnChange={ false }
+        >
             {({
                 handleSubmit,
                 isSubmitting,
@@ -213,6 +170,12 @@ class Add extends React.Component {
                         placeholder="URL en anglais du LEX à ajouter" label="URL en anglais" name="urlEn" type="text" component={ CustomInput } 
                     />
                     <ErrorMessage name="urlEn" component={ CustomError } />
+
+                    <RichEditorExample
+                        editorState={values.editorState}
+                        onChange={setFieldValue}
+                        onBlur={handleBlur}
+                    />
 
                     <Field
                         onChange={e => { handleChange(e); this.updateUserMsg();}}
@@ -282,7 +245,106 @@ class Add extends React.Component {
                     </div>
                 </form>
             )}
-            </Formik>
+            </Formik>)
+
+    }
+}
+
+// const MyEnhancedForm = formikEnhancer(AddForm);
+
+class Add extends React.Component {
+
+  constructor(props){
+    super(props);
+    
+    let action;
+    if (this.props.match.path.startsWith('/edit')) {
+      action = 'edit';
+    } else {
+      action = 'add';
+    }
+
+    this.state = {
+        saveSuccess: false,
+        lex: '',
+        action: action,
+        addSuccess: false,
+        editSuccess: false,
+    }
+  }
+
+  updateSaveSuccess = (newValue) => {
+    this.setState({ saveSuccess: newValue });
+}
+
+  updateUserMsg = () => {
+    this.setState({addSuccess: false, editSuccess: false});
+  }
+
+  getLex = async () => {
+    let lex = await Lexes.findOne({_id: this.props.match.params._id});
+    return lex;
+  }
+
+  componentDidMount() {
+    if (this.state.action === 'edit') {
+        this.getLex().then((lex) => {
+            this.setState({lex: lex});
+        });
+    }
+  }
+    
+  
+  render() {
+
+
+    let content;
+    const isLoadingEdit = (this.state.lex === undefined || this.state.lex === '') 
+        && this.state.action === 'edit';
+    const isLoadingAdd = (
+            this.props.defaultCategoryId === undefined || 
+            this.props.defaultSubcategoryId === undefined || 
+            this.props.responsibles === undefined) && this.state.action === 'add';
+    if (isLoadingAdd || isLoadingEdit) {
+      content = <h1>Loading...</h1>
+    } else {
+
+      let title;
+
+      if (this.state.action === 'edit') {
+        title = 'Modifier le lex ci-dessous';
+      } else {
+        title = 'Ajouter un nouveau lex';
+      }
+
+      let msgAddSuccess = (
+        <div className="alert alert-success" role="alert">
+          Le nouveau lex a été ajouté avec succès ! 
+        </div> 
+      )
+
+      let msgEditSuccess = (
+        <div className="alert alert-success" role="alert">
+          Le lex a été modifié avec succès ! 
+        </div> 
+      )
+      
+      content = (
+          
+        <div className="card my-2">
+            <h5 className="card-header">{title}</h5> 
+            
+            { this.state.addSuccess && msgAddSuccess }
+            { this.state.editSuccess && msgEditSuccess }
+
+            <AddForm 
+                action={this.state.action} 
+                categories={this.props.categories} 
+                subcategories={this.props.subcategories} 
+                responsibles={this.props.responsibles}
+                lex={this.state.lex}
+            />
+            
             { this.state.addSuccess && msgAddSuccess }
             { this.state.editSuccess && msgEditSuccess }
         </div>
