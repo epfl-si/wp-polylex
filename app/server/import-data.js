@@ -211,7 +211,7 @@ importSubcategories = () => {
     const path = 'subcategories.csv';
     const file = Assets.getText(path);
     Papa.parse(file, {
-    delimiter: ",",
+    delimiter: ";",
     header: true,
     complete: function(results) {
         let data = JSON.parse(JSON.stringify(results.data));

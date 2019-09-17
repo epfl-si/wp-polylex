@@ -243,8 +243,8 @@ export default withTracker(() => {
     Meteor.subscribe('responsible.list');
 
     return {
-        categories: Categories.find({}, {sort: {name:1 }}).fetch(),
-        subcategories: Subcategories.find({}, {sort: {name:1 }}).fetch(),
+        categories: Categories.find({}, {sort: {nameFr:1 }}).fetch(),
+        subcategories: Subcategories.find({}, {sort: {nameFr:1 }}).fetch(),
         responsibles: Responsibles.find({}, {sort: {lastName: 1}}).fetch(),
     };
     
