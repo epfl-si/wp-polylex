@@ -10,6 +10,7 @@ import { stateFromHTML } from 'draft-js-import-html';
 import { RichEditorExample } from './RichEditor';
 import './rich-editor.css';
 
+/*
 const formikEnhancer = withFormik({
     mapPropsToValues: props => ({
     
@@ -27,7 +28,7 @@ const formikEnhancer = withFormik({
     },
     displayName: 'AddForm',
   });
-
+*/
 class AddForm extends React.Component {
 
     submit = (values, actions) => {
@@ -35,7 +36,7 @@ class AddForm extends React.Component {
         if (this.props.action === 'add') {
 
             console.log(values);
-            let result = stateToHTML(values['editorState'].getCurrentContent())
+            let result = stateToHTML(values['descriptionFrHTML'].getCurrentContent())
             console.log(result);
 
           Meteor.call(
@@ -84,14 +85,10 @@ class AddForm extends React.Component {
     render() {
         let initialValues;
     
-        if (this.props.action === 'edit') {
-            
-            console.log(this.props);
-            
+        if (this.props.action === 'edit') {            
             initialValues = this.props.lex;
-            let editorState = EditorState.createWithContent(stateFromHTML(initalValues.descriptionFr)); 
-            initialValues['editorState'] = editorState;
-            
+            let descriptionFrHTML = EditorState.createWithContent(stateFromHTML(initialValues.descriptionFr)); 
+            initialValues['descriptionFrHTML'] = descriptionFrHTML;
         } else { 
 
             initialValues = { 
@@ -110,7 +107,10 @@ class AddForm extends React.Component {
                 //editorState: this.props.initialValues.editorState,
                 // editorState: this.state.editorState,
                 editorState: new EditorState.createEmpty(),
+                descriptionFrHTML: new EditorState.createEmpty(),
             }
+
+            console.log(initialValues);
         }
 
         return ( <Formik
@@ -170,11 +170,18 @@ class AddForm extends React.Component {
                         placeholder="URL en anglais du LEX à ajouter" label="URL en anglais" name="urlEn" type="text" component={ CustomInput } 
                     />
                     <ErrorMessage name="urlEn" component={ CustomError } />
-
+                    
                     <RichEditorExample
                         editorState={values.editorState}
                         onChange={setFieldValue}
                         onBlur={handleBlur}
+                        name="toto"
+                    />
+                    <RichEditorExample
+                        editorState={values.descriptionFrHTML}
+                        onChange={setFieldValue}
+                        onBlur={handleBlur}
+                        name="descriptionFrHTML"
                     />
 
                     <Field
@@ -369,7 +376,7 @@ export default withTracker(() => {
     if (defaultCategoryId != undefined) {
         defaultCategoryId = defaultCategoryId["_id"];
     }
-    let defaultSubcategoryId = Subcategories.findOne({nameFr:"Achats"});
+    let defaultSubcategoryId = Subcategories.findOne({nameFr:"Achats et inventaire"});
     if (defaultSubcategoryId != undefined) {
         defaultSubcategoryId = defaultSubcategoryId["_id"];
     }
