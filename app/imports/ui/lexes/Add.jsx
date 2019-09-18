@@ -307,7 +307,7 @@ export default withTracker(() => {
     if (defaultCategoryId != undefined) {
         defaultCategoryId = defaultCategoryId["_id"];
     }
-    let defaultSubcategoryId = Subcategories.findOne({nameFr:"Achats"});
+    let defaultSubcategoryId = Subcategories.findOne({nameFr:"Achats et inventaire"});
     if (defaultSubcategoryId != undefined) {
         defaultSubcategoryId = defaultSubcategoryId["_id"];
     }
