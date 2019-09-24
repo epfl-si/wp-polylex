@@ -78,6 +78,8 @@ importLexes = () => {
             let category = Categories.find({nameFr: lex.categoryName}).fetch();
             if (category.length == 1) {
                 categoryId = category[0]["_id"];
+            } else {
+                console.error(`PROB ${category}`);
             }
 
             let subcategoryId;
