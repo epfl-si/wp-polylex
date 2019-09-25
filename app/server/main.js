@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor';
-import { importData } from './import-data';
+import { importData, deleteAll } from './import-data';
 import '../imports/api/methods';
 import './publications';
 import './rest-api';
@@ -9,6 +9,7 @@ Meteor.startup(() => {
     let activeTequila = true;
 
     if (needImportData) {
+        deleteAll();
         importData();
     }
 

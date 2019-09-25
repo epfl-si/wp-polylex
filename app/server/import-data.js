@@ -1,5 +1,12 @@
 import { Categories, Subcategories, Responsibles, Lexes } from '../imports/api/collections';
 
+deleteAll = () => {
+    Categories.remove({});
+    Subcategories.remove({});
+    Lexes.remove({});
+    Responsibles.remove({});
+}
+
 importData = () => {
 
     if (Categories.find({}).count() == 0) {
@@ -232,4 +239,4 @@ importSubcategories = () => {
     });
 }
 
-export { importData }
+export { deleteAll, importData }
