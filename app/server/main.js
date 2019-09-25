@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor';
-import { importData, deleteAll } from './import-data';
+import { importData } from './import-data';
 import '../imports/api/methods';
 import './publications';
 import './rest-api';
