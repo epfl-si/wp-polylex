@@ -5,11 +5,10 @@ import './publications';
 import './rest-api';
 
 Meteor.startup(() => {
-    let needImportData = true;
+    let needImportData = false;
     let activeTequila = true;
 
     if (needImportData) {
-        deleteAll();
         importData();
     }
 
