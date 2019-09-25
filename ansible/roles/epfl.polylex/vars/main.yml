@@ -6,7 +6,7 @@ polylex_route_name: polylex
 polylex_secret_name: "polylex"
 polylex_cname: "{{ 'polylex-admin.epfl.ch' if openshift_namespace == 'wwp' else 'polylex.128.178.222.83.nip.io' }}"
 polylex_deploy_name: polylex
-polylex_image_version: '0.0.11'
+polylex_image_version: '0.0.15'
 polylex_image_tag: 'epflidevelop/polylex:{{ polylex_image_version }}'
 polylex_db_name: "polylex"
 polylex_db_user: "polylex"

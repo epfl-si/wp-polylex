@@ -1,5 +1,12 @@
 import { Categories, Subcategories, Responsibles, Lexes } from '../imports/api/collections';
 
+deleteAll = () => {
+    Categories.remove({});
+    Subcategories.remove({});
+    Lexes.remove({});
+    Responsibles.remove({});
+}
+
 importData = () => {
 
     if (Categories.find({}).count() == 0) {
@@ -78,6 +85,8 @@ importLexes = () => {
             let category = Categories.find({nameFr: lex.categoryName}).fetch();
             if (category.length == 1) {
                 categoryId = category[0]["_id"];
+            } else {
+                console.error(`PROB ${category}`);
             }
 
             let subcategoryId;
@@ -230,4 +239,4 @@ importSubcategories = () => {
     });
 }
 
-export { importData }
+export { deleteAll, importData }
