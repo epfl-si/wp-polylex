@@ -9,28 +9,34 @@ import User from './admin/User';
 import Responsible from './admin/Responsible';
 import Category from './admin/Category';
 import Subcategory from './admin/Subcategory';
+import { Loading } from './Messages';
 
 class App extends Component {
 
   render() {
-    
+       
     let isAdmin;
     let isLoading = this.props.currentUser === undefined;
     if (isLoading) {
-      return 'Loading';
+      return <Loading />;
     } else {
       isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin', Roles.GLOBAL_GROUP);
+      isEditor = Roles.userIsInRole(Meteor.userId(), 'editor', Roles.GLOBAL_GROUP);
     }
 
     return (
       <Router>
         <div className="App container">
-          <Header  />      
-          { isAdmin ?   
+          <Header />
+          { isAdmin || isEditor?   
             (<Fragment>
             <Route exact path="/" component={ List } />
             <Route exact path="/add" component={ Add } />
             <Route path="/edit/:_id" component={ Add } />
+            </Fragment>)
+           : null}
+          { isAdmin ?   
+            (<Fragment>
             <Route exact path="/admin/users" component={ User } />
             <Route path="/admin/responsible/add" component={ Responsible } />
             <Route path="/admin/responsible/:_id/edit" component={ Responsible } />
@@ -46,14 +52,9 @@ class App extends Component {
     )
   }
 }
-
 export default withTracker(() => {
-  
   let user = Meteor.users.findOne({'_id': Meteor.userId()});
-  
   return {  
     currentUser: user,
-  };
-  
+  };  
 })(App);
-

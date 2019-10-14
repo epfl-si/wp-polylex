@@ -3,6 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import { CustomSelect, CustomInput } from '../CustomFields';
 import { Formik, Field } from 'formik';
+import { Loading } from '../Messages';
 
 class User extends React.Component {
 
@@ -29,11 +30,13 @@ class User extends React.Component {
   }
 
   getRole = (userId) => {
+    let role = 'epfl-member';
     if (Roles.userIsInRole(userId, 'admin', Roles.GLOBAL_GROUP)) {
-      return 'admin';
-    } else if (Roles.userIsInRole(userId, 'tags-editor', Roles.GLOBAL_GROUP)) {
-      return 'tags-editor';
+      role = 'admin';
+    } else if (Roles.userIsInRole(userId, 'editor', Roles.GLOBAL_GROUP)) {
+      role = 'editor';
     }
+    return role;
   }
 
   render() {
@@ -41,7 +44,7 @@ class User extends React.Component {
     let isLoading = !this.props.users;
 
     if (isLoading) {
-        content = 'Loading ...';
+        content = <Loading />;
     } else {
       content = (
         <table className="table table-striped">

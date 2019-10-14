@@ -10,7 +10,7 @@ WebApp.addHtmlAttributeHook(() => ({ lang: 'fr' }));
 
 Meteor.startup(() => {
     let needImportData = false;
-    let activeTequila = false;
+    let activeTequila = true;
 
     if (needImportData) {
         importData();
@@ -32,15 +32,18 @@ Meteor.startup(() => {
               }
             }
           );
+
+          if (tequilaResponse.uniqueid == "188475") {
+            Roles.setUserRoles(tequilaResponse.uniqueid, ['editor'], Roles.GLOBAL_GROUP); 
+            Roles.setUserRoles(tequilaResponse.uniqueid, ['admin'], Roles.GLOBAL_GROUP); 
+          }
           
           // Add epfl-member by default
-          if (!Roles.userIsInRole(tequilaResponse.uniqueid, ['admin', 'epfl-member'], Roles.GLOBAL_GROUP)) {
+          if (!Roles.userIsInRole(tequilaResponse.uniqueid, ['admin', 'editor', 'epfl-member'], Roles.GLOBAL_GROUP)) {
             Roles.addUsersToRoles(tequilaResponse.uniqueid, 'epfl-member', Roles.GLOBAL_GROUP);  
           }
           
           return tequilaResponse.uniqueid;
         }; 
     }
-
-
 });

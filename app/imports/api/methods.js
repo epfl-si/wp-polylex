@@ -92,13 +92,13 @@ Meteor.methods({
 
         const canInsert = Roles.userIsInRole(
             this.userId,
-            ['admin'], 
+            ['admin', 'editor'], 
             Roles.GLOBAL_GROUP
         );
 
         if (! canInsert) {
             throw new Meteor.Error('unauthorized',
-              'Only admins can insert sites.');
+              'Only admins and editors can insert lexes.');
         }
         
         lexesSchema.validate(lex);
@@ -131,13 +131,13 @@ Meteor.methods({
 
         const canUpdate = Roles.userIsInRole(
             this.userId,
-            ['admin'], 
+            ['admin', 'editor'], 
             Roles.GLOBAL_GROUP
         );
 
         if (! canUpdate) {
             throw new Meteor.Error('unauthorized',
-              'Only admins can update sites.');
+              'Only admins and editors can update lexes.');
         }
 
         lexesSchema.validate(lex);
@@ -174,13 +174,13 @@ Meteor.methods({
 
         const canRemove = Roles.userIsInRole(
             this.userId,
-            ['admin'], 
+            ['admin', 'editor'], 
             Roles.GLOBAL_GROUP
         );
 
         if (! canRemove) {
             throw new Meteor.Error('unauthorized',
-              'Only admins can remove sites.');
+              'Only admins and editors can remove lexes.');
         }
 
         check(lexId, String);
@@ -449,5 +449,22 @@ Meteor.methods({
         check(responsibleId, String);
 
         Responsibles.remove({_id: responsibleId});
+    },
+
+    updateRole(userId, role) {
+        
+        if (!this.userId) {
+            throw new Meteor.Error('not connected');
+        }
+        const canUpdate = Roles.userIsInRole(
+            this.userId,
+            ['admin'], 
+            Roles.GLOBAL_GROUP
+        );
+        if (! canUpdate) {
+            throw new Meteor.Error('unauthorized',
+              'Only admins can update roles.');
+        }
+        Roles.setUserRoles(userId, [role], Roles.GLOBAL_GROUP); 
     },
 });

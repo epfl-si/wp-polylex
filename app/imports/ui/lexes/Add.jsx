@@ -279,8 +279,8 @@ export default withTracker(() => {
     Meteor.subscribe('responsibles');
 
     let categories = Categories.find({}, {sort: {nameFr:1 }}).fetch();
-    let subcategories = Subcategories.find({}, {sort: {name:1 }}).fetch();
-    let responsibles = Responsibles.find({}, {sort: {name:1 }}).fetch()
+    let subcategories = Subcategories.find({}, {sort: {nameFr:1 }}).fetch();
+    let responsibles = Responsibles.find({}, {sort: {nameFr:1 }}).fetch()
 
     let defaultCategoryId = Categories.findOne({nameFr:"Autres"});
     if (defaultCategoryId != undefined) {

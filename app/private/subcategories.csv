@@ -1,51 +1,53 @@
-nameFr,nameEn
-Domaine des EPF,Domaine des EPF
-Organisation,Organisation
-Facultés Collèges et plateformes,Facultés Collèges et plateformes
-Fundraising,Fundraising
-Déontologie et éthique,Déontologie et éthique
-Risk Management,Risk Management
-Fondations,Fondations
-Sécurité,Sécurité
-Système de contrôle interne,Système de contrôle interne
-Compliance Guide,Compliance Guide
-Instances d’alerte,Instances d’alerte
-Conférences et commissions,Conférences et commissions
-Admission EPFL,Admission EPFL
-Bachelor Master CMS,Bachelor Master CMS
-Bibliothèque,Bibliothèque
-Code d’honneur,Code d’honneur
-Discipline,Discipline
-Doctorat,Doctorat
-Evaluation enseignement,Evaluation enseignement
-Examens & recours,Examens & recours
-Formation continue,Formation continue
-Règlements d’étude,Règlements d’étude
-Taxes et Bourses,Taxes et Bourses
-Financement de la recherche,Financement de la recherche
-Financement équipements scientifiques,Financement équipements scientifiques
-Commission de la recherche,Commission de la recherche
-Valorisation,Valorisation
-Tous les collaborateurs,Tous les collaborateurs
-Professeurs,Professeurs
-Chargés de cours,Chargés de cours
-Corps intermédiaire,Corps intermédiaire
-Doctorants,Doctorants
-Assistants-étudiants,Assistants-étudiants
-Compétences RH,Compétences RH
-Assucances sociales et prévoyance,Assucances sociales et prévoyance
-Gestion financière,Gestion financière
-Carte de crédit,Carte de crédit
-Voyages et remboursement des frais,Voyages et remboursement des frais
-Gestion de la trésorerie,Gestion de la trésorerie
-Achats,Achats
-Directives d’utilisation,Directives d’utilisation
-Réseaux,Réseaux
-Web et messagerie,Web et messagerie
-Recyclage,Recyclage
-Gestion immobilière,Gestion immobilière
-Téléphonie mobile,Téléphonie mobile
-Stationnement,Stationnement
-Garderies – accueil de la petite enfance,Garderies – accueil de la petite enfance
-Associations & fondations,Associations & fondations
-Manifestation,Manifestation
+nameFr;nameEn
+Domaine des EPF;EPF Domain
+Organisation;Organisation of EPFL
+Facultés, Collèges et plateformes;Schools and Colleges
+Fundraising;Fundraising
+Déontologie et éthique;Deontology and ethics
+Risk Management;Risk Management
+Fondations;Fondations
+Sécurité;Safety, Prevention and Health
+Audits;Audits
+Système de contrôle interne;Internal Control System
+Compliance Guide;Compliance Guide
+Instances d'alerte;Report instances
+Conférences et commissions;Conference, Commission and Steering Committee
+Admission EPFL;EPFL admission
+Bachelor, Master, CMS;Bachelor-Master-CMS
+Bibliothèque;Library
+Code d'honneur;Code of Honour
+Discipline;Discipline
+Doctorat;Doctorate
+Evaluation enseignement;Teaching evaluation
+Examens & recours;Examinations & Appeal
+Formation continue;Continuing Education
+Règlements d'étude;Study rules and regulations
+Taxes et Bourses;Fees and Grants
+Financement de la recherche;Research Funding
+Commission de la recherche;Research Commission
+Valorisation;Technology Transfer
+Tous les collaborateurs;All employees
+Dispositions particulières pour les professeurs;Faculty
+Chargés de cours;Lecturers
+Corps intermédiaire;Scientific Staff
+Doctorants;PhD candidates
+Assistants-étudiants;Student Assitants
+Compétences RH;HR Competences
+Assurances sociales et prévoyance;Social Security and Pensions
+Gestion financière;Financial Management
+Carte de crédit;Credit Cards
+Voyages et remboursement des frais;Travel and Reimbursement of Expenses
+Gestion de la trésorerie;Investment Policy
+Achats et inventaire;Purchases and Inventories
+Directives d'utilisation;Directives concerning use
+Réseaux;Networks
+Web et messagerie;Web and Email
+Recyclage;Recycling and Sale of Equipment
+Gestion immobilière;Real Estate Management
+Téléphonie mobile;Mobile Telephony
+Stationnement;Parking
+Garderies - accueil de la petite enfance;Day Nursery Facilities
+Associations & fondations;Associations
+Manifestation;Event Organisation
+Sécurité des systèmes d'information;Security of Information Systems
+Publications scientifiques;Scientific publications
