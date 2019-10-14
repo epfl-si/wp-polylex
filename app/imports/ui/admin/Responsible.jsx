@@ -46,6 +46,7 @@ class Responsible extends Component {
         action: action,
         addSuccess: false,
         editSuccess: false,
+        deleteSuccess: false,
     }
   }
 
@@ -53,16 +54,18 @@ class Responsible extends Component {
     Meteor.call(
       'removeResponsible',
       responsibleID,
-      function(error, objectId) {
+      (error, responsibleID) => {
         if (error) {
-            console.log(`ERROR Responsible removeResponsible ${error}`);
-        } 
+          console.log(`ERROR Responsible removeResponsible ${error}`);
+        } else {
+          this.setState({deleteSuccess: true});
+        }
       }
     );
   }
 
   updateUserMsg = () => {
-    this.setState({addSuccess: false, editSuccess: false});
+    this.setState({addSuccess: false, editSuccess: false, deleteSuccess: false});
   }
 
   submitResponsible = (values, actions) => {
@@ -134,6 +137,10 @@ class Responsible extends Component {
 
       content = (
         <Fragment>
+          { this.state.deleteSuccess ? ( 
+            <AlertSuccess message={ 'Le responsable a été supprimé avec succès !' } />
+          ) : (null) }
+
           { isDisplayResponsibleList ? (
             <ResponsiblesList 
               responsibles={this.props.responsibles} 
@@ -149,48 +156,52 @@ class Responsible extends Component {
             { this.state.editSuccess ? ( 
               <AlertSuccess message={ 'Le responsable a été modifié avec succès !' } />
             ) : (null) }
+
+            { this.state.deleteSuccess ? ( 
+              <AlertSuccess message={ 'Le responsable a été supprimé avec succès !' } />
+            ) : (null) }
             
             <Formik
-                    onSubmit={ this.submitResponsible }
-                    initialValues={ initialValues }
-                    validateOnBlur={ false }
-                    validateOnChange={ false }
-                >
+              onSubmit={ this.submitResponsible }
+              initialValues={ initialValues }
+              validateOnBlur={ false }
+              validateOnChange={ false }
+              >
                 {({
-                    handleSubmit,
-                    isSubmitting,
-                    handleChange,
-                    handleBlur,
+                  handleSubmit,
+                  isSubmitting,
+                  handleChange,
+                  handleBlur,
                 }) => (    
-                    <form onSubmit={ handleSubmit }>
-                        <Field 
-                          onChange={e => { handleChange(e); this.updateUserMsg();}}
-                          onBlur={e => { handleBlur(e); this.updateUserMsg();}}
-                          label="Nom" placeholder="Nom du responsable à ajouter" name="lastName" type="text" component={ CustomInput } />
-                        <ErrorMessage name="lastName" component={ CustomError } />
-                        
-                        <Field 
-                          onChange={e => { handleChange(e); this.updateUserMsg();}}
-                          onBlur={e => { handleBlur(e); this.updateUserMsg();}}
-                          label="Prénom" placeholder="Prénom du responsable à ajouter" name="firstName" type="text" component={ CustomInput } />
-                        <ErrorMessage name="firstName" component={ CustomError } />
+                  <form onSubmit={ handleSubmit }>
+                    <Field 
+                      onChange={e => { handleChange(e); this.updateUserMsg();}}
+                      onBlur={e => { handleBlur(e); this.updateUserMsg();}}
+                      label="Nom" placeholder="Nom du responsable à ajouter" name="lastName" type="text" component={ CustomInput } />
+                    <ErrorMessage name="lastName" component={ CustomError } />
+                    
+                    <Field 
+                      onChange={e => { handleChange(e); this.updateUserMsg();}}
+                      onBlur={e => { handleBlur(e); this.updateUserMsg();}}
+                      label="Prénom" placeholder="Prénom du responsable à ajouter" name="firstName" type="text" component={ CustomInput } />
+                    <ErrorMessage name="firstName" component={ CustomError } />
 
-                        <Field 
-                          onChange={e => { handleChange(e); this.updateUserMsg();}}
-                          onBlur={e => { handleBlur(e); this.updateUserMsg();}}
-                          label="URL en français" placeholder="URL du responsable en français à ajouter" name="urlFr" type="text" component={ CustomInput } />
-                        <ErrorMessage name="urlFr" component={ CustomError } />
+                    <Field 
+                      onChange={e => { handleChange(e); this.updateUserMsg();}}
+                      onBlur={e => { handleBlur(e); this.updateUserMsg();}}
+                      label="URL en français" placeholder="URL du responsable en français à ajouter" name="urlFr" type="text" component={ CustomInput } />
+                    <ErrorMessage name="urlFr" component={ CustomError } />
 
-                        <Field 
-                          onChange={e => { handleChange(e); this.updateUserMsg();}}
-                          onBlur={e => { handleBlur(e); this.updateUserMsg();}}
-                          label="URL en anglais" placeholder="URL du responsable en anglais à ajouter" name="urlEn" type="text" component={ CustomInput } />
-                        <ErrorMessage name="urlEn" component={ CustomError } />
+                    <Field 
+                      onChange={e => { handleChange(e); this.updateUserMsg();}}
+                      onBlur={e => { handleBlur(e); this.updateUserMsg();}}
+                      label="URL en anglais" placeholder="URL du responsable en anglais à ajouter" name="urlEn" type="text" component={ CustomInput } />
+                    <ErrorMessage name="urlEn" component={ CustomError } />
 
-                        <div className="my-1 text-right">
-                            <button type="submit" disabled={ isSubmitting } className="btn btn-primary">Enregistrer</button>
-                        </div>
-                    </form>
+                    <div className="my-1 text-right">
+                        <button type="submit" disabled={ isSubmitting } className="btn btn-primary">Enregistrer</button>
+                    </div>
+                  </form>
                 )}
             </Formik>
           </div>

@@ -46,6 +46,7 @@ class Category extends Component {
         action: action,
         addSuccess: false,
         editSuccess: false,
+        deleteSuccess: false,
     }
   }
 
@@ -53,16 +54,18 @@ class Category extends Component {
     Meteor.call(
       'removeCategory',
       categoryID,
-      function(error, categoryID) {
+      (error, categoryID) => {
         if (error) {
             console.log(`ERROR Category removeCategory ${error}`);
-        } 
+        } else {
+          this.setState({deleteSuccess: true});
+        }
       }
     );
   }
 
   updateUserMsg = () => {
-    this.setState({addSuccess: false, editSuccess: false});
+    this.setState({addSuccess: false, editSuccess: false, deleteSuccess: false,});
   }
 
   submitCategory = (values, actions) => {
@@ -134,6 +137,10 @@ class Category extends Component {
 
       content = (
         <Fragment>
+          { this.state.deleteSuccess ? ( 
+            <AlertSuccess message={ 'La catégorie a été supprimée avec succès !' } />
+          ) : (null) }
+
           { isDisplayCategoriesList ? (
             <CategoriesList 
               categories={this.props.categories} 
@@ -148,6 +155,10 @@ class Category extends Component {
 
             { this.state.editSuccess ? ( 
               <AlertSuccess message={ 'La catégorie a été modifiée avec succès !' } />
+            ) : (null) }
+
+            { this.state.deleteSuccess ? ( 
+              <AlertSuccess message={ 'La catégorie a été supprimée avec succès !' } />
             ) : (null) }
             
             <Formik

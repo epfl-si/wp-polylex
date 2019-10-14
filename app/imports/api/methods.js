@@ -13,28 +13,49 @@ import {
 import { throwMeteorError, throwMeteorErrors } from './error';
 
 function prepareUpdateInsertResponsible(responsible, action) {
-  // Check if name is unique
-  // TODO: Move this code to SimpleSchema custom validation function
-  if (Responsibles.find({lastName: responsible.lastName, firstName: responsible.firstName}).count() > 0) {
-      throwMeteorErrors(['lastName', 'firstName'], 'Un responsable avec les mêmes nom et prénom existe déjà !');
+
+  let responsibles = Responsibles.find({});
+  let alreadExist = false;
+
+  // Check if reponsible already exist (case insensitive)
+  for (const currentResponsible of responsibles) {
+    if (currentResponsible.firstName.toLowerCase() == responsible.firstName.toLowerCase() && 
+        currentResponsible.lastName.toLowerCase() == responsible.lastName.toLowerCase()) {
+      alreadExist = true;
+      break;
+    }
+  };
+
+  if (alreadExist) {
+    throwMeteorErrors(
+      ['lastName', 'firstName'], 
+      'Un responsable avec les mêmes nom et prénom existe déjà !'
+    );
   }
+  
   return responsible;
 }
 
 function prepareUpdateInsertCategory(category, action) {
-  // Check if name is unique
-  // TODO: Move this code to SimpleSchema custom validation function
-  if (Categories.find({name: category.nameFr}).count()>0) {
-    throwMeteorError('name', 'Nom de la catégorie existe déjà !');
+  // Check if nameFr of category already exist (case insensitive)
+  if (Categories.find({nameFr:  {$regex : new RegExp(category.nameFr, "i") }}).count()>0) {
+    throwMeteorError('nameFr', 'Nom de la catégorie en Français existe déjà !');
+  }
+  // Check if nameEn of category already exist (case insensitive)
+  if (Categories.find({nameEn:  {$regex : new RegExp(category.nameEn, "i") }}).count()>0) {
+    throwMeteorError('nameEn', 'Nom de la catégorie en Anglais existe déjà !');
   }
   return category;
 }
 
 function prepareUpdateInsertSubcategory(subcategory, action) {
-  // Check if name is unique
-  // TODO: Move this code to SimpleSchema custom validation function
-  if (Subcategories.find({name: subcategory.nameFr}).count()>0) {
-    throwMeteorError('name', 'Nom de la sous catégorie existe déjà !');
+  // Check if nameFr of subcategory already exist (case insensitive)
+  if (Subcategories.find({nameFr:  {$regex : new RegExp(subcategory.nameFr, "i") }}).count()>0) {
+    throwMeteorError('nameFr', 'Nom de la sous-catégorie en Français existe déjà !');
+  }
+  // Check if nameEn of subcategory already exist (case insensitive)
+  if (Subcategories.find({nameEn:  {$regex : new RegExp(subcategory.nameEn, "i") }}).count()>0) {
+    throwMeteorError('nameEn', 'Nom de la sous-catégorie en Anglais existe déjà !');
   }
   return subcategory;
 }
@@ -308,8 +329,6 @@ Meteor.methods({
 
     updateSubcategory(subcategory) {
 
-      console.log(subcategory);
-      
       if (!this.userId) {
           throw new Meteor.Error('not connected');
       }
@@ -325,8 +344,6 @@ Meteor.methods({
             'Only admins can update sites.');
       }
 
-      console.log(subcategory);
-      
       subcategoriesSchema.validate(subcategory);
       
       subcategory = prepareUpdateInsertSubcategory(subcategory, 'update');

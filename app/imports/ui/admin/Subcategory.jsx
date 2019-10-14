@@ -46,23 +46,26 @@ class Subcategory extends Component {
       action: action,
       addSuccess: false,
       editSuccess: false,
+      deleteSuccess: false,
     }
   }
 
-  deleteSubcategory = (categoryID) => {
+  deleteSubcategory = (subcategoryID) => {
     Meteor.call(
       'removeSubcategory',
       subcategoryID,
-      function(error, subcategoryID) {
+      (error, subcategoryID) => {
         if (error) {
-            console.log(`ERROR Subcategory removeSubcategory ${error}`);
-        } 
+          console.log(`ERROR Subcategory removeSubcategory ${error}`);
+        } else {
+          this.setState({deleteSuccess: true});
+        }
       }
     );
   }
 
   updateUserMsg = () => {
-    this.setState({addSuccess: false, editSuccess: false});
+    this.setState({addSuccess: false, editSuccess: false, deleteSuccess: false});
   }
 
   submitSubcategory = (values, actions) => {
@@ -80,13 +83,10 @@ class Subcategory extends Component {
       resetForm = false;
     }
 
-    console.log(values);
-    console.log(methodName);
-
     Meteor.call(
       methodName,
       values, 
-      (errors, CategoryId) => {
+      (errors, SubcategoryId) => {
         if (errors) {
           console.log(errors);
           let formErrors = {};
@@ -137,6 +137,10 @@ class Subcategory extends Component {
 
       content = (
         <Fragment>
+          { this.state.deleteSuccess ? ( 
+            <AlertSuccess message={ 'La sous-catégorie a été supprimée avec succès !' } />
+          ) : (null) }
+
           { isDisplaySubcategoriesList ? (
             <SubcategoriesList 
               subcategories={this.props.subcategories} 
@@ -152,12 +156,16 @@ class Subcategory extends Component {
             { this.state.editSuccess ? ( 
               <AlertSuccess message={ 'La sous-catégorie a été modifiée avec succès !' } />
             ) : (null) }
+
+            { this.state.deleteSuccess ? ( 
+              <AlertSuccess message={ 'La sous-catégorie a été supprimée avec succès !' } />
+            ) : (null) }
             
             <Formik
-                    onSubmit={ this.submitSubcategory }
-                    initialValues={ initialValues }
-                    validateOnBlur={ false }
-                    validateOnChange={ false }
+              onSubmit={ this.submitSubcategory }
+              initialValues={ initialValues }
+              validateOnBlur={ false }
+              validateOnChange={ false }
                 >
                 {({
                     handleSubmit,
@@ -166,7 +174,6 @@ class Subcategory extends Component {
                     handleBlur,
                 }) => (    
                   <form onSubmit={ handleSubmit }>
-
                     <Field 
                       onChange={e => { handleChange(e); this.updateUserMsg();}}
                       onBlur={e => { handleBlur(e); this.updateUserMsg();}}

@@ -16,6 +16,7 @@ class App extends Component {
   render() {
        
     let isAdmin;
+    let isEditor;
     let isLoading = this.props.currentUser === undefined;
     if (isLoading) {
       return <Loading />;
