@@ -12,21 +12,33 @@ import {
 } from './collections';
 import { throwMeteorError, throwMeteorErrors } from './error';
 
+function trimObjValues(obj) {
+  return Object.keys(obj).reduce((acc, curr) => {
+    acc[curr] = obj[curr].trim()
+    return acc;
+  }, {});
+}
+
 function prepareUpdateInsertResponsible(responsible, action) {
 
+  // Trim all attributes of responsible
+  responsible = trimObjValues(responsible);
+
   let responsibles = Responsibles.find({});
-  let alreadExist = false;
+  let alreadyExist = false;
 
   // Check if reponsible already exist (case insensitive)
   for (const currentResponsible of responsibles) {
     if (currentResponsible.firstName.toLowerCase() == responsible.firstName.toLowerCase() && 
         currentResponsible.lastName.toLowerCase() == responsible.lastName.toLowerCase()) {
-      alreadExist = true;
-      break;
+      if ((action == 'insert') || (action == 'update' && responsible._id != currentResponsible._id)) {
+        alreadyExist = true;
+        break;  
+      } 
     }
   };
 
-  if (alreadExist) {
+  if (alreadyExist) {
     throwMeteorErrors(
       ['lastName', 'firstName'], 
       'Un responsable avec les mêmes nom et prénom existe déjà !'
@@ -37,26 +49,53 @@ function prepareUpdateInsertResponsible(responsible, action) {
 }
 
 function prepareUpdateInsertCategory(category, action) {
-  // Check if nameFr of category already exist (case insensitive)
-  if (Categories.find({nameFr:  {$regex : new RegExp(category.nameFr, "i") }}).count()>0) {
-    throwMeteorError('nameFr', 'Nom de la catégorie en Français existe déjà !');
-  }
-  // Check if nameEn of category already exist (case insensitive)
-  if (Categories.find({nameEn:  {$regex : new RegExp(category.nameEn, "i") }}).count()>0) {
-    throwMeteorError('nameEn', 'Nom de la catégorie en Anglais existe déjà !');
-  }
+
+  // Trim all attributes of category
+  category = trimObjValues(category);
+
+  let categories = Categories.find({});
+
+  // Check if nameFr category already exist (case insensitive)
+  for (const currentCategory of categories) {
+    if (currentCategory.nameFr.toLowerCase() == category.nameFr.toLowerCase()) {
+      throwMeteorError('nameFr', 'Nom de la catégorie en Français existe déjà !');
+      break;
+    }
+  };
+
+  // Check if nameEn category already exist (case insensitive)
+  for (const currentCategory of categories) {
+    if (currentCategory.nameEn.toLowerCase() == category.nameEn.toLowerCase()) {
+      throwMeteorError('nameEn', 'Nom de la catégorie en Anglais existe déjà !');
+      break;
+    }
+  };
+
   return category;
 }
 
 function prepareUpdateInsertSubcategory(subcategory, action) {
-  // Check if nameFr of subcategory already exist (case insensitive)
-  if (Subcategories.find({nameFr:  {$regex : new RegExp(subcategory.nameFr, "i") }}).count()>0) {
-    throwMeteorError('nameFr', 'Nom de la sous-catégorie en Français existe déjà !');
-  }
-  // Check if nameEn of subcategory already exist (case insensitive)
-  if (Subcategories.find({nameEn:  {$regex : new RegExp(subcategory.nameEn, "i") }}).count()>0) {
-    throwMeteorError('nameEn', 'Nom de la sous-catégorie en Anglais existe déjà !');
-  }
+  // Trim all attributes of subcategory
+  subcategory = trimObjValues(subcategory);
+
+  let subcategories = Subcategories.find({});
+
+  // Check if nameFr subcategory already exist (case insensitive)
+  for (const currentSubcategory of subcategories) {
+    if (currentSubcategory.nameFr.toLowerCase() == subcategory.nameFr.toLowerCase()) {
+      throwMeteorError('nameFr', 'Nom de la sous-catégorie en Français existe déjà !');
+      break;
+    }
+  };
+
+  // Check if nameEn subcategory already exist (case insensitive)
+  for (const currentSubcategory of subcategories) {
+    if (currentSubcategory.nameEn.toLowerCase() == subcategory.nameEn.toLowerCase()) {
+      throwMeteorError('nameEn', 'Nom de la sous-catégorie en Anglais existe déjà !');
+      break;
+    }
+  };
+  
   return subcategory;
 }
 

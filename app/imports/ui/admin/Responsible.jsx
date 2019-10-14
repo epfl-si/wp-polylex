@@ -69,6 +69,8 @@ class Responsible extends Component {
   }
 
   submitResponsible = (values, actions) => {
+    console.log(values.lastName.trim());
+
     let methodName;
     let state;
     let resetForm;
