@@ -2,3 +2,8 @@ body {
   padding: 10px;
   font-family: sans-serif;
 }
+
+.edit {
+  float: right;
+  padding-right: 20px;
+}
