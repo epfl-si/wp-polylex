@@ -1,23 +1,23 @@
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import React from 'react';
+import React, { Component, Fragment } from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
 import Footer from './footer/Footer';
 import Header from './header/Header';
 import List from './lexes/List';
 import Add from './lexes/Add';
-import Admin from './admin/Admin';
 import User from './admin/User';
 import Responsible from './admin/Responsible';
+import Category from './admin/Category';
+import Subcategory from './admin/Subcategory';
 
-class App extends React.Component {
+class App extends Component {
 
   render() {
     
     let isAdmin;
-    
-    if (this.props.currentUser === undefined) {
+    let isLoading = this.props.currentUser === undefined;
+    if (isLoading) {
       return 'Loading';
-
     } else {
       isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin', Roles.GLOBAL_GROUP);
     }
@@ -27,28 +27,30 @@ class App extends React.Component {
         <div className="App container">
           <Header  />      
           { isAdmin ?   
-            (<React.Fragment>
+            (<Fragment>
             <Route exact path="/" component={ List } />
             <Route exact path="/add" component={ Add } />
             <Route path="/edit/:_id" component={ Add } />
-            <Route exact path="/admin" component={ Admin } />
             <Route exact path="/admin/users" component={ User } />
+            <Route path="/admin/responsible/add" component={ Responsible } />
             <Route path="/admin/responsible/:_id/edit" component={ Responsible } />
-            </React.Fragment>)
+            <Route path="/admin/category/add" component={ Category } />
+            <Route path="/admin/category/:_id/edit" component={ Category } />
+            <Route path="/admin/subcategory/add" component={ Subcategory } />
+            <Route path="/admin/subcategory/:_id/edit" component={ Subcategory } />
+            </Fragment>)
            : null}
           <Footer />
         </div>
       </Router>
-      )
+    )
   }
 }
 
 export default withTracker(() => {
   
   let user = Meteor.users.findOne({'_id': Meteor.userId()});
-
-  // console.log(user);
-
+  
   return {  
     currentUser: user,
   };

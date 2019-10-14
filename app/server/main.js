@@ -1,11 +1,15 @@
 import { Meteor } from 'meteor/meteor';
+import { WebApp } from 'meteor/webapp';
 import { importData } from './import-data';
 import '../imports/api/methods';
 import './publications';
 import './rest-api';
 
+// Define lang <html lang="fr" />
+WebApp.addHtmlAttributeHook(() => ({ lang: 'fr' }));
+
 Meteor.startup(() => {
-    let needImportData = true;
+    let needImportData = false;
     let activeTequila = false;
 
     if (needImportData) {

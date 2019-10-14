@@ -12,7 +12,34 @@ import {
 } from './collections';
 import { throwMeteorError, throwMeteorErrors } from './error';
 
-function prepareUpdateInsert(lex, action) {
+function prepareUpdateInsertResponsible(responsible, action) {
+  // Check if name is unique
+  // TODO: Move this code to SimpleSchema custom validation function
+  if (Responsibles.find({lastName: responsible.lastName, firstName: responsible.firstName}).count() > 0) {
+      throwMeteorErrors(['lastName', 'firstName'], 'Un responsable avec les mêmes nom et prénom existe déjà !');
+  }
+  return responsible;
+}
+
+function prepareUpdateInsertCategory(category, action) {
+  // Check if name is unique
+  // TODO: Move this code to SimpleSchema custom validation function
+  if (Categories.find({name: category.nameFr}).count()>0) {
+    throwMeteorError('name', 'Nom de la catégorie existe déjà !');
+  }
+  return category;
+}
+
+function prepareUpdateInsertSubcategory(subcategory, action) {
+  // Check if name is unique
+  // TODO: Move this code to SimpleSchema custom validation function
+  if (Subcategories.find({name: subcategory.nameFr}).count()>0) {
+    throwMeteorError('name', 'Nom de la sous catégorie existe déjà !');
+  }
+  return subcategory;
+}
+
+function prepareUpdateInsertLex(lex, action) {
 
     // Delete "/" at the end of URL 
     let urlFr = lex.urlFr;
@@ -25,19 +52,29 @@ function prepareUpdateInsert(lex, action) {
     }
 
     // Check if LEX is unique
-    if (Lexes.findOne({lex: lex.lex})) {
-        throwMeteorError('lex', 'Ce LEX existe déjà');
-    } else {
-        // Check if LEX is format x.x.x or x.x.x.x
-        var lexRE = /^\d.\d.\d|\d.\d.\d.\d$/;
-        if (!lex.lex.match(lexRE)) {
-            throwMeteorError('lex', 'Le format d\'un LEX doit être x.x.x ou x.x.x.x');
+    let lexes = Lexes.find({lex: lex.lex});
+    
+    if (action === 'update') {  
+      if (lexes.count() > 1) {
+        throwMeteorError('lex', 'Ce LEX existe déjà !');
+      } else if (lexes.count() == 1) {
+        if (lexes.fetch()[0]._id != lex._id) {
+          throwMeteorError('lex', 'Cet LEX existe déjà !');
         }
+      }
+    } else if (action === 'insert' && lexes.count() > 0) {
+      throwMeteorError('lex', 'Ce LEX existe déjà');
+    }  
+
+    // Check if LEX is format x.x.x or x.x.x.x
+    var lexRE = /^\d.\d.\d|\d.\d.\d.\d$/;
+    if (!lex.lex.match(lexRE)) {
+      throwMeteorError('lex', 'Le format d\'un LEX doit être x.x.x ou x.x.x.x');
     }
 
     // Check if responsible is empty
     if (lex.responsibleId.length == 0) {
-        throwMeteorError('responsibleId', 'Vous devez sélectionner au moins 1 responsable');
+      throwMeteorError('responsibleId', 'Vous devez sélectionner au moins 1 responsable');
     }
 
     return lex;
@@ -65,7 +102,7 @@ Meteor.methods({
         }
         
         lexesSchema.validate(lex);
-        lex = prepareUpdateInsert(lex, 'insert');
+        lex = prepareUpdateInsertLex(lex, 'insert');
         console.log(lex);
         
         let lexDocument = {
@@ -103,11 +140,9 @@ Meteor.methods({
               'Only admins can update sites.');
         }
 
-        //console.log(lex);
-
         lexesSchema.validate(lex);
 
-        lex = prepareUpdateInsert(lex, 'update');
+        lex = prepareUpdateInsertLex(lex, 'update');
 
         let lexDocument = {
             lex: lex.lex,
@@ -170,13 +205,9 @@ Meteor.methods({
               'Only admins can insert category.');
         }
 
-        // Check if name is unique
-        // TODO: Move this code to SimpleSchema custom validation function
-        if (Categories.find({name: category.nameFr}).count()>0) {
-            throwMeteorError('name', 'Nom de la catégorie existe déjà !');
-        }
-
         categoriesSchema.validate(category);
+
+        category = prepareUpdateInsertCategory(category, 'insert');
 
         let categoryDocument = {
             nameFr: category.nameFr,
@@ -185,6 +216,42 @@ Meteor.methods({
 
         return Categories.insert(categoryDocument);
 
+    },
+
+    updateCategory(category) {
+
+      console.log(category);
+      
+      if (!this.userId) {
+          throw new Meteor.Error('not connected');
+      }
+
+      const canUpdate = Roles.userIsInRole(
+          this.userId,
+          ['admin'], 
+          Roles.GLOBAL_GROUP
+      );
+
+      if (! canUpdate) {
+          throw new Meteor.Error('unauthorized',
+            'Only admins can update sites.');
+      }
+
+      console.log(category);
+      
+      categoriesSchema.validate(category);
+      
+      category = prepareUpdateInsertCategory(category, 'update');
+
+      let categoryDocument = {
+        nameFr: category.nameFr,
+        nameEn: category.nameEn,
+      };
+      
+      Categories.update(
+          {_id: category._id}, 
+          { $set: categoryDocument }
+      );
     },
 
     removeCategory(categoryId){
@@ -226,13 +293,9 @@ Meteor.methods({
               'Only admins can insert category.');
         }
 
-        // Check if name is unique
-        // TODO: Move this code to SimpleSchema custom validation function
-        if (Subcategories.find({name: subcategory.nameFr}).count()>0) {
-            throwMeteorError('name', 'Nom de la sous catégorie existe déjà !');
-        }
-
         subcategoriesSchema.validate(subcategory);
+
+        subcategory = prepareUpdateInsertSubcategory(subcategory, 'insert');
 
         let subcategoryDocument = {
             nameFr: subcategory.nameFr,
@@ -241,6 +304,42 @@ Meteor.methods({
 
         return Subcategories.insert(subcategoryDocument);
 
+    },
+
+    updateSubcategory(subcategory) {
+
+      console.log(subcategory);
+      
+      if (!this.userId) {
+          throw new Meteor.Error('not connected');
+      }
+
+      const canUpdate = Roles.userIsInRole(
+          this.userId,
+          ['admin'], 
+          Roles.GLOBAL_GROUP
+      );
+
+      if (! canUpdate) {
+          throw new Meteor.Error('unauthorized',
+            'Only admins can update sites.');
+      }
+
+      console.log(subcategory);
+      
+      subcategoriesSchema.validate(subcategory);
+      
+      subcategory = prepareUpdateInsertSubcategory(subcategory, 'update');
+
+      let subcategoryDocument = {
+        nameFr: subcategory.nameFr,
+        nameEn: subcategory.nameEn,
+      };
+      
+      Subcategories.update(
+          {_id: subcategory._id}, 
+          { $set: subcategoryDocument }
+      );
     },
 
     removeSubcategory(subcategoryId){
@@ -282,15 +381,9 @@ Meteor.methods({
               'Only admins can insert category.');
         }
         
-        // Check if name is unique
-        // TODO: Move this code to SimpleSchema custom validation function
-        if (Responsibles.find({lastName: responsible.lastName, firstName: responsible.firstName}).count() > 0) {
-            throwMeteorErrors(['lastName', 'firstName'], 'Un responsable avec les mêmes nom et prénom existe déjà !');
-        }
-        
         responsiblesSchema.validate(responsible);
 
-        console.log(responsible);
+        responsible = prepareUpdateInsertResponsible(responsible, 'insert');
 
         let responsibleDocument = {
             firstName: responsible.firstName,
@@ -300,8 +393,41 @@ Meteor.methods({
         };
 
         return Responsibles.insert(responsibleDocument);
-
     },
+
+    updateResponsible(responsible) {
+
+      if (!this.userId) {
+          throw new Meteor.Error('not connected');
+      }
+
+      const canUpdate = Roles.userIsInRole(
+          this.userId,
+          ['admin'], 
+          Roles.GLOBAL_GROUP
+      );
+
+      if (!canUpdate) {
+          throw new Meteor.Error('unauthorized',
+          'You do not have the necessary rights to do this.');
+      }
+      
+      responsiblesSchema.validate(responsible);
+      
+      responsible = prepareUpdateInsertResponsible(responsible, 'update');
+
+      let responsibleDocument = {
+        firstName: responsible.firstName,
+        lastName: responsible.lastName,
+        urlFr: responsible.urlFr,
+        urlEn: responsible.urlEn,
+      };
+      
+      Responsibles.update(
+          {_id: responsible._id}, 
+          { $set: responsibleDocument }
+      );
+  },
 
     removeResponsible(responsibleId){
 
