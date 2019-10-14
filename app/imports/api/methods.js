@@ -101,43 +101,46 @@ function prepareUpdateInsertSubcategory(subcategory, action) {
 
 function prepareUpdateInsertLex(lex, action) {
 
-    // Delete "/" at the end of URL 
-    let urlFr = lex.urlFr;
-    if (urlFr.endsWith('/')) {
-        lex.urlFr = urlFr.slice(0, -1);
-    }
-    let urlEn = lex.urlEn;
-    if (urlEn.endsWith('/')) {
-        lex.urlEn = urlEn.slice(0, -1);
-    }
+  // Trim all attributes of lex
+  lex = trimObjValues(lex);
 
-    // Check if LEX is unique
-    let lexes = Lexes.find({lex: lex.lex});
-    
-    if (action === 'update') {  
-      if (lexes.count() > 1) {
-        throwMeteorError('lex', 'Ce LEX existe déjà !');
-      } else if (lexes.count() == 1) {
-        if (lexes.fetch()[0]._id != lex._id) {
-          throwMeteorError('lex', 'Cet LEX existe déjà !');
-        }
+  // Delete "/" at the end of URL 
+  let urlFr = lex.urlFr;
+  if (urlFr.endsWith('/')) {
+      lex.urlFr = urlFr.slice(0, -1);
+  }
+  let urlEn = lex.urlEn;
+  if (urlEn.endsWith('/')) {
+      lex.urlEn = urlEn.slice(0, -1);
+  }
+
+  // Check if LEX is unique
+  let lexes = Lexes.find({lex: lex.lex});
+  
+  if (action === 'update') {  
+    if (lexes.count() > 1) {
+      throwMeteorError('lex', 'Ce LEX existe déjà !');
+    } else if (lexes.count() == 1) {
+      if (lexes.fetch()[0]._id != lex._id) {
+        throwMeteorError('lex', 'Cet LEX existe déjà !');
       }
-    } else if (action === 'insert' && lexes.count() > 0) {
-      throwMeteorError('lex', 'Ce LEX existe déjà');
-    }  
-
-    // Check if LEX is format x.x.x or x.x.x.x
-    var lexRE = /^\d.\d.\d|\d.\d.\d.\d$/;
-    if (!lex.lex.match(lexRE)) {
-      throwMeteorError('lex', 'Le format d\'un LEX doit être x.x.x ou x.x.x.x');
     }
+  } else if (action === 'insert' && lexes.count() > 0) {
+    throwMeteorError('lex', 'Ce LEX existe déjà');
+  }  
 
-    // Check if responsible is empty
-    if (lex.responsibleId.length == 0) {
-      throwMeteorError('responsibleId', 'Vous devez sélectionner au moins 1 responsable');
-    }
+  // Check if LEX is format x.x.x or x.x.x.x
+  var lexRE = /^\d.\d.\d|\d.\d.\d.\d$/;
+  if (!lex.lex.match(lexRE)) {
+    throwMeteorError('lex', 'Le format d\'un LEX doit être x.x.x ou x.x.x.x');
+  }
 
-    return lex;
+  // Check if responsible is empty
+  if (lex.responsibleId.length == 0) {
+    throwMeteorError('responsibleId', 'Vous devez sélectionner au moins 1 responsable');
+  }
+
+  return lex;
 }
 
 Meteor.methods({
