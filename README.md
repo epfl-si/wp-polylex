@@ -33,8 +33,8 @@ Les champs obligatoires sont :
 * Titre en FR et EN 
 * URL en FR et EN
 * Description en FR et EN
-* Catégorie: a une valeur par défaut.
-* Sous catégorie: a une valeur par défaut.
+* Rubrique: a une valeur par défaut.
+* Sous rubrique: a une valeur par défaut.
 * Responsable: a une valeur par défaut.
 * Date d'entrée en vigueur
 * Date de révision
@@ -49,15 +49,15 @@ Il existe 3 rôles :
 Lorsque l'utilisateur s'authenfie la 1ère fois à l'application polylex, on lui attribue automatiquement le rôle epfl-member.
 Avec ce rôle, l'utilisateur ne peut pour l'instant rien faire.
 
-Un utilisateur avec le rôle éditeur peut lister, créer, éditer, supprimer des lexes mais ne peut pas gérer les catégories, les sous-catégories et les responsables.
+Un utilisateur avec le rôle éditeur peut lister, créer, éditer, supprimer des lexes mais ne peut pas gérer les rubriques, les sous-rubriques et les responsables.
 
-L'admin peut tout faire. Il devrait avoir conscience des conséquences lors d'un changement sur les catégories, sous catégories et responsables.
+L'admin peut tout faire. Il devrait avoir conscience des conséquences lors d'un changement sur les rubriques, sous rubriques et responsables.
 
 Cas d'utilisation n°1: Changement d'un responsable 
 Un responsable quitte l'EPFL. Un successeur doit "hériter" de tous ses lexes.
 
-Cas d'utilisation n°2: Gestion des catégories et sous-catégories
-Si on supprime une catégorie, il faut avoir conscience que tous les lexes liées à cette catégorie référenceront une catégorie qui n'existe plus.
+Cas d'utilisation n°2: Gestion des rubriques et sous-rubriques
+Si on supprime une rubrique, il faut avoir conscience que tous les lexes liées à cette rubrique référenceront une rubrique qui n'existe plus.
 
 ## Déployer une nouvelle version sur l'environnement de test d'openshift
 

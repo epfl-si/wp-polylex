@@ -11,7 +11,7 @@ class CategoriesList extends Component {
   render() { 
     return (
       <Fragment>
-        <h5 className="card-header">Liste des catégories</h5>    
+        <h5 className="card-header">Liste des rubriques</h5>
         <ul className="list-group">
           {this.props.categories.map( (category, index) => (
             <li key={category._id} value={category.nameFr} className="list-group-item">
@@ -138,7 +138,7 @@ class Category extends Component {
       content = (
         <Fragment>
           { this.state.deleteSuccess ? ( 
-            <AlertSuccess message={ 'La catégorie a été supprimée avec succès !' } />
+            <AlertSuccess message={ 'La rubrique a été supprimée avec succès !' } />
           ) : (null) }
 
           { isDisplayCategoriesList ? (
@@ -146,19 +146,19 @@ class Category extends Component {
               categories={this.props.categories} 
               callBackDeleteCategory={this.deleteCategory} 
             />
-          ):(<h5 className="card-header">Édition de la catégorie des Lexes suivante: </h5>)}
+          ):(<h5 className="card-header">Édition de la rubrique des Lexes suivante: </h5>)}
           <div className="card-body">
 
             { this.state.addSuccess ? ( 
-              <AlertSuccess message={ 'La nouvelle catégorie a été ajoutée avec succès !' } />
+              <AlertSuccess message={ 'La nouvelle rubrique a été ajoutée avec succès !' } />
             ) : (null) }
 
             { this.state.editSuccess ? ( 
-              <AlertSuccess message={ 'La catégorie a été modifiée avec succès !' } />
+              <AlertSuccess message={ 'La rubrique a été modifiée avec succès !' } />
             ) : (null) }
 
             { this.state.deleteSuccess ? ( 
-              <AlertSuccess message={ 'La catégorie a été supprimée avec succès !' } />
+              <AlertSuccess message={ 'La rubrique a été supprimée avec succès !' } />
             ) : (null) }
             
             <Formik
@@ -177,13 +177,13 @@ class Category extends Component {
                     <Field 
                       onChange={e => { handleChange(e); this.updateUserMsg();}}
                       onBlur={e => { handleBlur(e); this.updateUserMsg();}}
-                      placeholder="Nom de la catégorie en français à ajouter" name="nameFr" type="text" component={ CustomInput } />
+                      placeholder="Nom de la rubrique en français à ajouter" name="nameFr" type="text" component={ CustomInput } />
                     <ErrorMessage name="nameFr" component={ CustomError } />
 
                     <Field 
                       onChange={e => { handleChange(e); this.updateUserMsg();}}
                       onBlur={e => { handleBlur(e); this.updateUserMsg();}}
-                      placeholder="Nom de la catégorie en anglais à ajouter" name="nameEn" type="text" component={ CustomInput } />
+                      placeholder="Nom de la rubrique en anglais à ajouter" name="nameEn" type="text" component={ CustomInput } />
                     <ErrorMessage name="nameEn" component={ CustomError } />
 
                     <div className="my-1 text-right">
