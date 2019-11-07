@@ -22,7 +22,7 @@ Meteor.startup(() => {
 
       Tequila.start({
         request: ['uniqueid', 'email'],
-        //control: ['/api'],
+        bypass: ['/api'],
         getUserId(tequila) {
           if (tequila.uniqueid == "188475") {
             Roles.setUserRoles(tequila.uniqueid, ['editor'], Roles.GLOBAL_GROUP); 
