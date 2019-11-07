@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
 import { Link } from 'react-router-dom';
 import { Lexes, Categories, Subcategories } from '../../api/collections';
+import { Loading } from '../Messages';
 
 class Cells extends Component {
 
@@ -69,7 +70,7 @@ class List extends Component {
     let content;
     let isLoading = (this.props.categories == undefined || this.props.lexes == undefined);
     if (isLoading) {
-      content = "Loading";
+      content = <Loading />;
     } else {
       content = (
         <div className="">
