@@ -81,8 +81,8 @@ class List extends Component {
                 <th scope="col">Title</th>
                 <th scope="col" className="w-25">Date d'entrée en vigueur</th>
                 <th scope="col" className="w-25">Date de révision</th>
-                <th scope="col">Catégorie</th>
-                <th scope="col">Sous-catégorie</th>
+                <th scope="col">Rubrique</th>
+                <th scope="col">Sous-rubrique</th>
                 <th className="w-50">Actions</th>
               </tr>
             </thead>

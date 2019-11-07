@@ -31,8 +31,8 @@ class Header extends Component {
                 </a>
                 <div className="dropdown-menu" aria-labelledby="navbarDropdown">
                   <NavLink className="nav-link" to="/admin/responsible/add">Responsables</NavLink>
-                  <NavLink className="nav-link" to="/admin/category/add">Catégories</NavLink>
-                  <NavLink className="nav-link" to="/admin/subcategory/add">Sous-catégories</NavLink>
+                  <NavLink className="nav-link" to="/admin/category/add">Rubriques</NavLink>
+                  <NavLink className="nav-link" to="/admin/subcategory/add">Sous-rubriques</NavLink>
                   <NavLink className="nav-link" to="/admin/users">Gestion des rôles</NavLink>
                 </div>
               </li>

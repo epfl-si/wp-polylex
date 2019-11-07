@@ -218,7 +218,7 @@ class Add extends Component {
               <Field 
                   onChange={e => { handleChange(e); this.updateUserMsg();}}
                   onBlur={e => { handleBlur(e); this.updateUserMsg();}}
-                  label="Catégorie" name="categoryId" component={ CustomSelect } >
+                  label="Rubrique" name="categoryId" component={ CustomSelect } >
                   {this.props.categories.map( (category, index) => (
                   <option key={category._id} value={category._id}>{category.nameFr}</option>
                   ))}
@@ -228,7 +228,7 @@ class Add extends Component {
               <Field 
                   onChange={e => { handleChange(e); this.updateUserMsg();}}
                   onBlur={e => { handleBlur(e); this.updateUserMsg();}}
-                  label="Sous-catégorie" name="subcategoryId" component={ CustomSelect } >
+                  label="Sous-rubrique" name="subcategoryId" component={ CustomSelect } >
                   {this.props.subcategories.map( (subcategory, index) => (
                   <option key={subcategory._id} value={subcategory._id}>{subcategory.nameFr}</option>
                   ))}
