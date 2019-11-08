@@ -10,10 +10,13 @@ class Header extends Component {
     
     let content;
 
-    if (this.props.currentUser !== undefined) {  
+    if (this.props.currentUser !== undefined) { 
+
+      let peopleUrl = "https://people.epfl.ch/" + this.props.currentUser.profile.sciper;
+      
       content =  (
         <header className="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-          <Link className="navbar-brand" to="/"><img src={logo} className="App-logo" alt="logo"/></Link>           
+          <Link className="navbar-brand" to="/"><img src={logo} className="App-logo" alt="logo"/></Link>
           <div className="collapse navbar-collapse">
             <ul className="navbar-nav mr-auto"> 
               <li className="nav-item dropdown">
@@ -38,6 +41,7 @@ class Header extends Component {
               </li>
             </ul>                                  
           </div>
+          <div> Utilisateur connecté: <a target="_blank" href={ peopleUrl }> { this.props.currentUser.username } </a></div>
         </header>
       )
     }
