@@ -1,3 +1,4 @@
+import Tequila from "meteor/epfl:accounts-tequila";
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
@@ -6,6 +7,7 @@ import { Lexes, Categories, Subcategories, Responsibles } from '../imports/api/c
 
 Meteor.startup(() => {
   render(<App />, document.getElementById('react-target'));
+  Tequila.start();
 });
 
 if (Meteor.isDevelopment) {
