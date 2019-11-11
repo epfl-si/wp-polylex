@@ -21,6 +21,7 @@ Meteor.startup(() => {
     if (activeTequila) {
 
       Tequila.start({
+        service: 'Polylex',
         request: ['uniqueid', 'email'],
         bypass: ['/api'],
         getUserId(tequila) {
