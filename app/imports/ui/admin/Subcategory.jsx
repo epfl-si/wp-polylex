@@ -17,7 +17,7 @@ class SubcategoriesList extends Component {
             <li key={subcategory._id} value={subcategory.nameFr} className="list-group-item">
               {subcategory.nameFr} / {subcategory.nameEn}
               <button type="button" className="close" aria-label="Close">
-                <span  onClick={() => this.props.callBackDeleteSubcategory(subcategory._id)} aria-hidden="true">&times;</span>
+                <span  onClick={() => { if (window.confirm('Are you sure you wish to delete this item?')) this.props.callBackDeleteSubcategory(subcategory._id) }} aria-hidden="true">&times;</span>
               </button>
               <Link className="edit" to={`/admin/subcategory/${subcategory._id}/edit`}>
                 <button type="button" className="btn btn-outline-primary">Éditer</button>

@@ -11,6 +11,7 @@ import {
     responsiblesSchema,
 } from './collections';
 import { throwMeteorError, throwMeteorErrors } from './error';
+import { AppLogger } from '../../server/logger';
 
 function trimObjValues(obj) {
   return Object.keys(obj).reduce((acc, curr) => {
@@ -147,8 +148,6 @@ Meteor.methods({
 
     insertLex(lex){
 
-        //console.log(lex);
-        
         if (!this.userId) {
             throw new Meteor.Error('not connected');
         }
@@ -166,7 +165,6 @@ Meteor.methods({
         
         lexesSchema.validate(lex);
         lex = prepareUpdateInsertLex(lex, 'insert');
-        console.log(lex);
         
         let lexDocument = {
             lex: lex.lex,
@@ -183,7 +181,16 @@ Meteor.methods({
             responsibleId: lex.responsibleId,
         }
 
-        return Lexes.insert(lexDocument);
+        let newLexId = Lexes.insert(lexDocument);
+        let newLex = Lexes.findOne({_id: newLexId});
+
+        AppLogger.getLog().info(
+          `Insert lex ID ${ newLexId }`, 
+          { before: "", after: newLex },
+          this.userId
+        );
+
+        return newLex;
     },
 
     updateLex(lex) {
@@ -222,33 +229,47 @@ Meteor.methods({
             responsibleId: lex.responsibleId,
         }
         
+        let lexBeforeUpdate = Lexes.findOne({ _id: lex._id});
+
         Lexes.update(
             {_id: lex._id}, 
             { $set: lexDocument }
         );
 
+        let updatedLexe = Lexes.findOne({ _id: lex._id});
+
+        AppLogger.getLog().info(
+          `Update lex ID ${ lex._id }`, 
+          { before: lexBeforeUpdate , after: updatedLexe }, 
+          this.userId
+        );
+
     },
     
     removeLex(lexId){
+      if (!this.userId) {
+          throw new Meteor.Error('not connected');
+      }
+      const canRemove = Roles.userIsInRole(
+          this.userId,
+          ['admin', 'editor'], 
+          Roles.GLOBAL_GROUP
+      );
+      if (! canRemove) {
+          throw new Meteor.Error('unauthorized',
+            'Only admins and editors can remove lexes.');
+      }
 
-        if (!this.userId) {
-            throw new Meteor.Error('not connected');
-        }
-
-        const canRemove = Roles.userIsInRole(
-            this.userId,
-            ['admin', 'editor'], 
-            Roles.GLOBAL_GROUP
-        );
-
-        if (! canRemove) {
-            throw new Meteor.Error('unauthorized',
-              'Only admins and editors can remove lexes.');
-        }
-
-        check(lexId, String);
-
-        Lexes.remove({_id: lexId});
+      check(lexId, String);
+      
+      let lex = Lexes.findOne({_id: lexId});
+      Lexes.remove({_id: lexId});
+      
+      AppLogger.getLog().info(
+        `Delete lex ID ${ lexId }`, 
+        { before: lex, after: "" }, 
+        this.userId
+      );
     },
 
     insertCategory(category) {
@@ -277,14 +298,21 @@ Meteor.methods({
             nameEn: category.nameEn,
         };
 
-        return Categories.insert(categoryDocument);
+        let newCategoryId = Categories.insert(categoryDocument);
+        let newCategory = Categories.findOne({_id: newCategoryId});
+
+        AppLogger.getLog().info(
+          `Insert category ID ${ newCategory._id }`, 
+          { before: "", after: newCategory }, 
+          this.userId
+        );
+
+        return newCategoryId;
 
     },
 
     updateCategory(category) {
 
-      console.log(category);
-      
       if (!this.userId) {
           throw new Meteor.Error('not connected');
       }
@@ -300,8 +328,6 @@ Meteor.methods({
             'Only admins can update sites.');
       }
 
-      console.log(category);
-      
       categoriesSchema.validate(category);
       
       category = prepareUpdateInsertCategory(category, 'update');
@@ -311,9 +337,19 @@ Meteor.methods({
         nameEn: category.nameEn,
       };
       
+      let categoryBeforeUpdate = Categories.findOne({ _id: category._id});
+
       Categories.update(
           {_id: category._id}, 
           { $set: categoryDocument }
+      );
+
+      let updatedCategory = Categories.findOne({ _id: category._id});
+
+      AppLogger.getLog().info(
+        `Update category ID ${ category._id }`, 
+        { before: categoryBeforeUpdate , after: updatedCategory }, 
+        this.userId
       );
     },
 
@@ -336,7 +372,15 @@ Meteor.methods({
 
         check(categoryId, String);
 
+        let category = Categories.findOne({_id: categoryId});
+
         Categories.remove({_id: categoryId});
+
+        AppLogger.getLog().info(
+          `Delete category ID ${ categoryId }`, 
+          { before: category, after: "" }, 
+          this.userId
+        );
     },
 
     insertSubcategory(subcategory) {
@@ -365,7 +409,16 @@ Meteor.methods({
             nameEn: subcategory.nameEn,
         };
 
-        return Subcategories.insert(subcategoryDocument);
+        let newSubcategoryId = Subcategories.insert(subcategoryDocument);
+        let newSubcategory = Subcategories.findOne({_id: newSubcategoryId});
+
+        AppLogger.getLog().info(
+          `Insert subcategory ID ${ newSubcategory._id }`, 
+          { before: "", after: newSubcategory }, 
+          this.userId
+        );
+
+        return newSubcategoryId;
 
     },
 
@@ -395,9 +448,19 @@ Meteor.methods({
         nameEn: subcategory.nameEn,
       };
       
+      let subcategoryBeforeUpdate = Subcategories.findOne({ _id: subcategory._id});
+
       Subcategories.update(
           {_id: subcategory._id}, 
           { $set: subcategoryDocument }
+      );
+
+      let updatedSubcategory = Subcategories.findOne({ _id: subcategory._id});
+
+      AppLogger.getLog().info(
+        `Update subcategory ID ${ subcategory._id }`, 
+        { before: subcategoryBeforeUpdate , after: updatedSubcategory }, 
+        this.userId
       );
     },
 
@@ -420,7 +483,15 @@ Meteor.methods({
 
         check(subcategoryId, String);
 
+        let subcategory = Subcategories.findOne({_id: subcategoryId});
+
         Subcategories.remove({_id: subcategoryId});
+
+        AppLogger.getLog().info(
+          `Delete subcategory ID ${ subcategoryId }`, 
+          { before: subcategory, after: "" }, 
+          this.userId
+        );
     },
 
     insertResponsible(responsible) {
@@ -451,7 +522,16 @@ Meteor.methods({
             urlEn: responsible.urlEn,
         };
 
-        return Responsibles.insert(responsibleDocument);
+        let newResponsibleId = Responsibles.insert(responsibleDocument);
+        let newResponsible = Responsibles.findOne({_id: newResponsibleId});
+
+        AppLogger.getLog().info(
+          `Insert responsible ID ${ newResponsible._id }`, 
+          { before: "", after: newResponsible }, 
+          this.userId
+        );
+
+        return newResponsibleId;
     },
 
     updateResponsible(responsible) {
@@ -482,32 +562,50 @@ Meteor.methods({
         urlEn: responsible.urlEn,
       };
       
+      let responsibleBeforeUpdate = Responsibles.findOne({ _id: responsible._id});
+
       Responsibles.update(
-          {_id: responsible._id}, 
-          { $set: responsibleDocument }
+        {_id: responsible._id}, 
+        { $set: responsibleDocument }
+      );
+
+      let updatedResponsible = Responsibles.findOne({ _id: responsible._id});
+
+      AppLogger.getLog().info(
+        `Update responsible ID ${ responsible._id }`, 
+        { before: responsibleBeforeUpdate , after: updatedResponsible }, 
+        this.userId
       );
   },
 
     removeResponsible(responsibleId){
 
-        if (!this.userId) {
-            throw new Meteor.Error('not connected');
-        }
+      if (!this.userId) {
+          throw new Meteor.Error('not connected');
+      }
 
-        const canRemove = Roles.userIsInRole(
-            this.userId,
-            ['admin'], 
-            Roles.GLOBAL_GROUP
-        );
+      const canRemove = Roles.userIsInRole(
+          this.userId,
+          ['admin'], 
+          Roles.GLOBAL_GROUP
+      );
 
-        if (! canRemove) {
-            throw new Meteor.Error('unauthorized',
-              'Only admins can remove Category.');
-        }
+      if (! canRemove) {
+          throw new Meteor.Error('unauthorized',
+            'Only admins can remove Category.');
+      }
 
-        check(responsibleId, String);
+      check(responsibleId, String);
 
-        Responsibles.remove({_id: responsibleId});
+      let responsible = Responsibles.findOne({_id: responsibleId});
+
+      Responsibles.remove({_id: responsibleId});
+
+      AppLogger.getLog().info(
+        `Delete responsible ID ${ responsibleId }`, 
+        { before: responsible, after: "" }, 
+        this.userId
+      );
     },
 
     updateRole(userId, role) {
@@ -524,6 +622,15 @@ Meteor.methods({
             throw new Meteor.Error('unauthorized',
               'Only admins can update roles.');
         }
+        
+        let roleBeforeUpdate = Roles.getRolesForUser(userId);
+
         Roles.setUserRoles(userId, [role], Roles.GLOBAL_GROUP); 
+
+        AppLogger.getLog().info(
+          `Update role ID ${ userId }`, 
+          { before: roleBeforeUpdate, after: [role] },
+          userId
+        );
     },
 });

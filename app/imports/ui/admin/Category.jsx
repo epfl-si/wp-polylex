@@ -17,7 +17,7 @@ class CategoriesList extends Component {
             <li key={category._id} value={category.nameFr} className="list-group-item">
               {category.nameFr} / {category.nameEn}
               <button type="button" className="close" aria-label="Close">
-                <span  onClick={() => this.props.callBackDeleteCategory(category._id)} aria-hidden="true">&times;</span>
+                <span onClick={() => { if (window.confirm('Are you sure you wish to delete this item?')) this.props.callBackDeleteCategory(category._id) }} aria-hidden="true">&times;</span>
               </button>
               <Link className="edit" to={`/admin/category/${category._id}/edit`}>
                 <button type="button" className="btn btn-outline-primary">Éditer</button>

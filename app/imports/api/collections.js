@@ -184,3 +184,4 @@ export const Lexes = new Mongo.Collection('lexes');
 export const Categories = new Mongo.Collection('categories');
 export const Subcategories = new Mongo.Collection('subcategories');
 export const Responsibles = new Mongo.Collection('responsibles');
+export const AppLogs = new Mongo.Collection('AppLogs');

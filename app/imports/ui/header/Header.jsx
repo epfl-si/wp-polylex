@@ -33,6 +33,7 @@ const Header = (props) => {
                 <NavLink className="nav-link" to="/admin/responsible/add">Responsables</NavLink>
                 <NavLink className="nav-link" to="/admin/category/add">Rubriques</NavLink>
                 <NavLink className="nav-link" to="/admin/subcategory/add">Sous-rubriques</NavLink>
+                <NavLink className="nav-link" to="/admin/log/list">Voir les logs</NavLink>
                 <NavLink className="nav-link" to="/admin/users">Gestion des rôles</NavLink>
               </div>
             </li>

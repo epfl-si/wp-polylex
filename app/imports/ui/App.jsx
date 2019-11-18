@@ -9,6 +9,7 @@ import User from './admin/User';
 import Responsible from './admin/Responsible';
 import Category from './admin/Category';
 import Subcategory from './admin/Subcategory';
+import Log from './admin/Log';
 import { Loading } from './Messages';
 
 class App extends Component {
@@ -45,6 +46,7 @@ class App extends Component {
             <Route path="/admin/category/:_id/edit" component={ Category } />
             <Route path="/admin/subcategory/add" component={ Subcategory } />
             <Route path="/admin/subcategory/:_id/edit" component={ Subcategory } />
+            <Route exact path="/admin/log/list" component={ Log } />
             </Fragment>)
            : null}
           <Footer />

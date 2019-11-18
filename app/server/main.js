@@ -2,6 +2,7 @@ import Tequila from "meteor/epfl:accounts-tequila";
 import { Meteor } from 'meteor/meteor';
 import { WebApp } from 'meteor/webapp';
 import { importData } from './import-data';
+import { AppLogger } from './logger';
 import '../imports/api/methods';
 import './publications';
 import './rest-api';
@@ -13,6 +14,9 @@ Meteor.startup(() => {
   
     let needImportData = false;
     let activeTequila = true;
+
+    // Setting up logs
+    new AppLogger();
 
     if (needImportData) {
         importData();
