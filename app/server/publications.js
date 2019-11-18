@@ -1,4 +1,4 @@
-import { Lexes, Categories, Subcategories, Responsibles } from "../imports/api/collections";
+import { Lexes, Categories, Subcategories, Responsibles, AppLogs } from "../imports/api/collections";
 
 Meteor.publish('lexes', function() {  
   return Lexes.find();
@@ -22,4 +22,8 @@ Meteor.publish('users', function () {
 
 Meteor.publish('user.roles', function () {
     return Meteor.roles.find({});
+});
+
+Meteor.publish('log.list', function() {    
+  return AppLogs.find({});
 });

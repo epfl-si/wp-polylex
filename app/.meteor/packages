@@ -30,4 +30,5 @@ harrison:papa-parse           # parse csv
 nimble:restivus               # Rest APi
 alanning:roles                # roles
 epfl:accounts-tequila         # Tequila
-momentjs:moment               # Date 
+ostrio:logger                 # logger
+ostrio:loggermongo            # logger stores in MongoDB

@@ -3,6 +3,7 @@ import { withTracker } from 'meteor/react-meteor-data';
 import { Link } from 'react-router-dom';
 import { Lexes, Categories, Subcategories } from '../../api/collections';
 import { Loading } from '../Messages';
+import moment from 'moment';
 
 class Cells extends Component {
 
@@ -43,7 +44,11 @@ class Cells extends Component {
               <Link className="mr-2" to={`/edit/${lex._id}`}>
                 <button type="button" className="btn btn-outline-primary">Éditer</button>
               </Link>
-              <button type="button" className="btn btn-outline-primary" onClick={() => this.props.deleteLex(lex._id)}>Supprimer</button>
+              <button 
+                type="button" 
+                className="btn btn-outline-primary" 
+                onClick={ () => { if (window.confirm('Are you sure you wish to delete this item?')) this.props.deleteLex(lex._id) }}
+                >Supprimer</button>
             </td>
           </tr>
         ))}
