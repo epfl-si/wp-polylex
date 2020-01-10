@@ -1,4 +1,7 @@
 import { Lexes, Categories, Subcategories, Responsibles } from '../imports/api/collections.js';
+import { EditorState } from 'draft-js';
+import { convertFromRaw } from 'draft-js';
+import { stateToHTML } from 'draft-js-export-html';
 
 function getLex(lex) {
 
@@ -14,6 +17,15 @@ function getLex(lex) {
 
     lex.responsible = responsible;
     delete lex.responsibleId;
+
+    // Convert json description to EditorState and convert EditorState to HTML
+    lex.descriptionFr = stateToHTML(EditorState.createWithContent(
+      convertFromRaw(JSON.parse(lex.descriptionFr))
+    ).getCurrentContent());
+
+    lex.descriptionEn = stateToHTML(EditorState.createWithContent(
+      convertFromRaw(JSON.parse(lex.descriptionEn))
+    ).getCurrentContent());
 
     return lex;
 }

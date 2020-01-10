@@ -13,11 +13,6 @@ import {
 import { throwMeteorError, throwMeteorErrors } from './error';
 import { AppLogger } from '../../server/logger';
 
-import { stateToHTML } from 'draft-js-export-html';
-import { stateFromHTML } from 'draft-js-import-html';
-import { EditorState } from 'draft-js';
-import { convertToRaw } from 'draft-js';
-
 function trimObjValues(obj) {
   return Object.keys(obj).reduce((acc, curr) => {
     acc[curr] = obj[curr].trim()
@@ -125,11 +120,9 @@ function prepareUpdateInsertLex(lex, action) {
   
   if (action === 'update') {  
     if (lexes.count() > 1) {
-      console.log("Cas > 1");
       throwMeteorError('lex', 'Ce LEX existe déjà !');
     } else if (lexes.count() == 1) {
       if (lexes.fetch()[0]._id != lex._id) {
-        console.log("Cas _id = _id");
         throwMeteorError('lex', 'Cet LEX existe déjà !');
       }
     }
@@ -185,8 +178,6 @@ Meteor.methods({
           responsibleId: lex.responsibleId,
         }
 
-        console.log(lexDocument);
-
         lexesSchema.validate(lexDocument);
         lex = prepareUpdateInsertLex(lexDocument, 'insert');
         
@@ -199,15 +190,10 @@ Meteor.methods({
           this.userId
         );
 
-        console.log(newLex);
-
-
         return newLex;
     },
 
     updateLex(lex) {
-
-        console.log(lex)
 
         if (!this.userId) {
             throw new Meteor.Error('not connected');
@@ -244,8 +230,6 @@ Meteor.methods({
 
         lex = prepareUpdateInsertLex(lexDocument, 'update');
 
-        
-        
         let lexBeforeUpdate = Lexes.findOne({ _id: lex._id});
 
         Lexes.update(
