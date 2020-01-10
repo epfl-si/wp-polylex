@@ -52,7 +52,6 @@ class Add extends Component {
       methodName,
       values, 
       (errors, lexId) => {
-
         if (errors) {
           console.log(errors);
           let formErrors = {};

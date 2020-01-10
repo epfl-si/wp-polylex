@@ -1,6 +1,5 @@
 import { Lexes, Categories, Subcategories, Responsibles } from '../imports/api/collections.js';
-import { EditorState } from 'draft-js';
-import { convertFromRaw } from 'draft-js';
+import { EditorState, convertFromRaw } from 'draft-js';
 import { stateToHTML } from 'draft-js-export-html';
 
 function getLex(lex) {
