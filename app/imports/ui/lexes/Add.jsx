@@ -6,6 +6,15 @@ import { Lexes, Categories, Subcategories, Responsibles } from '../../api/collec
 import { CustomError, CustomInput, CustomTextarea, CustomSelect } from '../CustomFields';
 import { AlertSuccess, Loading } from '../Messages';
 
+import './formik-demo.css';
+import './rich-editor.css';
+import { stateToHTML } from 'draft-js-export-html';
+import { stateFromHTML } from 'draft-js-import-html';
+import { RichEditorExample } from './RichEditor';
+import { EditorState } from 'draft-js';
+import { convertToRaw } from 'draft-js';
+import { convertFromRaw } from 'draft-js';
+
 class Add extends Component {
 
   constructor(props){
@@ -30,7 +39,20 @@ class Add extends Component {
   }
     
   submit = (values, actions) => {
+    /*
+    console.log(values);
+    //console.log(typeof values);
+    let htmlDescriptionFr = stateToHTML(values['descriptionFr'].getCurrentContent());
+    let htmlDescriptionEn = stateToHTML(values['descriptionEn'].getCurrentContent())
+    console.log(htmlDescriptionFr);
+    console.log(htmlDescriptionEn);
+    //delete values.descriptionFr;
+    values["descriptionFr"] = htmlDescriptionFr;
+    values["descriptionEn"] = htmlDescriptionEn;
+    */
 
+    console.log(values);
+  
     let methodName;
     let state;
     if (this.state.action === 'add') {
@@ -45,6 +67,19 @@ class Add extends Component {
       methodName,
       values, 
       (errors, lexId) => {
+
+        values.dFr = JSON.stringify(convertToRaw(values.descriptionFr.getCurrentContent()));
+        values.dEn = JSON.stringify(convertToRaw(values.descriptionEn.getCurrentContent()));
+
+        /*
+        console.log(values);
+
+        values['descriptionFr'] = stateFromHTML(values['descriptionFr']);
+        values['descriptionEn'] = stateFromHTML(values['descriptionEn']);
+
+        console.log(values);
+        */
+
         if (errors) {
           console.log(errors);
           let formErrors = {};
@@ -68,6 +103,27 @@ class Add extends Component {
     // Get the URL parameter
     let lexId = this.props.match.params._id;
     let lex = Lexes.findOne({_id: lexId});
+
+    if (lex !== undefined) {
+      console.log(lex);
+
+      console.log(lex.descriptionFr);
+      console.log(JSON.parse(lex.descriptionFr));
+      console.log(convertFromRaw(JSON.parse(lex.descriptionFr)));
+
+      
+      lex.descriptionFr = EditorState.createWithContent(
+        convertFromRaw(JSON.parse(lex.descriptionFr))
+      );
+  
+      lex.descriptionEn = EditorState.createWithContent(
+        convertFromRaw(JSON.parse(lex.descriptionEn))
+      );
+  
+      console.log(lex);
+  
+    }
+    
     return lex;
   }
 
@@ -80,8 +136,10 @@ class Add extends Component {
         titleEn: '',
         urlFr: '',
         urlEn: '',
-        descriptionFr: '',
-        descriptionEn: '',
+        // descriptionFr: '',
+        // descriptionEn: '',
+        descriptionFr: new EditorState.createEmpty(),
+        descriptionEn: new EditorState.createEmpty(),
         effectiveDate: '',
         revisionDate: '',
         categoryId: this.props.defaultCategoryId,
@@ -143,10 +201,12 @@ class Add extends Component {
               validateOnChange={ false }
           >
           {({
+              values,
               handleSubmit,
-              isSubmitting,
               handleChange,
               handleBlur,
+              setFieldValue,
+              isSubmitting,
           }) => (
             <form onSubmit={ handleSubmit } className="bg-white border p-4">
               <div className="my-1 text-right">
@@ -187,6 +247,23 @@ class Add extends Component {
               />
               <ErrorMessage name="urlEn" component={ CustomError } />
 
+              <label>Description en français</label>
+              <RichEditorExample
+                editorState={values.descriptionFr}
+                reference="descriptionFr"
+                onChange={setFieldValue}
+                onBlur={handleBlur}
+              />
+
+              <label>Description en anglais</label>
+              <RichEditorExample
+                editorState={values.descriptionEn}
+                reference="descriptionEn"
+                onChange={setFieldValue}
+                onBlur={handleBlur}
+              />
+
+              {/*
               <Field
                   onChange={e => { handleChange(e); this.updateUserMsg();}}
                   onBlur={e => { handleBlur(e); this.updateUserMsg();}}
@@ -200,7 +277,7 @@ class Add extends Component {
                   placeholder="Description en anglais du LEX à ajouter" label="Description en anglais" name="descriptionEn" type="text" component={ CustomTextarea } 
               />
               <ErrorMessage name="descriptionEn" component={ CustomError } />
-
+              */}
               <Field
                   onChange={e => { handleChange(e); this.updateUserMsg();}}
                   onBlur={e => { handleBlur(e); this.updateUserMsg();}}

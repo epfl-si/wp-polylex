@@ -13,6 +13,11 @@ import {
 import { throwMeteorError, throwMeteorErrors } from './error';
 import { AppLogger } from '../../server/logger';
 
+import { stateToHTML } from 'draft-js-export-html';
+import { stateFromHTML } from 'draft-js-import-html';
+import { EditorState } from 'draft-js';
+import { convertToRaw } from 'draft-js';
+
 function trimObjValues(obj) {
   return Object.keys(obj).reduce((acc, curr) => {
     acc[curr] = obj[curr].trim()
@@ -103,7 +108,7 @@ function prepareUpdateInsertSubcategory(subcategory, action) {
 function prepareUpdateInsertLex(lex, action) {
 
   // Trim all attributes of lex
-  lex = trimObjValues(lex);
+  //lex = trimObjValues(lex);
 
   // Delete "/" at the end of URL 
   let urlFr = lex.urlFr;
@@ -120,9 +125,11 @@ function prepareUpdateInsertLex(lex, action) {
   
   if (action === 'update') {  
     if (lexes.count() > 1) {
+      console.log("Cas > 1");
       throwMeteorError('lex', 'Ce LEX existe déjà !');
     } else if (lexes.count() == 1) {
       if (lexes.fetch()[0]._id != lex._id) {
+        console.log("Cas _id = _id");
         throwMeteorError('lex', 'Cet LEX existe déjà !');
       }
     }
@@ -162,25 +169,27 @@ Meteor.methods({
             throw new Meteor.Error('unauthorized',
               'Only admins and editors can insert lexes.');
         }
-        
-        lexesSchema.validate(lex);
-        lex = prepareUpdateInsertLex(lex, 'insert');
-        
+
         let lexDocument = {
-            lex: lex.lex,
-            titleFr: lex.titleFr,
-            titleEn: lex.titleEn,
-            urlFr: lex.urlFr,
-            urlEn: lex.urlEn,
-            descriptionFr: lex.descriptionFr,
-            descriptionEn: lex.descriptionEn,
-            effectiveDate: lex.effectiveDate,
-            revisionDate: lex.revisionDate,
-            categoryId: lex.categoryId,
-            subcategoryId: lex.subcategoryId,
-            responsibleId: lex.responsibleId,
+          lex: lex.lex,
+          titleFr: lex.titleFr,
+          titleEn: lex.titleEn,
+          urlFr: lex.urlFr,
+          urlEn: lex.urlEn,
+          descriptionFr: lex.dFr,
+          descriptionEn: lex.dEn,
+          effectiveDate: lex.effectiveDate,
+          revisionDate: lex.revisionDate,
+          categoryId: lex.categoryId,
+          subcategoryId: lex.subcategoryId,
+          responsibleId: lex.responsibleId,
         }
 
+        console.log(lexDocument);
+
+        lexesSchema.validate(lexDocument);
+        lex = prepareUpdateInsertLex(lexDocument, 'insert');
+        
         let newLexId = Lexes.insert(lexDocument);
         let newLex = Lexes.findOne({_id: newLexId});
 
@@ -190,10 +199,15 @@ Meteor.methods({
           this.userId
         );
 
+        console.log(newLex);
+
+
         return newLex;
     },
 
     updateLex(lex) {
+
+        console.log(lex)
 
         if (!this.userId) {
             throw new Meteor.Error('not connected');
@@ -210,24 +224,27 @@ Meteor.methods({
               'Only admins and editors can update lexes.');
         }
 
-        lexesSchema.validate(lex);
-
-        lex = prepareUpdateInsertLex(lex, 'update');
-
         let lexDocument = {
-            lex: lex.lex,
-            titleFr: lex.titleFr,
-            titleEn: lex.titleEn,
-            urlFr: lex.urlFr,
-            urlEn: lex.urlEn,
-            descriptionFr: lex.descriptionFr,
-            descriptionEn: lex.descriptionEn,
-            effectiveDate: lex.effectiveDate,
-            revisionDate: lex.revisionDate,
-            categoryId: lex.categoryId,
-            subcategoryId: lex.subcategoryId,
-            responsibleId: lex.responsibleId,
-        }
+          _id: lex._id,
+          lex: lex.lex,
+          titleFr: lex.titleFr,
+          titleEn: lex.titleEn,
+          urlFr: lex.urlFr,
+          urlEn: lex.urlEn,
+          descriptionFr: lex.dFr,
+          descriptionEn: lex.dEn,
+          effectiveDate: lex.effectiveDate,
+          revisionDate: lex.revisionDate,
+          categoryId: lex.categoryId,
+          subcategoryId: lex.subcategoryId,
+          responsibleId: lex.responsibleId,
+      }
+
+        lexesSchema.validate(lexDocument);
+
+        lex = prepareUpdateInsertLex(lexDocument, 'update');
+
+        
         
         let lexBeforeUpdate = Lexes.findOne({ _id: lex._id});
 

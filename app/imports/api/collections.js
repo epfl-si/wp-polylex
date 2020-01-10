@@ -55,16 +55,18 @@ export const lexesSchema = new SimpleSchema({
         custom: isRequired
     },
     descriptionFr: {
-        type: String,
+        type: String, 
+    
         label: "Description en francais",
-        optional: false,
-        custom: isRequired
+        optional: true,
+        //custom: isRequired
     },
     descriptionEn: {
-        type: String,
+        type: String, 
+       
         label: "Description en anglais",
-        optional: false,
-        custom: isRequired
+        optional: true,
+        //custom: isRequired
     },
     effectiveDate: {
         type: String,
