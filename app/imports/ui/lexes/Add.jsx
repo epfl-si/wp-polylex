@@ -7,7 +7,9 @@ import { CustomError, CustomInput, CustomTextarea, CustomSelect } from '../Custo
 import { AlertSuccess, Loading } from '../Messages';
 
 import './rich-editor.css';
-import { RichEditorExample } from './RichEditor';
+
+//import { RichEditorExample } from './RichEditor';
+import { RichEditorExample } from './RichEditor2';
 import { EditorState, convertToRaw, convertFromRaw } from 'draft-js';
 
 class Add extends Component {
@@ -216,7 +218,7 @@ class Add extends Component {
                 onChange={setFieldValue}
                 onBlur={handleBlur}
               />
-
+              
               <label>Description en anglais</label>
               <RichEditorExample
                 editorState={values.descriptionEn}
