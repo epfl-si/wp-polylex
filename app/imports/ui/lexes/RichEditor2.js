@@ -7,27 +7,71 @@ import {
   RichUtils,
 } from 'draft-js';
 
+
+
+function findLinkEntities(contentBlock, callback, contentState) {
+  contentBlock.findEntityRanges(
+    (character) => {
+      const entityKey = character.getEntity();
+      return (
+        entityKey !== null &&
+        contentState.getEntity(entityKey).getType() === 'LINK'
+      );
+    },
+    callback
+  );
+}
+
+const Link = (props) => {
+  const {url} = props.contentState.getEntity(props.entityKey).getData();
+  console.log(url);
+  return (
+    <a href={url} style={styles.link}>
+      {props.children}
+    </a>
+  );
+};
+
+const decorator = new CompositeDecorator([
+  {
+    strategy: findLinkEntities,
+    component: Link,
+  },
+]);
+
 export class RichEditorExample extends React.Component {
 
+  onChange = editorState => {
+    let reference = this.props.reference;
+    this.props.onChange(reference, editorState);
+  };
+
+  // this.refs.editor correspond à ref="editor" du composant <Editor>
+  focus = () => {
+    if (this.props.reference == 'descriptionFr') {
+      this.refs.descriptionFr.focus();
+    } else if (this.props.reference == 'descriptionEn') {
+      this.refs.descriptionEn.focus();
+    } else {
+      this.refs.editor.focus();
+    } 
+  }
   
   constructor(props) {
     super(props);
 
-    const decorator = new CompositeDecorator([
-      {
-        strategy: findLinkEntities,
-        component: Link,
-      },
-    ]);
+    
 
+    let newEditorState = EditorState.set(this.props.editorState, {decorator: decorator});
+    this.onChange(newEditorState);
     this.state = {
-      editorState: EditorState.set(this.props.editorState, {decorator: decorator}),
+      editorState: newEditorState,
       showURLInput: false,
       urlValue: '',
     };
 
-    this.focus = () => this.refs.editor.focus();
-    this.onChange = (editorState) => this.setState({editorState});
+    //this.focus = () => this.refs.editor.focus();
+    //this.onChange = (editorState) => this.setState({editorState});
     this.logState = () => {
       const content = this.state.editorState.getCurrentContent();
       console.log(convertToRaw(content));
@@ -42,7 +86,8 @@ export class RichEditorExample extends React.Component {
 
   _promptForLink(e) {
     e.preventDefault();
-    const {editorState} = this.state;
+    let editorState = EditorState.set(this.props.editorState, {decorator: decorator});
+    this.onChange(editorState);
     const selection = editorState.getSelection();
     if (!selection.isCollapsed()) {
       const contentState = editorState.getCurrentContent();
@@ -68,7 +113,9 @@ export class RichEditorExample extends React.Component {
 
   _confirmLink(e) {
     e.preventDefault();
-    const {editorState, urlValue} = this.state;
+    const {urlValue} = this.state;
+    let editorState = EditorState.set(this.props.editorState, {decorator: decorator});
+    this.onChange(editorState);
     const contentState = editorState.getCurrentContent();
     const contentStateWithEntity = contentState.createEntity(
       'LINK',
@@ -77,16 +124,18 @@ export class RichEditorExample extends React.Component {
     );
     const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
     const newEditorState = EditorState.set(editorState, { currentContent: contentStateWithEntity });
+    const newES = RichUtils.toggleLink(
+      newEditorState,
+      newEditorState.getSelection(),
+      entityKey
+    );
+    this.onChange(newES);
     this.setState({
-      editorState: RichUtils.toggleLink(
-        newEditorState,
-        newEditorState.getSelection(),
-        entityKey
-      ),
+      editorState: newES,
       showURLInput: false,
       urlValue: '',
     }, () => {
-      setTimeout(() => this.refs.editor.focus(), 0);
+      setTimeout(() => this.focus(), 0);
     });
   }
 
@@ -98,16 +147,18 @@ export class RichEditorExample extends React.Component {
 
   _removeLink(e) {
     e.preventDefault();
-    const {editorState} = this.state;
+    let editorState = EditorState.set(this.props.editorState, {decorator: decorator});
+    this.onChange(editorState);
     const selection = editorState.getSelection();
     if (!selection.isCollapsed()) {
-      this.setState({
-        editorState: RichUtils.toggleLink(editorState, selection, null),
-      });
+
+      
+      this.onChange(RichUtils.toggleLink(editorState, selection, null));
     }
   }
 
   render() {
+    let editorState = EditorState.set(this.props.editorState, {decorator: decorator});
     let urlInput;
     if (this.state.showURLInput) {
       urlInput =
@@ -127,6 +178,7 @@ export class RichEditorExample extends React.Component {
     }
 
     return (
+      
       <div style={styles.root}>
         <div style={{marginBottom: 10}}>
           Select some text, then use the buttons to add or remove links
@@ -146,10 +198,10 @@ export class RichEditorExample extends React.Component {
         {urlInput}
         <div style={styles.editor} onClick={this.focus}>
           <Editor
-            editorState={this.state.editorState}
+            editorState={editorState}
             onChange={this.onChange}
             placeholder="Enter some text..."
-            ref="editor"
+            ref={this.props.reference}
           />
         </div>
         <input
@@ -163,27 +215,6 @@ export class RichEditorExample extends React.Component {
   }
 }
 
-function findLinkEntities(contentBlock, callback, contentState) {
-  contentBlock.findEntityRanges(
-    (character) => {
-      const entityKey = character.getEntity();
-      return (
-        entityKey !== null &&
-        contentState.getEntity(entityKey).getType() === 'LINK'
-      );
-    },
-    callback
-  );
-}
-
-const Link = (props) => {
-  const {url} = props.contentState.getEntity(props.entityKey).getData();
-  return (
-    <a href={url} style={styles.link}>
-      {props.children}
-    </a>
-  );
-};
 
 const styles = {
   root: {
