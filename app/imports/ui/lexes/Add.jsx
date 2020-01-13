@@ -7,9 +7,7 @@ import { CustomError, CustomInput, CustomTextarea, CustomSelect } from '../Custo
 import { AlertSuccess, Loading } from '../Messages';
 
 import './rich-editor.css';
-
-//import { RichEditorExample } from './RichEditor';
-import { RichEditorExample } from './RichEditor2';
+import { PolylexRichEditor } from './RichEditor';
 import { EditorState, convertToRaw, convertFromRaw } from 'draft-js';
 
 class Add extends Component {
@@ -212,7 +210,7 @@ class Add extends Component {
               <ErrorMessage name="urlEn" component={ CustomError } />
 
               <label>Description en français</label>
-              <RichEditorExample
+              <PolylexRichEditor
                 editorState={values.descriptionFr}
                 reference="descriptionFr"
                 onChange={setFieldValue}
@@ -220,7 +218,7 @@ class Add extends Component {
               />
               
               <label>Description en anglais</label>
-              <RichEditorExample
+              <PolylexRichEditor
                 editorState={values.descriptionEn}
                 reference="descriptionEn"
                 onChange={setFieldValue}
