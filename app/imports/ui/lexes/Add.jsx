@@ -35,8 +35,8 @@ class Add extends Component {
     
   submit = (values, actions) => {
 
-    values.dFr = JSON.stringify(convertToRaw(values.descriptionFr.getCurrentContent()));
-    values.dEn = JSON.stringify(convertToRaw(values.descriptionEn.getCurrentContent()));
+    values.jsonDescriptionFr = JSON.stringify(convertToRaw(values.descriptionFr.getCurrentContent()));
+    values.jsonDescriptionEn = JSON.stringify(convertToRaw(values.descriptionEn.getCurrentContent()));
 
     let methodName;
     let state;
@@ -77,17 +77,13 @@ class Add extends Component {
     let lex = Lexes.findOne({_id: lexId});
 
     if (lex !== undefined) {
-
       lex.descriptionFr = EditorState.createWithContent(
         convertFromRaw(JSON.parse(lex.descriptionFr))
       );
-  
       lex.descriptionEn = EditorState.createWithContent(
         convertFromRaw(JSON.parse(lex.descriptionEn))
       );
-
     }
-    
     return lex;
   }
 
