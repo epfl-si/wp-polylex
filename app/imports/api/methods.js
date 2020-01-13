@@ -103,7 +103,7 @@ function prepareUpdateInsertSubcategory(subcategory, action) {
 function prepareUpdateInsertLex(lex, action) {
 
   // Trim all attributes of lex
-  //lex = trimObjValues(lex);
+  lex = trimObjValues(lex);
 
   // Delete "/" at the end of URL 
   let urlFr = lex.urlFr;
