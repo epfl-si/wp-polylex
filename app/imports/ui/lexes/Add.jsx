@@ -6,6 +6,10 @@ import { Lexes, Categories, Subcategories, Responsibles } from '../../api/collec
 import { CustomError, CustomInput, CustomTextarea, CustomSelect } from '../CustomFields';
 import { AlertSuccess, Loading } from '../Messages';
 
+import './rich-editor.css';
+import { PolylexRichEditor } from './RichEditor';
+import { EditorState, convertToRaw, convertFromRaw } from 'draft-js';
+
 class Add extends Component {
 
   constructor(props){
@@ -30,6 +34,9 @@ class Add extends Component {
   }
     
   submit = (values, actions) => {
+
+    values.jsonDescriptionFr = JSON.stringify(convertToRaw(values.descriptionFr.getCurrentContent()));
+    values.jsonDescriptionEn = JSON.stringify(convertToRaw(values.descriptionEn.getCurrentContent()));
 
     let methodName;
     let state;
@@ -68,6 +75,15 @@ class Add extends Component {
     // Get the URL parameter
     let lexId = this.props.match.params._id;
     let lex = Lexes.findOne({_id: lexId});
+
+    if (lex !== undefined) {
+      lex.descriptionFr = EditorState.createWithContent(
+        convertFromRaw(JSON.parse(lex.descriptionFr))
+      );
+      lex.descriptionEn = EditorState.createWithContent(
+        convertFromRaw(JSON.parse(lex.descriptionEn))
+      );
+    }
     return lex;
   }
 
@@ -80,8 +96,8 @@ class Add extends Component {
         titleEn: '',
         urlFr: '',
         urlEn: '',
-        descriptionFr: '',
-        descriptionEn: '',
+        descriptionFr: new EditorState.createEmpty(),
+        descriptionEn: new EditorState.createEmpty(),
         effectiveDate: '',
         revisionDate: '',
         categoryId: this.props.defaultCategoryId,
@@ -143,10 +159,12 @@ class Add extends Component {
               validateOnChange={ false }
           >
           {({
+              values,
               handleSubmit,
-              isSubmitting,
               handleChange,
               handleBlur,
+              setFieldValue,
+              isSubmitting,
           }) => (
             <form onSubmit={ handleSubmit } className="bg-white border p-4">
               <div className="my-1 text-right">
@@ -187,19 +205,21 @@ class Add extends Component {
               />
               <ErrorMessage name="urlEn" component={ CustomError } />
 
-              <Field
-                  onChange={e => { handleChange(e); this.updateUserMsg();}}
-                  onBlur={e => { handleBlur(e); this.updateUserMsg();}}
-                  placeholder="Description en français du LEX à ajouter" label="Description en Français" name="descriptionFr" type="text" component={ CustomTextarea } 
+              <label>Description en français</label>
+              <PolylexRichEditor
+                editorState={values.descriptionFr}
+                reference="descriptionFr"
+                onChange={setFieldValue}
+                onBlur={handleBlur}
               />
-              <ErrorMessage name="descriptionFr" component={ CustomError } />
-
-              <Field
-                  onChange={e => { handleChange(e); this.updateUserMsg();}}
-                  onBlur={e => { handleBlur(e); this.updateUserMsg();}}
-                  placeholder="Description en anglais du LEX à ajouter" label="Description en anglais" name="descriptionEn" type="text" component={ CustomTextarea } 
+              
+              <label>Description en anglais</label>
+              <PolylexRichEditor
+                editorState={values.descriptionEn}
+                reference="descriptionEn"
+                onChange={setFieldValue}
+                onBlur={handleBlur}
               />
-              <ErrorMessage name="descriptionEn" component={ CustomError } />
 
               <Field
                   onChange={e => { handleChange(e); this.updateUserMsg();}}

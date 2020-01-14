@@ -10,7 +10,11 @@
   "dependencies": {
     "@babel/runtime": "^7.3.4",
     "bcrypt": "^3.0.6",
+    "draft-js": "^0.11.4",
+    "draft-js-export-html": "^1.4.1",
+    "draft-js-import-html": "^1.4.1",
     "formik": "^1.5.8",
+    "immutable": "^4.0.0-rc.12",
     "meteor-node-stubs": "^0.4.1",
     "moment": "^2.24.0",
     "react": "^16.5.0",

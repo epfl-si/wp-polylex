@@ -162,25 +162,25 @@ Meteor.methods({
             throw new Meteor.Error('unauthorized',
               'Only admins and editors can insert lexes.');
         }
-        
-        lexesSchema.validate(lex);
-        lex = prepareUpdateInsertLex(lex, 'insert');
-        
+
         let lexDocument = {
-            lex: lex.lex,
-            titleFr: lex.titleFr,
-            titleEn: lex.titleEn,
-            urlFr: lex.urlFr,
-            urlEn: lex.urlEn,
-            descriptionFr: lex.descriptionFr,
-            descriptionEn: lex.descriptionEn,
-            effectiveDate: lex.effectiveDate,
-            revisionDate: lex.revisionDate,
-            categoryId: lex.categoryId,
-            subcategoryId: lex.subcategoryId,
-            responsibleId: lex.responsibleId,
+          lex: lex.lex,
+          titleFr: lex.titleFr,
+          titleEn: lex.titleEn,
+          urlFr: lex.urlFr,
+          urlEn: lex.urlEn,
+          descriptionFr: lex.jsonDescriptionFr,
+          descriptionEn: lex.jsonDescriptionEn,
+          effectiveDate: lex.effectiveDate,
+          revisionDate: lex.revisionDate,
+          categoryId: lex.categoryId,
+          subcategoryId: lex.subcategoryId,
+          responsibleId: lex.responsibleId,
         }
 
+        lexesSchema.validate(lexDocument);
+        lex = prepareUpdateInsertLex(lexDocument, 'insert');
+        
         let newLexId = Lexes.insert(lexDocument);
         let newLex = Lexes.findOne({_id: newLexId});
 
@@ -210,25 +210,26 @@ Meteor.methods({
               'Only admins and editors can update lexes.');
         }
 
-        lexesSchema.validate(lex);
-
-        lex = prepareUpdateInsertLex(lex, 'update');
-
         let lexDocument = {
-            lex: lex.lex,
-            titleFr: lex.titleFr,
-            titleEn: lex.titleEn,
-            urlFr: lex.urlFr,
-            urlEn: lex.urlEn,
-            descriptionFr: lex.descriptionFr,
-            descriptionEn: lex.descriptionEn,
-            effectiveDate: lex.effectiveDate,
-            revisionDate: lex.revisionDate,
-            categoryId: lex.categoryId,
-            subcategoryId: lex.subcategoryId,
-            responsibleId: lex.responsibleId,
-        }
-        
+          _id: lex._id,
+          lex: lex.lex,
+          titleFr: lex.titleFr,
+          titleEn: lex.titleEn,
+          urlFr: lex.urlFr,
+          urlEn: lex.urlEn,
+          descriptionFr: lex.jsonDescriptionFr,
+          descriptionEn: lex.jsonDescriptionEn,
+          effectiveDate: lex.effectiveDate,
+          revisionDate: lex.revisionDate,
+          categoryId: lex.categoryId,
+          subcategoryId: lex.subcategoryId,
+          responsibleId: lex.responsibleId,
+      }
+
+        lexesSchema.validate(lexDocument);
+
+        lex = prepareUpdateInsertLex(lexDocument, 'update');
+
         let lexBeforeUpdate = Lexes.findOne({ _id: lex._id});
 
         Lexes.update(
@@ -243,7 +244,8 @@ Meteor.methods({
           { before: lexBeforeUpdate , after: updatedLexe }, 
           this.userId
         );
-
+        
+        return lex._id;
     },
     
     removeLex(lexId){
