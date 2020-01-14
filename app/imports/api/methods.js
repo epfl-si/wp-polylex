@@ -244,7 +244,8 @@ Meteor.methods({
           { before: lexBeforeUpdate , after: updatedLexe }, 
           this.userId
         );
-
+        
+        return lex._id;
     },
     
     removeLex(lexId){

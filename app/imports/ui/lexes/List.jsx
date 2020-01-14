@@ -108,9 +108,11 @@ export default withTracker(() => {
   Meteor.subscribe('lexes');
   Meteor.subscribe('categories');
   Meteor.subscribe('subcategories');
+
+  let lexes = Lexes.find({}).fetch();
   
   return {
-    lexes: Lexes.find({}).fetch(),
+    lexes: lexes,
     categories: Categories.find({}).fetch(),
     subcategories: Subcategories.find({}).fetch(),
   };

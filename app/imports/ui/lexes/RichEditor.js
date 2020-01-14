@@ -177,7 +177,7 @@ export class PolylexRichEditor extends React.Component {
             value={this.state.urlValue}
             onKeyDown={this.onLinkInputKeyDown}
           />
-          <button onMouseDown={this.confirmLink}>
+          <button className="btn btn-light" onMouseDown={this.confirmLink}>
             Valider
           </button>
         </div>;
@@ -188,12 +188,13 @@ export class PolylexRichEditor extends React.Component {
         <div style={styles.root}>
           <div style={styles.buttons}>
             <button
+              className="btn btn-light"
               type="button"
               onMouseDown={this.promptForLink}
               style={{marginRight: 10}}>
               Ajouter un lien
             </button>
-            <button type="button" onMouseDown={this.removeLink}>
+            <button type="button" className="btn btn-light" onMouseDown={this.removeLink}>
               Supprimer un lien
             </button>
           </div>
