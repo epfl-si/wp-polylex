@@ -17,7 +17,7 @@ class ResponsiblesList extends Component {
             <li key={responsible._id} value={responsible.lastName} className="list-group-item">
                 <a href={responsible.urlFr} target="_blank">{responsible.lastName} {responsible.firstName}</a>
                 <button type="button" className="close" aria-label="Close">
-                  <span  onClick={() => this.props.callBackDeleteResponsible(responsible._id)} aria-hidden="true">&times;</span>
+                  <span onClick={() => { if (window.confirm('Are you sure you wish to delete this item?')) this.props.callBackDeleteResponsible(responsible._id) }} aria-hidden="true">&times;</span>
                 </button>
                 <Link className="edit" to={`/admin/responsible/${responsible._id}/edit`}>
                   <button type="button" className="btn btn-outline-primary">Éditer</button>
@@ -57,6 +57,7 @@ class Responsible extends Component {
       (error, responsibleID) => {
         if (error) {
           console.log(`ERROR Responsible removeResponsible ${error}`);
+          alert(error);
         } else {
           this.setState({deleteSuccess: true});
         }

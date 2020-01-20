@@ -57,6 +57,7 @@ class Category extends Component {
       (error, categoryID) => {
         if (error) {
             console.log(`ERROR Category removeCategory ${error}`);
+            alert(error);
         } else {
           this.setState({deleteSuccess: true});
         }

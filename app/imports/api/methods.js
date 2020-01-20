@@ -374,6 +374,12 @@ Meteor.methods({
 
         check(categoryId, String);
 
+        // Check if category is used
+        lexesByCategory = Lexes.find({categoryId: categoryId}).count();
+        if (lexesByCategory > 0) {
+          throw new Meteor.Error('Remove category', 'Cette catégorie ne peut pas être supprimée car elle est encore liée à, au moins, 1 lex.');
+        }
+
         let category = Categories.findOne({_id: categoryId});
 
         Categories.remove({_id: categoryId});
@@ -452,11 +458,6 @@ Meteor.methods({
       
       let subcategoryBeforeUpdate = Subcategories.findOne({ _id: subcategory._id});
 
-      Subcategories.update(
-          {_id: subcategory._id}, 
-          { $set: subcategoryDocument }
-      );
-
       let updatedSubcategory = Subcategories.findOne({ _id: subcategory._id});
 
       AppLogger.getLog().info(
@@ -484,6 +485,14 @@ Meteor.methods({
         }
 
         check(subcategoryId, String);
+
+        // Check if subcategory is used
+        lexesBySubcategory = Lexes.find({subcategoryId: subcategoryId}).count();
+        if (lexesBySubcategory > 0) {
+          throw new Meteor.Error('Remove subcategory', 'Cette sous-catégorie ne peut pas être supprimée car elle est encore liée à, au moins, 1 lex.');
+        }
+
+        Lexes.find({subcategoryId: subcategoryId}, );
 
         let subcategory = Subcategories.findOne({_id: subcategoryId});
 
@@ -598,6 +607,12 @@ Meteor.methods({
       }
 
       check(responsibleId, String);
+
+      // Check if responsible is used
+      lexesByResponsible = Lexes.find({responsibleId: responsibleId}).count();
+      if (lexesByResponsible > 0) {
+        throw new Meteor.Error('Remove responsible', 'Ce responsable ne peut pas être supprimé car il est encore responsable d\'au moins 1 lex.');
+      }
 
       let responsible = Responsibles.findOne({_id: responsibleId});
 
