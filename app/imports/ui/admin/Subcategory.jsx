@@ -57,6 +57,7 @@ class Subcategory extends Component {
       (error, subcategoryID) => {
         if (error) {
           console.log(`ERROR Subcategory removeSubcategory ${error}`);
+          alert(error);
         } else {
           this.setState({deleteSuccess: true});
         }
