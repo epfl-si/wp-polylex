@@ -10,7 +10,6 @@ import Responsible from './admin/Responsible';
 import Category from './admin/Category';
 import Subcategory from './admin/Subcategory';
 import Log from './admin/Log';
-import ConvertData from './admin/ConvertData';
 import { Loading } from './Messages';
 
 class App extends Component {
@@ -31,24 +30,23 @@ class App extends Component {
       <Router>
         <div className="App container">
           <Header />
-          { isAdmin || isEditor?   
+          { isAdmin || isEditor ?   
             (<Fragment>
             <Route exact path="/" component={ List } />
             <Route exact path="/add" component={ Add } />
             <Route path="/edit/:_id" component={ Add } />
-            </Fragment>)
-           : null}
-          { isAdmin ?   
-            (<Fragment>
-            <Route exact path="/admin/users" component={ User } />
             <Route path="/admin/responsible/add" component={ Responsible } />
             <Route path="/admin/responsible/:_id/edit" component={ Responsible } />
             <Route path="/admin/category/add" component={ Category } />
             <Route path="/admin/category/:_id/edit" component={ Category } />
             <Route path="/admin/subcategory/add" component={ Subcategory } />
             <Route path="/admin/subcategory/:_id/edit" component={ Subcategory } />
+            </Fragment>)
+           : null}
+          { isAdmin ?   
+            (<Fragment>
+            <Route exact path="/admin/users" component={ User } />
             <Route exact path="/admin/log/list" component={ Log } />
-            <Route exact path="/admin/converter" component={ ConvertData } />
             </Fragment>)
            : null}
           <Footer />
