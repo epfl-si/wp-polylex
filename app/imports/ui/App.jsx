@@ -5,7 +5,6 @@ import Footer from './footer/Footer';
 import Header from './header/Header';
 import List from './lexes/List';
 import Add from './lexes/Add';
-import User from './admin/User';
 import Responsible from './admin/Responsible';
 import Category from './admin/Category';
 import Subcategory from './admin/Subcategory';
@@ -45,7 +44,6 @@ class App extends Component {
            : null}
           { isAdmin ?   
             (<Fragment>
-            <Route exact path="/admin/users" component={ User } />
             <Route exact path="/admin/log/list" component={ Log } />
             </Fragment>)
            : null}
