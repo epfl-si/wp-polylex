@@ -282,7 +282,7 @@ Meteor.methods({
 
         const canInsert = Roles.userIsInRole(
             this.userId,
-            ['admin'], 
+            ['admin', 'editor'],
             Roles.GLOBAL_GROUP
         );
 
@@ -321,7 +321,7 @@ Meteor.methods({
 
       const canUpdate = Roles.userIsInRole(
           this.userId,
-          ['admin'], 
+          ['admin', 'editor'],
           Roles.GLOBAL_GROUP
       );
 
@@ -363,7 +363,7 @@ Meteor.methods({
 
         const canRemove = Roles.userIsInRole(
             this.userId,
-            ['admin'], 
+            ['admin', 'editor'], 
             Roles.GLOBAL_GROUP
         );
 
@@ -399,7 +399,7 @@ Meteor.methods({
 
         const canInsert = Roles.userIsInRole(
             this.userId,
-            ['admin'], 
+            ['admin', 'editor'], 
             Roles.GLOBAL_GROUP
         );
 
@@ -438,7 +438,7 @@ Meteor.methods({
 
       const canUpdate = Roles.userIsInRole(
           this.userId,
-          ['admin'], 
+          ['admin', 'editor'], 
           Roles.GLOBAL_GROUP
       );
 
@@ -475,7 +475,7 @@ Meteor.methods({
 
         const canRemove = Roles.userIsInRole(
             this.userId,
-            ['admin'], 
+            ['admin', 'editor'], 
             Roles.GLOBAL_GROUP
         );
 
@@ -513,7 +513,7 @@ Meteor.methods({
 
         const canInsert = Roles.userIsInRole(
             this.userId,
-            ['admin'], 
+            ['admin', 'editor'], 
             Roles.GLOBAL_GROUP
         );
 
@@ -553,7 +553,7 @@ Meteor.methods({
 
       const canUpdate = Roles.userIsInRole(
           this.userId,
-          ['admin'], 
+          ['admin', 'editor'], 
           Roles.GLOBAL_GROUP
       );
 
@@ -597,7 +597,7 @@ Meteor.methods({
 
       const canRemove = Roles.userIsInRole(
           this.userId,
-          ['admin'], 
+          ['admin', 'editor'], 
           Roles.GLOBAL_GROUP
       );
 
