@@ -107,6 +107,5 @@ polylex_image_version: '0.1.10'
 - Pour obtenir le rôle 'editor' il faut appartenir au groupe 'wp-polylex-editors' de l'application groups.epfl.ch
 
 ATTENTION :
-Pour mettre à jour l'image avec FROM node:10.19-alpine 
-On a du utiliser node version 10 car avec la 12 on avait un prob avec Fiber 
-FROM node:10.19-alpine
+A la différence de wp-veritas, la mise à jour de meteor 1.9 ne pose pas de problème. Donc dans le Dockerfile on utilise node en version 12
+`FROM node:12.14.0-alpine`
