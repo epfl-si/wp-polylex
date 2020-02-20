@@ -61,6 +61,13 @@ Si on supprime une rubrique, il faut avoir conscience que tous les lexes liées 
 
 ## Déployer une nouvelle version sur l'environnement de test d'openshift
 
+Pour commencer, on doit changer le numéro de version : 
+- Fichier ansible/roles/epfl.polylex/vars/main.yml
+- Dans le composant Header app/imports/ui/header/Header.jsx
+- On commit/push 
+- On crée le tag : `git tag -a 1.0 -m "polylex version 1.0"`
+- On push le tag : `git push --follow-tags`
+
 On commence par builder l'image :
 
 `docker build -t epflsi/polylex .`
@@ -92,3 +99,14 @@ polylex_image_version: '0.1.10'
 ## Plus d'info sur la configuration OpenShift
 
 <a href="https://docs.google.com/document/d/165DWXhxMyjb4EY8wQMwvGlTYUddYvgMnaAP2OR7-Foo" target="_blank">Déploiement de Polylex sur OpenShift</a>
+
+## Autentification Tequila et rôle
+
+- Pour se connecter à l'application, il se faut s'authentifier Tequila.
+- Pour obtenir le rôle 'admin' il faut appartenir au groupe 'wp-polylex-admins' de l'application groups.epfl.ch
+- Pour obtenir le rôle 'editor' il faut appartenir au groupe 'wp-polylex-editors' de l'application groups.epfl.ch
+
+ATTENTION :
+Pour mettre à jour l'image avec FROM node:10.19-alpine 
+On a du utiliser node version 10 car avec la 12 on avait un prob avec Fiber 
+FROM node:10.19-alpine
