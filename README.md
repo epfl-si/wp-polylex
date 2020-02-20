@@ -63,17 +63,17 @@ Si on supprime une rubrique, il faut avoir conscience que tous les lexes liées 
 
 On commence par builder l'image :
 
-`docker build -t epflidevelop/polylex .`
+`docker build -t epflsi/polylex .`
 
 On crée un tag pour cette image 
 
-`docker tag epflidevelop/polylex:latest epflidevelop/polylex:0.1.10`
+`docker tag epflsi/polylex:latest epflsi/polylex:0.1.10`
 
 On pousse l'image dans dockerhub
 
-`docker push epflidevelop/polylex:0.1.10`
+`docker push epflsi/polylex:0.1.10`
 
-`docker push epflidevelop/polylex:latest`
+`docker push epflsi/polylex:latest`
 
 Ensuite on doit modifier la référence à cette image dans le déploiment openshift en éditant le fichier ansible/main.yml.
 
