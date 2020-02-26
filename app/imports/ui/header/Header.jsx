@@ -45,7 +45,7 @@ const Header = (props) => {
               { isAdmin ?
                 <Fragment>
                   <NavLink className="dropdown-item" to="/admin/log/list" activeClassName="active">Voir les logs</NavLink>
-                  <NavLink className="dropdown-item" to="/admin/users" activeClassName="active">Gestion des rôles</NavLink>
+                  <div className="dropdown-item">Polylex - version 1.4.1</div>
                 </Fragment>
                 : null}
               </div>

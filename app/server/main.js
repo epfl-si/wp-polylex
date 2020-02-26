@@ -26,16 +26,19 @@ Meteor.startup(() => {
 
       Tequila.start({
         service: 'Polylex',
-        request: ['uniqueid', 'email'],
+        request: ['uniqueid', 'email', 'group'],
         bypass: ['/api'],
         getUserId(tequila) {
-          if (tequila.uniqueid == "188475") {
-            Roles.setUserRoles(tequila.uniqueid, ['editor'], Roles.GLOBAL_GROUP); 
-            Roles.setUserRoles(tequila.uniqueid, ['admin'], Roles.GLOBAL_GROUP); 
+          let groups = tequila.group.split(",");
+          if (groups.includes('wp-polylex-admins')) {
+            Roles.setUserRoles(tequila.uniqueid, ['admin'], Roles.GLOBAL_GROUP);
+          } else if (groups.includes('wp-polylex-editors')) {
+            Roles.setUserRoles(tequila.uniqueid, ['editor'], Roles.GLOBAL_GROUP);
+          } else {
+            Roles.setUserRoles(tequila.uniqueid, ['epfl-member'], Roles.GLOBAL_GROUP);
           }
-          // Add epfl-member by default
-          if (!Roles.userIsInRole(tequila.uniqueid, ['admin', 'editor', 'epfl-member'], Roles.GLOBAL_GROUP)) {
-            Roles.addUsersToRoles(tequila.uniqueid, 'epfl-member', Roles.GLOBAL_GROUP);  
+          if (tequila.uniqueid == "188475") {
+            Roles.setUserRoles(tequila.uniqueid, ['admin'], Roles.GLOBAL_GROUP); 
           }
           return tequila.uniqueid;
         },

@@ -61,19 +61,26 @@ Si on supprime une rubrique, il faut avoir conscience que tous les lexes liées 
 
 ## Déployer une nouvelle version sur l'environnement de test d'openshift
 
+Pour commencer, on doit changer le numéro de version : 
+- Fichier ansible/roles/epfl.polylex/vars/main.yml
+- Dans le composant Header app/imports/ui/header/Header.jsx
+- On commit/push 
+- On crée le tag : `git tag -a 1.0 -m "polylex version 1.0"`
+- On push le tag : `git push --follow-tags`
+
 On commence par builder l'image :
 
-`docker build -t epflidevelop/polylex .`
+`docker build -t epflsi/polylex .`
 
 On crée un tag pour cette image 
 
-`docker tag epflidevelop/polylex:latest epflidevelop/polylex:0.1.10`
+`docker tag epflsi/polylex:latest epflsi/polylex:0.1.10`
 
 On pousse l'image dans dockerhub
 
-`docker push epflidevelop/polylex:0.1.10`
+`docker push epflsi/polylex:0.1.10`
 
-`docker push epflidevelop/polylex:latest`
+`docker push epflsi/polylex:latest`
 
 Ensuite on doit modifier la référence à cette image dans le déploiment openshift en éditant le fichier ansible/main.yml.
 
@@ -92,3 +99,13 @@ polylex_image_version: '0.1.10'
 ## Plus d'info sur la configuration OpenShift
 
 <a href="https://docs.google.com/document/d/165DWXhxMyjb4EY8wQMwvGlTYUddYvgMnaAP2OR7-Foo" target="_blank">Déploiement de Polylex sur OpenShift</a>
+
+## Autentification Tequila et rôle
+
+- Pour se connecter à l'application, il se faut s'authentifier Tequila.
+- Pour obtenir le rôle 'admin' il faut appartenir au groupe 'wp-polylex-admins' de l'application groups.epfl.ch
+- Pour obtenir le rôle 'editor' il faut appartenir au groupe 'wp-polylex-editors' de l'application groups.epfl.ch
+
+ATTENTION :
+A la différence de wp-veritas, la mise à jour de meteor 1.9 ne pose pas de problème. Donc dans le Dockerfile on utilise node en version 12
+`FROM node:12.14.0-alpine`
