@@ -59,16 +59,20 @@ function prepareUpdateInsertCategory(category, action) {
   // Check if nameFr category already exist (case insensitive)
   for (const currentCategory of categories) {
     if (currentCategory.nameFr.toLowerCase() == category.nameFr.toLowerCase()) {
-      throwMeteorError('nameFr', 'Nom de la rubrique en Français existe déjà !');
-      break;
+      if ((action == 'insert') || (action == 'update' && currentCategory._id !== category._id)) {
+        throwMeteorError('nameFr', 'Nom de la rubrique en Français existe déjà !');
+        break;
+      }
     }
   };
 
   // Check if nameEn category already exist (case insensitive)
   for (const currentCategory of categories) {
     if (currentCategory.nameEn.toLowerCase() == category.nameEn.toLowerCase()) {
-      throwMeteorError('nameEn', 'Nom de la rubrique en Anglais existe déjà !');
-      break;
+      if ((action == 'insert') || (action == 'update' && currentCategory._id !== category._id)) {
+        throwMeteorError('nameEn', 'Nom de la rubrique en Anglais existe déjà !');
+        break;
+      }
     }
   };
 
@@ -76,6 +80,7 @@ function prepareUpdateInsertCategory(category, action) {
 }
 
 function prepareUpdateInsertSubcategory(subcategory, action) {
+  
   // Trim all attributes of subcategory
   subcategory = trimObjValues(subcategory);
 
@@ -84,16 +89,20 @@ function prepareUpdateInsertSubcategory(subcategory, action) {
   // Check if nameFr subcategory already exist (case insensitive)
   for (const currentSubcategory of subcategories) {
     if (currentSubcategory.nameFr.toLowerCase() == subcategory.nameFr.toLowerCase()) {
-      throwMeteorError('nameFr', 'Nom de la sous-rubrique en Français existe déjà !');
-      break;
+      if ((action == 'insert') || (action == 'update' && currentSubcategory._id !== subcategory._id)) {
+        throwMeteorError('nameFr', 'Nom de la sous-rubrique en Français existe déjà !');
+        break;
+      }
     }
   };
 
   // Check if nameEn subcategory already exist (case insensitive)
   for (const currentSubcategory of subcategories) {
     if (currentSubcategory.nameEn.toLowerCase() == subcategory.nameEn.toLowerCase()) {
-      throwMeteorError('nameEn', 'Nom de la sous-rubrique en Anglais existe déjà !');
-      break;
+      if ((action == 'insert') || (action == 'update' && currentSubcategory._id !== subcategory._id)) {
+        throwMeteorError('nameEn', 'Nom de la sous-rubrique en Anglais existe déjà !');
+        break;
+      }
     }
   };
   
