@@ -457,7 +457,7 @@ Meteor.methods({
       }
 
       subcategoriesSchema.validate(subcategory);
-      
+
       subcategory = prepareUpdateInsertSubcategory(subcategory, 'update');
 
       let subcategoryDocument = {
@@ -466,6 +466,11 @@ Meteor.methods({
       };
       
       let subcategoryBeforeUpdate = Subcategories.findOne({ _id: subcategory._id});
+
+      Subcategories.update(
+        { _id: subcategory._id }, 
+        { $set: subcategoryDocument }
+      );
 
       let updatedSubcategory = Subcategories.findOne({ _id: subcategory._id});
 
