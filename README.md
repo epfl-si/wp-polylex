@@ -59,6 +59,34 @@ Un responsable quitte l'EPFL. Un successeur doit "hériter" de tous ses lexes.
 Cas d'utilisation n°2: Gestion des rubriques et sous-rubriques
 Si on supprime une rubrique, il faut avoir conscience que tous les lexes liées à cette rubrique référenceront une rubrique qui n'existe plus.
 
+## Utilisation du CLI
+
+Le CLI permet d'importer les données de prod ou de test dans la DB locale.
+
+Pour installer le CLI en local, il faut:
+- Se placer dans le répetoire `cli/`
+- Faire un `npm install`
+- Faire un `npm install -g ./`
+
+Lorsque le CLI est installé :
+- Se placer à la racine du projet polylex
+- On peut maintenant faire un `polylex-cli --help`
+
+```
+greg@epfl:~/workspace-idevfsd/wp-polylex$ polylex-cli --help 
+Usage: polylex-cli [options] [command]
+
+Options:
+  -h, --help               display help for command
+
+Commands:
+  clean-all-documents      Delete all documents from the local MongoDB
+  restore-test-db          Restore the test MongoDB on local MongoDB
+  restore-prod-db          Restore the production MongoDB on local MongoDB
+  restore-prod-db-on-test  Restore the production MongoDB on test MongoDB
+  help [command]           display help for command
+```
+
 ## Déployer une nouvelle version sur l'environnement de test d'openshift
 
 Pour commencer, on doit changer le numéro de version : 
