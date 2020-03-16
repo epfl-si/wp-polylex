@@ -233,7 +233,7 @@ Meteor.methods({
           effectiveDate: lex.effectiveDate,
           revisionDate: lex.revisionDate,
           categoryId: lex.categoryId,
-          subcategoryId: lex.subcategoryId,
+          subcategories: lex.subcategories,
           responsibleId: lex.responsibleId,
       }
 
