@@ -48,14 +48,6 @@ export const lexesSchema = new SimpleSchema({
         optional: false,
         custom: isRequired
     },
-    /*
-    subcategoryId: {
-        type: String,
-        label: "Sous-catégorie",
-        optional: false,
-        custom: isRequired
-    },
-    */
     subcategories: {
       type: Array,
       label: "Sous-catégorie",

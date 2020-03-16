@@ -52,7 +52,7 @@ class Add extends Component {
       methodName = 'updateLex';
       state = {editSuccess: true};
     }
-    console.log(values);
+
     Meteor.call(
       methodName,
       values, 
@@ -253,17 +253,7 @@ class Add extends Component {
                   ))}
               </Field>
               <ErrorMessage name="category" component={ CustomError } />
-              {/* 
-              <Field 
-                  onChange={e => { handleChange(e); this.updateUserMsg();}}
-                  onBlur={e => { handleBlur(e); this.updateUserMsg();}}
-                  label="Sous-rubrique" name="subcategoryId" component={ CustomSelect } >
-                  {this.props.subcategories.map( (subcategory, index) => (
-                  <option key={subcategory._id} value={subcategory._id}>{subcategory.nameFr}</option>
-                  ))}
-              </Field>
-              <ErrorMessage name="subcategory" component={ CustomError } />
-              */}
+              
               <Field 
                   onChange={e => { handleChange(e); this.updateUserMsg();}}
                   onBlur={e => { handleBlur(e); this.updateUserMsg();}}
