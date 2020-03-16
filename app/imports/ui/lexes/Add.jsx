@@ -34,10 +34,6 @@ class Add extends Component {
     this.setState({addSuccess: false, editSuccess: false});
   }
 
-  updateSaveSuccess = (newValue) => {
-    this.setState({ saveSuccess: newValue });
-  }
-    
   submit = (values, actions) => {
 
     values.jsonDescriptionFr = JSON.stringify(convertToRaw(values.descriptionFr.getCurrentContent()));
@@ -274,7 +270,6 @@ class Add extends Component {
                   error={errors.subcategories}
                   touched={touched.subcategories}
                   options={this.props.subcategories}
-                  saveSuccess={this.updateSaveSuccess}
                   placeholder="Sélectionner une sous-rubrique"
                   name="subcategories"
                 />
@@ -342,13 +337,11 @@ class MySelect extends React.Component {
   handleChange = value => {
     // this is going to call setFieldValue and manually update values
     this.props.onChange(this.props.name, value);
-    this.props.saveSuccess(!this.props.saveSuccess);
   };
 
   handleBlur = () => {
     // this is going to call setFieldTouched and manually update touched
     this.props.onBlur(this.props.name, true);
-    this.props.saveSuccess(!this.props.saveSuccess);
   };
 
   render() {
