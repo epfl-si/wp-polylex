@@ -15,7 +15,9 @@ import { AppLogger } from '../../server/logger';
 
 function trimObjValues(obj) {
   return Object.keys(obj).reduce((acc, curr) => {
-    acc[curr] = obj[curr].trim()
+    if (curr !== 'subcategories') {
+      acc[curr] = obj[curr].trim()
+    }
     return acc;
   }, {});
 }
@@ -183,7 +185,7 @@ Meteor.methods({
           effectiveDate: lex.effectiveDate,
           revisionDate: lex.revisionDate,
           categoryId: lex.categoryId,
-          subcategoryId: lex.subcategoryId,
+          subcategories: lex.subcategories,
           responsibleId: lex.responsibleId,
         }
 
