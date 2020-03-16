@@ -8,14 +8,15 @@ convertSubcategoryIdToSubcategories = () => {
 
   lexes.forEach(lex => {
 
+    if (!('subcategories' in lex)) {
 
+      
       console.log("Lex before : ", lex);
 
       let subcategories = [];
       let subcategory = Subcategories.findOne({_id: lex.subcategoryId});
 
       subcategories.push(subcategory);    
-      console.log(subcategories);
 
       Lexes.update(
         { _id: lex._id }, 
@@ -23,8 +24,9 @@ convertSubcategoryIdToSubcategories = () => {
       );
 
       let checkLex = Lexes.find({_id: lex._id}).fetch();
-      console.log("Lex after : ", checkLex);    
-
+      console.log("Lex after : ", JSON.stringify(checkLex, null, 4));    
+      
+      }
   });
 
   console.log("Convert subcategoryId to subcategories is complete !");
