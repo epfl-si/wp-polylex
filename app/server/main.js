@@ -12,7 +12,7 @@ WebApp.addHtmlAttributeHook(() => ({ lang: 'fr' }));
 
 Meteor.startup(() => {
   
-    let needImportData = false;
+    let needImportData = true;
     let activeTequila = true;
 
     // Setting up logs

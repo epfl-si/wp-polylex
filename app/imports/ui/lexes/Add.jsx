@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import { Formik, Field, ErrorMessage } from 'formik';
+import Select from 'react-select';
 import { Lexes, Categories, Subcategories, Responsibles } from '../../api/collections';
 import { CustomError, CustomInput, CustomTextarea, CustomSelect } from '../CustomFields';
 import { AlertSuccess, Loading } from '../Messages';
@@ -32,7 +33,7 @@ class Add extends Component {
   updateUserMsg = () => {
     this.setState({addSuccess: false, editSuccess: false});
   }
-    
+
   submit = (values, actions) => {
 
     values.jsonDescriptionFr = JSON.stringify(convertToRaw(values.descriptionFr.getCurrentContent()));
@@ -101,7 +102,8 @@ class Add extends Component {
         effectiveDate: '',
         revisionDate: '',
         categoryId: this.props.defaultCategoryId,
-        subcategoryId: this.props.defaultSubcategoryId,
+        //subcategoryId: this.props.defaultSubcategoryId,
+        subcategories: [],
         responsibleId: '',
       }
     } else {
@@ -159,11 +161,14 @@ class Add extends Component {
               validateOnChange={ false }
           >
           {({
+              touched,
+              errors,
               values,
               handleSubmit,
               handleChange,
               handleBlur,
               setFieldValue,
+              setFieldTouched,
               isSubmitting,
           }) => (
             <form onSubmit={ handleSubmit } className="bg-white border p-4">
@@ -248,22 +253,27 @@ class Add extends Component {
               <Field 
                   onChange={e => { handleChange(e); this.updateUserMsg();}}
                   onBlur={e => { handleBlur(e); this.updateUserMsg();}}
-                  label="Sous-rubrique" name="subcategoryId" component={ CustomSelect } >
-                  {this.props.subcategories.map( (subcategory, index) => (
-                  <option key={subcategory._id} value={subcategory._id}>{subcategory.nameFr}</option>
-                  ))}
-              </Field>
-              <ErrorMessage name="subcategory" component={ CustomError } />
-              
-              <Field 
-                  onChange={e => { handleChange(e); this.updateUserMsg();}}
-                  onBlur={e => { handleBlur(e); this.updateUserMsg();}}
                   label="Responsable" name="responsibleId" component={ CustomSelect } >
                   {this.props.responsibles.map( (responsible, index) => (
                   <option key={responsible._id} value={responsible._id}>{responsible.firstName} {responsible.lastName}</option>
                   ))}
               </Field>
               <ErrorMessage name="responsible" component={ CustomError } />
+              
+              <label>Sélectionner une sous-rubrique</label>
+              <div className="form-group clearfix">
+                <MySelect
+                  id="subcategories"
+                  value={values.subcategories}
+                  onChange={setFieldValue}
+                  onBlur={setFieldTouched}
+                  error={errors.subcategories}
+                  touched={touched.subcategories}
+                  options={this.props.subcategories}
+                  placeholder="Sélectionner une sous-rubrique"
+                  name="subcategories"
+                />
+              </div>
               
               <div className="my-1 text-right">
                   <button 
@@ -321,3 +331,42 @@ export default withTracker(() => {
     };  
 
 })(Add);
+
+class MySelect extends React.Component {
+
+  handleChange = value => {
+    // this is going to call setFieldValue and manually update values
+    this.props.onChange(this.props.name, value);
+  };
+
+  handleBlur = () => {
+    // this is going to call setFieldTouched and manually update touched
+    this.props.onBlur(this.props.name, true);
+  };
+
+  render() {
+    let content;
+    content = 
+    (
+      <div style={{ margin: '0 0' }}>
+        <Select
+          isMulti
+          onChange={this.handleChange}
+          onBlur={this.handleBlur}
+          value={this.props.value}
+          options={this.props.options}
+          getOptionLabel ={(option)=> option.nameFr + " / " + option.nameEn }
+          getOptionValue ={(option)=>option._id}
+          placeholder={this.props.placeholder}
+        />
+        { 
+          !!this.props.error &&
+          this.props.touched && (
+            <div style={ { color: 'red', marginTop: '.5rem' } }>{this.props.error}</div>
+          )
+        }
+      </div>
+    );
+    return content;
+  }
+}
