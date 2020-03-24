@@ -9,8 +9,7 @@ convertSubcategoryIdToSubcategories = () => {
   lexes.forEach(lex => {
 
     if (!('subcategories' in lex)) {
-
-      
+    
       console.log("Lex before : ", lex);
 
       let subcategories = [];
@@ -33,8 +32,27 @@ convertSubcategoryIdToSubcategories = () => {
 
 }
 
+deleteSubcategoryId = () => {
+  console.log("Delete Field subcategoryId for all sites ...");
+  let lexes = Lexes.find({});
+  let lexAfter;
+
+  lexes.forEach(lex => {
+    console.log("Before: ", lex);
+    if ('subcategoryId' in lex) {
+      Lexes.update(
+        { _id: lex._id }, 
+        { $unset: { 'subcategoryId': '' } },
+      );
+      lexAfter = Lexes.findOne({_id: lex._id});
+    }
+    console.log("After: ", lexAfter);
+  });
+  console.log("Finish!!");
+}
+
 importData = () => {
-  convertSubcategoryIdToSubcategories();
+  deleteSubcategoryId();
 }
 
 export { deleteAll, importData }
