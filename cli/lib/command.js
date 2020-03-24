@@ -1,18 +1,27 @@
 const MongoClient = require('mongodb').MongoClient;
 var config = require("./config.js");
 const { exec } = require('child_process');
+
 /**
  * Delete all documents of collection
  * @param {} connectionString of the DB
  */
-const _deleteAllDocuments = async function (connectionString) {
+const _deleteAllDocuments = async function (connectionString, environment) {
 
-  // We remove documents only of localhost DB
-  if (!connectionString.includes('localhost')) {
+
+  // We remove documents only of localhost DB and TEST DB
+  if (!connectionString.includes('localhost') && !connectionString.includes('@test-mongodb-svc-1.epfl.ch')) {
     throw "STOP don't TOUCH !";
   }
+
   const client = await MongoClient.connect(connectionString, {useUnifiedTopology: true});
-  const db = client.db("meteor");
+  let db;
+  if (environment === "test") {
+    dbName = 'polylex';
+  } else if (environment === "localhost") {
+    dbName = "meteor";
+  }
+  db = client.db(dbName);
 
   collectionsList = [
     'AppLogs',
@@ -60,7 +69,7 @@ const _dumpMongoDB = async function (source) {
     function(resolve, reject) {
       let HOST;
       let DB_PWD;
-      if (source == "prod") {
+      if (source == "prod" || source == "prod-on-test") {
         HOST = config.PROD_HOST;
         DB_PWD = config.PROD_DB_PWD;
         ALIAS = 'mongodb-svc-1';
@@ -88,21 +97,40 @@ const _moveDumpFolder =  async function (source) {
   return true;
 }
 
-const _restoreDataToLocalMongoDB = async function() {
-  await new Promise(
-    function(resolve, reject) { 
-      let command = "mongorestore dump/ --host=localhost:3001";
-      resolve(exec(command));
-    }
-  )
+const _restoreDataToLocalMongoDB = async function(source) {
+  if (source === "prod-on-test") {
+    await new Promise(
+      function(resolve, reject) { 
+        let connectionString = `mongodb://${ config.TEST_HOST }:${ config.TEST_DB_PWD }@test-mongodb-svc-1.epfl.ch/${ config.TEST_HOST }`;
+        let command = `mongorestore --db="${ config.TEST_HOST }" --uri="${ connectionString }" dump/${ config.TEST_HOST }`;
+        resolve(exec(command));
+      }
+    )
+  } else {
+    await new Promise(
+      function(resolve, reject) { 
+        let command = "mongorestore dump/ --host=localhost:3001";
+        resolve(exec(command));
+      }
+    )
+  }
   return true;
 }
 
 const _restore = async function (source) {
-  
-  const connectionString = `mongodb://localhost:3001/`;
-  await _deleteAllDocuments(connectionString);
 
+  let connectionString = `mongodb://localhost:3001/`;
+  let environment = 'localhost';
+
+  if (source === 'prod-on-test') {
+    connectionString = `mongodb://${ config.TEST_HOST }:${ config.TEST_DB_PWD }@test-mongodb-svc-1.epfl.ch/${ config.TEST_HOST }`;
+    environment = 'test';
+  }
+  console.log(`ConnectionString: ${connectionString}`);
+  console.log(`Environnement: ${environment}`);
+  
+  await _deleteAllDocuments(connectionString, environment);
+  
   await _deleteDumpFolder();
   console.log("Delete dump folder");
 
@@ -115,15 +143,16 @@ const _restore = async function (source) {
   // wait few secondes
   await new Promise(resolve => setTimeout(resolve, 8000));
 
-  await _moveDumpFolder(source);
-  dbName = 'polylex';
-
+  if (source !== 'prod-on-test') {
+    await _moveDumpFolder(source);
+    console.log(`Move polylex/ to meteor/`);
+  }
+  
   // wait few secondes
   await new Promise(resolve => setTimeout(resolve, 8000));
 
-  console.log(`Move ${dbName}/ to meteor/`);
+  await _restoreDataToLocalMongoDB(source);
 
-  await _restoreDataToLocalMongoDB();
   return true;
 }
 
@@ -145,7 +174,7 @@ module.exports.restoreProdDatabase = async function () {
 }
 
 module.exports.restoreProdDatabaseOnTest = async function () {
-  // TODO : restore prod database on test database
+  await _restore('prod-on-test');
   console.log("Restore prod database on test database");
   return true;
 }
