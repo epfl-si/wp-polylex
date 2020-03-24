@@ -13,6 +13,19 @@ import { Loading } from './Messages';
 
 class App extends Component {
 
+  getEnvironment() {
+    const absoluteUrl = Meteor.absoluteUrl();
+    let environment;
+    if (absoluteUrl.startsWith('http://localhost:3000/')) {
+      environment = "LOCALHOST";
+    } else if (absoluteUrl.startsWith('https://polylex.128.178.222.83.nip.io/')) {
+      environment = "TEST";
+    } else {
+      environment = "PROD";
+    }
+    return environment;
+  }
+
   render() {
        
     let isAdmin;
@@ -25,9 +38,16 @@ class App extends Component {
       isEditor = Roles.userIsInRole(Meteor.userId(), 'editor', Roles.GLOBAL_GROUP);
     }
 
+    const ribbon = (
+      <div className="ribbon-wrapper">
+          <div className="ribbon">{ this.getEnvironment() }</div>
+        </div>
+    );
+
     return (
       <Router>
         <div className="App container">
+          { this.getEnvironment() === "PROD" ? null : ribbon }
           <Header />
           { isAdmin || isEditor ?   
             (<Fragment>
