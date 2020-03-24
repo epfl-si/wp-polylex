@@ -5,14 +5,10 @@ import { stateToHTML } from 'draft-js-export-html';
 function getLex(lex) {
 
     let category = Categories.findOne(lex.categoryId);
-    let subcategory = Subcategories.findOne(lex.subcategoryId);
     let responsible = Responsibles.findOne(lex.responsibleId);
     
     lex.category = category;
     delete lex.categoryId;
-
-    lex.subcategory = subcategory;
-    delete lex.subcategoryId;
 
     lex.responsible = responsible;
     delete lex.responsibleId;
