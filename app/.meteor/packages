@@ -32,3 +32,4 @@ alanning:roles                # roles
 epfl:accounts-tequila         # Tequila
 ostrio:logger                 # logger
 ostrio:loggermongo            # logger stores in MongoDB
+mdg:validated-method

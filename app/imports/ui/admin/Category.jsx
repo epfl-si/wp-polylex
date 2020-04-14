@@ -6,6 +6,7 @@ import { Categories } from '../../api/collections';
 import { CustomError, CustomInput } from '../CustomFields';
 import { Link } from 'react-router-dom';
 import { AlertSuccess, Loading } from '../Messages';
+import { insertCategory, updateCategory, removeCategory } from '../../api/methods/categories';
 
 class CategoriesList extends Component {
   render() { 
@@ -50,11 +51,10 @@ class Category extends Component {
     }
   }
 
-  deleteCategory = (categoryID) => {
-    Meteor.call(
-      'removeCategory',
-      categoryID,
-      (error, categoryID) => {
+  deleteCategory = (categoryId) => {
+    removeCategory.call(
+      {categoryId},
+      (error, categoryId) => {
         if (error) {
             console.log(`ERROR Category removeCategory ${error}`);
             alert(error);
@@ -70,41 +70,44 @@ class Category extends Component {
   }
 
   submitCategory = (values, actions) => {
-    let methodName;
-    let state;
-    let resetForm;
-
     if (this.state.action === 'add') {
-      methodName = 'insertCategory';
-      state = {addSuccess: true};
-      resetForm = true;
-    } else if (this.state.action === 'edit') {
-      methodName = 'updateCategory';
-      state = {editSuccess: true};
-      resetForm = false;
-    }
-
-    Meteor.call(
-      methodName,
-      values, 
-      (errors, CategoryId) => {
-        if (errors) {
-          console.log(errors);
-          let formErrors = {};
-          errors.details.forEach(function(error) {
-            formErrors[error.name] = error.message;                        
-          });
-          actions.setErrors(formErrors);
-          actions.setSubmitting(false);
-        } else {
-          actions.setSubmitting(false);
-          if (resetForm) {
+      insertCategory.call(
+        values, 
+        (errors, CategoryId) => {
+          if (errors) {
+            console.log(errors);
+            let formErrors = {};
+            errors.details.forEach(function(error) {
+              formErrors[error.name] = error.message;                        
+            });
+            actions.setErrors(formErrors);
+            actions.setSubmitting(false);
+          } else {
+            actions.setSubmitting(false);
             actions.resetForm();
+            this.setState({addSuccess: true});
           }
-          this.setState(state);
         }
-      }
-    );
+      );
+    } else if (this.state.action === 'edit') {
+      updateCategory.call(
+        values, 
+        (errors, CategoryId) => {
+          if (errors) {
+            console.log(errors);
+            let formErrors = {};
+            errors.details.forEach(function(error) {
+              formErrors[error.name] = error.message;                        
+            });
+            actions.setErrors(formErrors);
+            actions.setSubmitting(false);
+          } else {
+            actions.setSubmitting(false);
+            this.setState({editSuccess: true});
+          }
+        }
+      );
+    }
   }
 
   getCategory = () => {
