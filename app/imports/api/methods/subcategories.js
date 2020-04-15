@@ -40,20 +40,10 @@ const insertSubcategory = new ValidatedMethod({
   validate: subcategoriesSchema.validator(),
   run(newSubcategory) {
 
-    if (!this.userId) {
-      throw new Meteor.Error('not connected');
-    }
-
-    const canInsert = Roles.userIsInRole(
-        this.userId,
-        ['admin', 'editor'], 
-        Roles.GLOBAL_GROUP
+    checkUserAndRole(
+      this.userId,
+      "Only admins or editors can insert subcategory."
     );
-
-    if (! canInsert) {
-        throw new Meteor.Error('unauthorized',
-          'Only admins can insert category.');
-    }
 
     newSubcategory = prepareUpdateInsertSubcategory(newSubcategory, 'insert');
 
@@ -81,20 +71,10 @@ const updateSubcategory = new ValidatedMethod({
   validate: subcategoriesSchema.validator(),
   run(newSubcategory) {
 
-    if (!this.userId) {
-      throw new Meteor.Error('not connected');
-    }
-
-    const canUpdate = Roles.userIsInRole(
-        this.userId,
-        ['admin', 'editor'], 
-        Roles.GLOBAL_GROUP
+    checkUserAndRole(
+      this.userId,
+      "Only admins or editors can update subcategory."
     );
-
-    if (! canUpdate) {
-        throw new Meteor.Error('unauthorized',
-          'Only admins can update sites.');
-    }
 
     newSubcategory = prepareUpdateInsertSubcategory(newSubcategory, 'update');
 
@@ -128,20 +108,10 @@ const removeSubcategory = new ValidatedMethod({
   }).validator(),
   run({ subcategoryId }) {
 
-    if (!this.userId) {
-      throw new Meteor.Error('not connected');
-    }
-
-    const canRemove = Roles.userIsInRole(
-        this.userId,
-        ['admin', 'editor'], 
-        Roles.GLOBAL_GROUP
+    checkUserAndRole(
+      this.userId,
+      "Only admins or editors can remove subcategory."
     );
-
-    if (! canRemove) {
-        throw new Meteor.Error('unauthorized',
-          'Only admins can remove Category.');
-    }
 
     // Check if subcategory is used
     lexesBySubcategory = Lexes.find({subcategoryId: subcategoryId}).count();

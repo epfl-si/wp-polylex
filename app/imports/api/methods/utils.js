@@ -7,4 +7,20 @@ function trimObjValues(obj) {
   }, {});
 }
 
-export { trimObjValues }
+checkUserAndRole = (userId, msg) => {
+  if (!userId) {
+    throw new Meteor.Error("not connected");
+  }
+
+  const canDoAction = Roles.userIsInRole(
+    userId,
+    ["admin", "editor"],
+    Roles.GLOBAL_GROUP
+  );
+
+  if (!canDoAction) {
+    throw new Meteor.Error("unauthorized", msg);
+  }
+};
+
+export { trimObjValues, checkUserAndRole };

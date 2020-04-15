@@ -1,5 +1,5 @@
 import { ValidatedMethod } from "meteor/mdg:validated-method";
-import SimpleSchema from 'simpl-schema';
+import SimpleSchema from "simpl-schema";
 import { lexesSchema, Lexes } from "../collections";
 import { AppLogger } from "../logger";
 import { throwMeteorError } from "../error";
@@ -71,22 +71,7 @@ const insertLex = new ValidatedMethod({
     lexesSchema.validate(newLexDocument);
   },
   run(newLex) {
-    if (!this.userId) {
-      throw new Meteor.Error("not connected");
-    }
-
-    const canInsert = Roles.userIsInRole(
-      this.userId,
-      ["admin", "editor"],
-      Roles.GLOBAL_GROUP
-    );
-
-    if (!canInsert) {
-      throw new Meteor.Error(
-        "unauthorized",
-        "Only admins and editors can insert lexes."
-      );
-    }
+    checkUserAndRole(this.userId, "Only admins or editors can insert LEX.");
 
     let newLexDocument = {
       lex: newLex.lex,
@@ -135,24 +120,11 @@ const updateLex = new ValidatedMethod({
       categoryId: newLex.categoryId,
       subcategories: newLex.subcategories,
       responsibleId: newLex.responsibleId,
-    }
+    };
     lexesSchema.validate(newLexDocument);
   },
   run(newLex) {
-    if (!this.userId) {
-        throw new Meteor.Error('not connected');
-    }
-
-    const canUpdate = Roles.userIsInRole(
-        this.userId,
-        ['admin', 'editor'], 
-        Roles.GLOBAL_GROUP
-    );
-
-    if (! canUpdate) {
-        throw new Meteor.Error('unauthorized',
-          'Only admins and editors can update lexes.');
-    }
+    checkUserAndRole(this.userId, "Only admins or editors can update LEX.");
 
     let newLexDocument = {
       _id: newLex._id,
@@ -168,27 +140,24 @@ const updateLex = new ValidatedMethod({
       categoryId: newLex.categoryId,
       subcategories: newLex.subcategories,
       responsibleId: newLex.responsibleId,
-    }
+    };
 
-    newLex = prepareUpdateInsertLex(newLexDocument, 'update');
+    newLex = prepareUpdateInsertLex(newLexDocument, "update");
 
-    let lexBeforeUpdate = Lexes.findOne({ _id: newLex._id});
+    let lexBeforeUpdate = Lexes.findOne({ _id: newLex._id });
 
-    Lexes.update(
-        {_id: newLex._id}, 
-        { $set: newLexDocument }
-    );
+    Lexes.update({ _id: newLex._id }, { $set: newLexDocument });
 
-    let updatedLex = Lexes.findOne({ _id: newLex._id});
+    let updatedLex = Lexes.findOne({ _id: newLex._id });
 
     AppLogger.getLog().info(
-      `Update lex ID ${ newLex._id }`, 
-      { before: lexBeforeUpdate , after: updatedLex }, 
+      `Update lex ID ${newLex._id}`,
+      { before: lexBeforeUpdate, after: updatedLex },
       this.userId
     );
-    
+
     return newLex._id;
-  }
+  },
 });
 
 const removeLex = new ValidatedMethod({
@@ -197,30 +166,16 @@ const removeLex = new ValidatedMethod({
     lexId: { type: String },
   }).validator(),
   run({ lexId }) {
+    checkUserAndRole(this.userId, "Only admins or editors can remove LEX.");
+    let lex = Lexes.findOne({ _id: lexId });
+    Lexes.remove({ _id: lexId });
 
-    if (!this.userId) {
-        throw new Meteor.Error('not connected');
-    }
-    const canRemove = Roles.userIsInRole(
-        this.userId,
-        ['admin', 'editor'], 
-        Roles.GLOBAL_GROUP
-    );
-    if (! canRemove) {
-        throw new Meteor.Error('unauthorized',
-          'Only admins and editors can remove lexes.');
-    }
-
-    let lex = Lexes.findOne({_id: lexId});
-    Lexes.remove({_id: lexId});
-  
     AppLogger.getLog().info(
-      `Delete lex ID ${ lexId }`, 
-      { before: lex, after: "" }, 
+      `Delete lex ID ${lexId}`,
+      { before: lex, after: "" },
       this.userId
     );
-
-  }
+  },
 });
 
 export { insertLex, updateLex, removeLex };
