@@ -1,9 +1,11 @@
 import { ValidatedMethod } from "meteor/mdg:validated-method";
 import SimpleSchema from "simpl-schema";
+import { DDPRateLimiter } from 'meteor/ddp-rate-limiter';
+import { _ } from 'meteor/underscore';
 import { responsiblesSchema, Responsibles, Lexes } from "../collections";
 import { AppLogger } from "../logger";
 import { throwMeteorErrors } from "../error";
-import { trimObjValues } from "./utils";
+import { trimObjValues, checkUserAndRole } from "./utils";
 
 function prepareUpdateInsertResponsible(responsible, action) {
   // Trim all attributes of responsible
@@ -134,5 +136,24 @@ const removeResponsible = new ValidatedMethod({
     );
   },
 });
+
+// Get list of all method names on Todos
+const TODOS_METHODS = _.pluck([
+  insertResponsible,
+  updateResponsible,
+  removeResponsible,
+], 'name');
+
+if (Meteor.isServer) {
+  // Only allow 5 todos operations per connection per second
+  DDPRateLimiter.addRule({
+    name(name) {
+      return _.contains(TODOS_METHODS, name);
+    },
+
+    // Rate limit per connection ID
+    connectionId() { return true; },
+  }, 5, 1000);
+}
 
 export { insertResponsible, updateResponsible, removeResponsible };
