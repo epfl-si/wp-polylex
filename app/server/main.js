@@ -3,7 +3,6 @@ import { Meteor } from 'meteor/meteor';
 import { WebApp } from 'meteor/webapp';
 import { importData } from './import-data';
 import { AppLogger } from '../imports/api/logger';
-import '../imports/api/methods';
 import './publications';
 import './rest-api';
 import '../imports/api/methods/responsibles';
