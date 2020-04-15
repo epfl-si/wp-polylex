@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Lexes, Categories, Subcategories } from '../../api/collections';
 import { Loading } from '../Messages';
 import moment from 'moment';
+import { removeLex } from '../../api/methods/lexes';
 
 class Cells extends Component {
 
@@ -60,9 +61,8 @@ class Cells extends Component {
 class List extends Component {
   
   deleteLex = (lexId) => {
-    Meteor.call(
-      'removeLex',
-      lexId, 
+    removeLex.call(
+      {lexId}, 
       function(error, lexId) {
         if (error) {
           console.log(`ERROR removeLex ${error}`);

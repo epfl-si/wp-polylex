@@ -9,6 +9,7 @@ import './rest-api';
 import '../imports/api/methods/responsibles';
 import '../imports/api/methods/categories';
 import '../imports/api/methods/subcategories';
+import '../imports/api/methods/lexes';
 
 // Define lang <html lang="fr" />
 WebApp.addHtmlAttributeHook(() => ({ lang: 'fr' }));
