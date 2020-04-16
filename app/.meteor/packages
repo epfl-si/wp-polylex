@@ -25,7 +25,7 @@ nathantreid:static-assets     # Logo EPFL SVG
 accounts-password@1.5.2             # To use Meteor.user()
 alexwine:bootstrap-4          # bootstrap 4
 peppelg:bootstrap-3-modal     # bootstrap 3 modal but works with bootstrap 4
-check@1.3.1                         # Check schema mongoDB
+check@1.3.1                   # Check schema mongoDB
 harrison:papa-parse           # parse csv
 nimble:restivus               # Rest APi
 alanning:roles                # roles
@@ -33,3 +33,4 @@ epfl:accounts-tequila         # Tequila
 ostrio:logger                 # logger
 ostrio:loggermongo            # logger stores in MongoDB
 mdg:validated-method
+audit-argument-checks
