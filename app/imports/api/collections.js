@@ -230,6 +230,12 @@ AppLogs.deny({
   remove() { return true; },
 });
 
+Meteor.users.deny({
+  insert() { return true; },
+  update() { return true; },
+  remove() { return true; },
+});
+
 export {
   Lexes,
   Categories,

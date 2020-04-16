@@ -1,5 +1,17 @@
 import { Subcategories, Lexes } from '../imports/api/collections';
 
+deleteUserProfile = () => {
+
+  let users = Meteor.users.find({}).fetch();
+  users.forEach(user => {
+    Meteor.users.update(
+      { _id: user._id }, 
+      { $unset: { 'profile': '' } },
+    );
+  });
+  console.log("All profiles are deleted");
+}
+
 convertSubcategoryIdToSubcategories = () => {
 
   console.log("Convert subcategoryId to subcategories is starting ...");
@@ -52,7 +64,7 @@ deleteSubcategoryId = () => {
 }
 
 importData = () => {
-  deleteSubcategoryId();
+  deleteUserProfile();
 }
 
 export { deleteAll, importData }

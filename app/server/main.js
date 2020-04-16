@@ -1,28 +1,47 @@
+import helmet from "helmet";
 import Tequila from "meteor/epfl:accounts-tequila";
 import { Meteor } from 'meteor/meteor';
 import { WebApp } from 'meteor/webapp';
 import { importData } from './import-data';
 import { AppLogger } from '../imports/api/logger';
-import './publications';
+import '../imports/api/methods/publications';
 import './rest-api';
 import '../imports/api/methods/responsibles';
 import '../imports/api/methods/categories';
 import '../imports/api/methods/subcategories';
 import '../imports/api/methods/lexes';
 
-// Define lang <html lang="fr" />
-WebApp.addHtmlAttributeHook(() => ({ lang: 'fr' }));
-
 Meteor.startup(() => {
   
-    let needImportData = false;
+    let needImportData = true;
     let activeTequila = true;
+
+    // Define lang <html lang="fr" />
+    WebApp.addHtmlAttributeHook(() => ({ lang: 'fr' }));
+
+    
+    // https://guide.meteor.com/security.html#httpheaders
+    WebApp.connectHandlers.use(
+      helmet.contentSecurityPolicy({
+        directives: {
+          defaultSrc: ["'self'"],
+          scriptSrc: ["'self'", "'unsafe-inline'"],
+          connectSrc: ["*"],
+          imgSrc: ["'self'"],
+          styleSrc: ["'self'", "'unsafe-inline'"],
+        },
+        browserSniff: false
+      })
+    );
+    
+    // https://guide.meteor.com/security.html#xframeoptions
+    WebApp.connectHandlers.use(helmet.frameguard());  // defaults to sameorigin
 
     // Setting up logs
     new AppLogger();
 
     if (needImportData) {
-        importData();
+      importData();
     }
 
     if (activeTequila) {
@@ -46,9 +65,6 @@ Meteor.startup(() => {
           return tequila.uniqueid;
         },
         upsert: (tequila) => ({ $set: {
-          profile: {
-            sciper: tequila.uniqueid
-          },
           username: tequila.user,
           emails: [ tequila.email ],
         }}),
