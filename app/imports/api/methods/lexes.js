@@ -8,6 +8,7 @@ import { lexesSchema, Lexes } from "../collections";
 import { AppLogger } from "../logger";
 import { throwMeteorError } from "../error";
 import { trimObjValues, checkUserAndRole } from "./utils";
+import { rateLimiter } from "./rate-limiting";
 
 function prepareUpdateInsertLex(lex, action) {
   // Trim all attributes of lex
@@ -200,5 +201,7 @@ if (Meteor.isServer) {
     connectionId() { return true; },
   }, 5, 1000);
 }
+
+rateLimiter([insertLex, updateLex, removeLex]);
 
 export { insertLex, updateLex, removeLex };

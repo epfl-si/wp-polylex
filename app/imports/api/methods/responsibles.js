@@ -6,6 +6,7 @@ import { responsiblesSchema, Responsibles, Lexes } from "../collections";
 import { AppLogger } from "../logger";
 import { throwMeteorErrors } from "../error";
 import { trimObjValues, checkUserAndRole } from "./utils";
+import { rateLimiter } from "./rate-limiting";
 
 function prepareUpdateInsertResponsible(responsible, action) {
   // Trim all attributes of responsible
@@ -155,5 +156,7 @@ if (Meteor.isServer) {
     connectionId() { return true; },
   }, 5, 1000);
 }
+
+rateLimiter([insertResponsible, updateResponsible, removeResponsible]);
 
 export { insertResponsible, updateResponsible, removeResponsible };

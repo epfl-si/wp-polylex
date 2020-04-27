@@ -6,6 +6,7 @@ import { subcategoriesSchema, Subcategories, Lexes } from "../collections";
 import { AppLogger } from "../logger";
 import { throwMeteorError } from "../error";
 import { trimObjValues, checkUserAndRole } from "./utils"; 
+import { rateLimiter } from "./rate-limiting";
 
 function prepareUpdateInsertSubcategory(subcategory, action) {
   
@@ -153,6 +154,8 @@ if (Meteor.isServer) {
     connectionId() { return true; },
   }, 5, 1000);
 }
+
+rateLimiter([insertSubcategory, updateSubcategory, removeSubcategory]);
 
 export {
   insertSubcategory, updateSubcategory, removeSubcategory
