@@ -4,7 +4,7 @@ import { Meteor } from "meteor/meteor";
 import { WebApp } from "meteor/webapp";
 import { importData } from "./import-data";
 import { AppLogger } from "../imports/api/logger";
-import "../imports/api/methods/publications";
+import "../imports/api/publications";
 import "./rest-api";
 import "../imports/api/methods/responsibles";
 import "../imports/api/methods/categories";
