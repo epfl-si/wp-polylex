@@ -193,8 +193,53 @@ export const responsiblesSchema = new SimpleSchema({
 
 responsiblesSchema.messageBox = messageBox;
 
-export const Lexes = new Mongo.Collection('lexes');
-export const Categories = new Mongo.Collection('categories');
-export const Subcategories = new Mongo.Collection('subcategories');
-export const Responsibles = new Mongo.Collection('responsibles');
-export const AppLogs = new Mongo.Collection('AppLogs');
+const Lexes = new Mongo.Collection('lexes');
+const Categories = new Mongo.Collection('categories');
+const Subcategories = new Mongo.Collection('subcategories');
+const Responsibles = new Mongo.Collection('responsibles');
+const AppLogs = new Mongo.Collection('AppLogs');
+
+// Deny all client-side updates on the Lists collection
+Lexes.deny({
+  insert() { return true; },
+  update() { return true; },
+  remove() { return true; },
+});
+
+Categories.deny({
+  insert() { return true; },
+  update() { return true; },
+  remove() { return true; },
+});
+
+Subcategories.deny({
+  insert() { return true; },
+  update() { return true; },
+  remove() { return true; },
+});
+
+Responsibles.deny({
+  insert() { return true; },
+  update() { return true; },
+  remove() { return true; },
+});
+
+AppLogs.deny({
+  insert() { return true; },
+  update() { return true; },
+  remove() { return true; },
+});
+
+Meteor.users.deny({
+  insert() { return true; },
+  update() { return true; },
+  remove() { return true; },
+});
+
+export {
+  Lexes,
+  Categories,
+  Subcategories,
+  Responsibles,
+  AppLogs,
+}

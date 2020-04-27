@@ -12,7 +12,7 @@ const Header = (props) => {
   } else { 
     let isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin', Roles.GLOBAL_GROUP);
     let isEditor = Roles.userIsInRole(Meteor.userId(), 'editor', Roles.GLOBAL_GROUP);
-    let peopleUrl = "https://people.epfl.ch/" + props.currentUser.profile.sciper;
+    let peopleUrl = "https://people.epfl.ch/" + props.currentUser._id;
     content =  (
       <header className="navbar navbar-expand-lg navbar-light bg-light border-bottom">
         <Link className="navbar-brand" to="/"><img src={logo} className="App-logo" alt="logo"/></Link>
@@ -45,7 +45,7 @@ const Header = (props) => {
               { isAdmin ?
                 <Fragment>
                   <NavLink className="dropdown-item" to="/admin/log/list" activeClassName="active">Voir les logs</NavLink>
-                  <div className="dropdown-item">Polylex - version 1.5.2</div>
+                  <div className="dropdown-item">Polylex - version 1.6.0</div>
                 </Fragment>
                 : null}
               </div>

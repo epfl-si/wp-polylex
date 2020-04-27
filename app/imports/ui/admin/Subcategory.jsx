@@ -6,6 +6,7 @@ import { Subcategories } from '../../api/collections';
 import { CustomError, CustomInput } from '../CustomFields';
 import { Link } from 'react-router-dom';
 import { AlertSuccess, Loading } from '../Messages';
+import { insertSubcategory, updateSubcategory, removeSubcategory } from '../../api/methods/subcategories';
 
 class SubcategoriesList extends Component {
   render() { 
@@ -50,11 +51,10 @@ class Subcategory extends Component {
     }
   }
 
-  deleteSubcategory = (subcategoryID) => {
-    Meteor.call(
-      'removeSubcategory',
-      subcategoryID,
-      (error, subcategoryID) => {
+  deleteSubcategory = (subcategoryId) => {
+    removeSubcategory.call(
+      {subcategoryId},
+      (error, subcategoryId) => {
         if (error) {
           console.log(`ERROR Subcategory removeSubcategory ${error}`);
           alert(error);
@@ -70,41 +70,44 @@ class Subcategory extends Component {
   }
 
   submitSubcategory = (values, actions) => {
-    let methodName;
-    let state;
-    let resetForm;
-
     if (this.state.action === 'add') {
-      methodName = 'insertSubcategory';
-      state = {addSuccess: true};
-      resetForm = true;
-    } else if (this.state.action === 'edit') {
-      methodName = 'updateSubcategory';
-      state = {editSuccess: true};
-      resetForm = false;
-    }
-
-    Meteor.call(
-      methodName,
-      values, 
-      (errors, SubcategoryId) => {
-        if (errors) {
-          console.log(errors);
-          let formErrors = {};
-          errors.details.forEach(function(error) {
-            formErrors[error.name] = error.message;                        
-          });
-          actions.setErrors(formErrors);
-          actions.setSubmitting(false);
-        } else {
-          actions.setSubmitting(false);
-          if (resetForm) {
+      insertSubcategory.call(
+        values, 
+        (errors, SubcategoryId) => {
+          if (errors) {
+            console.log(errors);
+            let formErrors = {};
+            errors.details.forEach(function(error) {
+              formErrors[error.name] = error.message;                        
+            });
+            actions.setErrors(formErrors);
+            actions.setSubmitting(false);
+          } else {
+            actions.setSubmitting(false);
             actions.resetForm();
+            this.setState({addSuccess: true});
           }
-          this.setState(state);
         }
-      }
-    );
+      );
+    } else if (this.state.action === 'edit') {
+      updateSubcategory.call(
+        values, 
+        (errors, SubcategoryId) => {
+          if (errors) {
+            console.log(errors);
+            let formErrors = {};
+            errors.details.forEach(function(error) {
+              formErrors[error.name] = error.message;                        
+            });
+            actions.setErrors(formErrors);
+            actions.setSubmitting(false);
+          } else {
+            actions.setSubmitting(false);
+            this.setState({editSuccess: true});
+          }
+        }
+      );
+    }
   }
 
   getSubcategory = () => {

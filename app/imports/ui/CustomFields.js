@@ -1,14 +1,8 @@
 import React from 'react';
 
 export const CustomInput = ({ field, form: { errors }, ...props }) => {
-  let cssClassName;
-  if (field.name == 'userId') {
-    cssClassName = 'd-none';
-  } else {
-    cssClassName = 'form-group';
-  }
   return (
-    <div className={cssClassName}>
+    <div className='form-group'>
       <label>{ props.label }</label>
       <input 
         { ...field } 

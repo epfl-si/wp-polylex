@@ -8,6 +8,11 @@ body {
   padding-right: 20px;
 }
 
+table#log {
+  table-layout: fixed;
+  word-wrap: break-word;
+}
+
 .ribbon-wrapper {
   width: 85px;
   height: 88px;

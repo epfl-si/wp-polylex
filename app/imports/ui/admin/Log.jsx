@@ -35,15 +35,15 @@ class Log extends Component {
     content = (
       <Fragment>
         <h5 className="card-header">Liste des logs</h5>
-        <table className="table table-striped">
+        <table id="log" className="table table-striped">
             <thead>
               <tr>
-                <th scope="col">#</th>
-                <th scope="col" style={ { width: "15%" } }>Date</th>
-                <th scope="col">Sciper</th>
-                <th scope="col">Message</th>
-                <th scope="col" style={ { width: "40%" } }>Avant</th>
-                <th scope="col" style={ { width: "40%" } }>Après</th>
+                <th scope="col" style={ { width: "5%" } }>#</th>
+                <th scope="col" style={ { width: "10%" } }>Date</th>
+                <th scope="col" style={ { width: "10%" } }>Sciper</th>
+                <th scope="col" style={ { width: "15%" } }>Message</th>
+                <th scope="col" style={ { width: "30%" } }>Avant</th>
+                <th scope="col" style={ { width: "30%" } }>Après</th>
               </tr>
             </thead>
             <LogCells logs={ this.props.logs } />

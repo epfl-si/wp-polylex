@@ -3,6 +3,7 @@ accounts-password@1.5.3
 alanning:roles@1.2.19
 alexwine:bootstrap-4@4.1.0
 allow-deny@1.1.0
+audit-argument-checks@1.0.7
 autoupdate@1.6.0
 babel-compiler@7.5.1
 babel-runtime@1.5.0
@@ -45,6 +46,7 @@ launch-screen@1.1.1
 livedata@1.0.18
 localstorage@1.2.0
 logging@1.1.20
+mdg:validated-method@1.2.0
 meteor@1.9.3
 meteor-base@1.4.0
 minifier-css@1.5.0
