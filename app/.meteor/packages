@@ -34,3 +34,4 @@ ostrio:logger                 # logger
 ostrio:loggermongo            # logger stores in MongoDB
 mdg:validated-method
 audit-argument-checks
+xolvio:cleaner
