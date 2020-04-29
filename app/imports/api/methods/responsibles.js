@@ -1,12 +1,11 @@
-import { ValidatedMethod } from "meteor/mdg:validated-method";
 import SimpleSchema from "simpl-schema";
-import { DDPRateLimiter } from 'meteor/ddp-rate-limiter';
-import { _ } from 'meteor/underscore';
+import { _ } from "meteor/underscore";
 import { responsiblesSchema, Responsibles, Lexes } from "../collections";
 import { AppLogger } from "../logger";
 import { throwMeteorErrors } from "../error";
 import { trimObjValues, checkUserAndRole } from "./utils";
 import { rateLimiter } from "./rate-limiting";
+import { Editor, PolylexValidatedMethod } from "./roles";
 
 function prepareUpdateInsertResponsible(responsible, action) {
   // Trim all attributes of responsible
@@ -43,15 +42,11 @@ function prepareUpdateInsertResponsible(responsible, action) {
   return responsible;
 }
 
-const insertResponsible = new ValidatedMethod({
+const insertResponsible = new PolylexValidatedMethod({
   name: "insertResponsible",
+  role: Editor,
   validate: responsiblesSchema.validator(),
   run(newResponsible) {
-    checkUserAndRole(
-      this.userId,
-      "Only admins or editors can insert responsible."
-    );
-
     newResponsible = prepareUpdateInsertResponsible(newResponsible, "insert");
 
     let newResponsibleId = Responsibles.insert(newResponsible);
@@ -69,15 +64,11 @@ const insertResponsible = new ValidatedMethod({
   },
 });
 
-const updateResponsible = new ValidatedMethod({
+const updateResponsible = new PolylexValidatedMethod({
   name: "updateResponsible",
+  role: Editor,
   validate: responsiblesSchema.validator(),
   run(newResponsible) {
-    checkUserAndRole(
-      this.userId,
-      "Only admins or editors can update responsible."
-    );
-
     newResponsible = prepareUpdateInsertResponsible(newResponsible, "update");
 
     let newResponsibleDocument = {
@@ -106,17 +97,13 @@ const updateResponsible = new ValidatedMethod({
   },
 });
 
-const removeResponsible = new ValidatedMethod({
+const removeResponsible = new PolylexValidatedMethod({
   name: "removeResponsible",
+  role: Editor,
   validate: new SimpleSchema({
     responsibleId: { type: String },
   }).validator(),
   run({ responsibleId }) {
-    checkUserAndRole(
-      this.userId,
-      "Only admins or editors can remove responsible."
-    );
-
     // Check if responsible is used
     lexesByResponsible = Lexes.find({ responsibleId: responsibleId }).count();
     if (lexesByResponsible > 0) {
@@ -137,25 +124,6 @@ const removeResponsible = new ValidatedMethod({
     );
   },
 });
-
-// Get list of all method names on Todos
-const TODOS_METHODS = _.pluck([
-  insertResponsible,
-  updateResponsible,
-  removeResponsible,
-], 'name');
-
-if (Meteor.isServer) {
-  // Only allow 5 todos operations per connection per second
-  DDPRateLimiter.addRule({
-    name(name) {
-      return _.contains(TODOS_METHODS, name);
-    },
-
-    // Rate limit per connection ID
-    connectionId() { return true; },
-  }, 5, 1000);
-}
 
 rateLimiter([insertResponsible, updateResponsible, removeResponsible]);
 

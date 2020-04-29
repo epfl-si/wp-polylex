@@ -1,12 +1,11 @@
-import { DDPRateLimiter } from "meteor/ddp-rate-limiter";
 import { _ } from "meteor/underscore";
-import { ValidatedMethod } from "meteor/mdg:validated-method";
 import SimpleSchema from "simpl-schema";
 import { categoriesSchema, Categories, Lexes } from "../collections";
 import { AppLogger } from "../logger";
 import { throwMeteorError } from "../error";
 import { trimObjValues, checkUserAndRole } from "./utils";
 import { rateLimiter } from "./rate-limiting";
+import { Editor, PolylexValidatedMethod } from "./roles";
 
 function prepareUpdateInsertCategory(category, action) {
   // Trim all attributes of category
@@ -49,15 +48,11 @@ function prepareUpdateInsertCategory(category, action) {
   return category;
 }
 
-const insertCategory = new ValidatedMethod({
+const insertCategory = new PolylexValidatedMethod({
   name: "insertCategory",
   validate: categoriesSchema.validator(),
+  role: Editor,
   run(newCategory) {
-    checkUserAndRole(
-      this.userId,
-      "Only admins or editors can insert category."
-    );
-
     newCategory = prepareUpdateInsertCategory(newCategory, "insert");
 
     let newCategoryDocument = {
@@ -78,14 +73,11 @@ const insertCategory = new ValidatedMethod({
   },
 });
 
-const updateCategory = new ValidatedMethod({
+const updateCategory = new PolylexValidatedMethod({
   name: "updateCategory",
   validate: categoriesSchema.validator(),
+  role: Editor,
   run(newCategory) {
-    checkUserAndRole(
-      this.userId,
-      "Only admins or editors can update category."
-    );
 
     newCategory = prepareUpdateInsertCategory(newCategory, "update");
 
@@ -108,11 +100,12 @@ const updateCategory = new ValidatedMethod({
   },
 });
 
-const removeCategory = new ValidatedMethod({
+const removeCategory = new PolylexValidatedMethod({
   name: "removeCategory",
   validate: new SimpleSchema({
     categoryId: { type: String },
   }).validator(),
+  role: Editor,
   run({ categoryId }) {
     checkUserAndRole(
       this.userId,
