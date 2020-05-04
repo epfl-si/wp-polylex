@@ -1,212 +1,262 @@
-import React, { Component, Fragment } from 'react';
-import { Meteor } from 'meteor/meteor';
-import { withTracker } from 'meteor/react-meteor-data';
-import { Formik, Field, ErrorMessage } from 'formik';
-import { Categories } from '../../api/collections';
-import { CustomError, CustomInput } from '../CustomFields';
-import { Link } from 'react-router-dom';
-import { AlertSuccess, Loading } from '../Messages';
-import { insertCategory, updateCategory, removeCategory } from '../../api/methods/categories';
+import React, { Component, Fragment } from "react";
+import { Meteor } from "meteor/meteor";
+import { withTracker } from "meteor/react-meteor-data";
+import { Formik, Field, ErrorMessage } from "formik";
+import { Categories } from "../../api/collections";
+import { CustomError, CustomInput } from "../CustomFields";
+import { Link } from "react-router-dom";
+import { AlertSuccess, Loading } from "../Messages";
+import {
+  insertCategory,
+  updateCategory,
+  removeCategory,
+} from "../../api/methods/categories";
 
 class CategoriesList extends Component {
-  render() { 
+  render() {
     return (
       <Fragment>
         <h5 className="card-header">Liste des rubriques</h5>
         <ul className="list-group">
-          {this.props.categories.map( (category, index) => (
-            <li key={category._id} value={category.nameFr} className="list-group-item">
+          {this.props.categories.map((category, index) => (
+            <li
+              key={category._id}
+              value={category.nameFr}
+              className="list-group-item"
+            >
               {category.nameFr} / {category.nameEn}
               <button type="button" className="close" aria-label="Close">
-                <span onClick={() => { if (window.confirm('Are you sure you wish to delete this item?')) this.props.callBackDeleteCategory(category._id) }} aria-hidden="true">&times;</span>
+                <span
+                  onClick={() => {
+                    if (
+                      window.confirm(
+                        "Are you sure you wish to delete this item?"
+                      )
+                    )
+                      this.props.callBackDeleteCategory(category._id);
+                  }}
+                  aria-hidden="true"
+                >
+                  &times;
+                </span>
               </button>
-              <Link className="edit" to={`/admin/category/${category._id}/edit`}>
-                <button type="button" className="btn btn-outline-primary">Éditer</button>
+              <Link
+                className="edit"
+                to={`/admin/category/${category._id}/edit`}
+              >
+                <button type="button" className="btn btn-outline-primary">
+                  Éditer
+                </button>
               </Link>
             </li>
           ))}
         </ul>
       </Fragment>
-    )
+    );
   }
 }
 
 class Category extends Component {
-
-  constructor(props){
+  constructor(props) {
     super(props);
-    
+
     let action;
-    if (this.props.match.path == '/admin/category/:_id/edit') {
-      action = 'edit';
+    if (this.props.match.path == "/admin/category/:_id/edit") {
+      action = "edit";
     } else {
-      action = 'add';
+      action = "add";
     }
 
     this.state = {
-        action: action,
-        addSuccess: false,
-        editSuccess: false,
-        deleteSuccess: false,
-    }
+      action: action,
+      addSuccess: false,
+      editSuccess: false,
+      deleteSuccess: false,
+    };
   }
 
   deleteCategory = (categoryId) => {
-    removeCategory.call(
-      {categoryId},
-      (error, categoryId) => {
-        if (error) {
-            console.log(`ERROR Category removeCategory ${error}`);
-            alert(error);
-        } else {
-          this.setState({deleteSuccess: true});
-        }
+    removeCategory.call({ categoryId }, (error, categoryId) => {
+      if (error) {
+        console.log(`ERROR Category removeCategory ${error}`);
+        alert(error);
+      } else {
+        this.setState({ deleteSuccess: true });
       }
-    );
-  }
+    });
+  };
 
   updateUserMsg = () => {
-    this.setState({addSuccess: false, editSuccess: false, deleteSuccess: false,});
-  }
+    this.setState({
+      addSuccess: false,
+      editSuccess: false,
+      deleteSuccess: false,
+    });
+  };
 
   submitCategory = (values, actions) => {
-    if (this.state.action === 'add') {
-      insertCategory.call(
-        values, 
-        (errors, CategoryId) => {
-          if (errors) {
-            console.log(errors);
-            let formErrors = {};
-            errors.details.forEach(function(error) {
-              formErrors[error.name] = error.message;                        
-            });
-            actions.setErrors(formErrors);
-            actions.setSubmitting(false);
-          } else {
-            actions.setSubmitting(false);
-            actions.resetForm();
-            this.setState({addSuccess: true});
-          }
+    if (this.state.action === "add") {
+      insertCategory.call(values, (errors, CategoryId) => {
+        if (errors) {
+          console.log(errors);
+          let formErrors = {};
+          errors.details.forEach(function (error) {
+            formErrors[error.name] = error.message;
+          });
+          actions.setErrors(formErrors);
+          actions.setSubmitting(false);
+        } else {
+          actions.setSubmitting(false);
+          actions.resetForm();
+          this.setState({ addSuccess: true });
         }
-      );
-    } else if (this.state.action === 'edit') {
-      updateCategory.call(
-        values, 
-        (errors, CategoryId) => {
-          if (errors) {
-            console.log(errors);
-            let formErrors = {};
-            errors.details.forEach(function(error) {
-              formErrors[error.name] = error.message;                        
-            });
-            actions.setErrors(formErrors);
-            actions.setSubmitting(false);
-          } else {
-            actions.setSubmitting(false);
-            this.setState({editSuccess: true});
-          }
+      });
+    } else if (this.state.action === "edit") {
+      updateCategory.call(values, (errors, CategoryId) => {
+        if (errors) {
+          console.log(errors);
+          let formErrors = {};
+          errors.details.forEach(function (error) {
+            formErrors[error.name] = error.message;
+          });
+          actions.setErrors(formErrors);
+          actions.setSubmitting(false);
+        } else {
+          actions.setSubmitting(false);
+          this.setState({ editSuccess: true });
         }
-      );
+      });
     }
-  }
+  };
 
   getCategory = () => {
     // Get the URL parameter
     let categoryId = this.props.match.params._id;
-    let category = Categories.findOne({_id: categoryId});
+    let category = Categories.findOne({ _id: categoryId });
     return category;
-  }
+  };
 
   getInitialValues = () => {
     let initialValues;
-    if (this.state.action == 'add') {
-      initialValues = { nameFr: '', nameEn: ''};
+    if (this.state.action == "add") {
+      initialValues = { nameFr: "", nameEn: "" };
     } else {
       initialValues = this.getCategory();
     }
     return initialValues;
-  }
-  
-  render() {
+  };
 
+  render() {
     let content;
     let initialValues = this.getInitialValues();
-    let isLoading = (this.props.categories == undefined || initialValues == undefined);
+    let isLoading =
+      this.props.categories == undefined || initialValues == undefined;
 
     if (isLoading) {
       content = <Loading />;
     } else {
-
-      const isDisplayCategoriesList = (this.state.action == 'add');
+      const isDisplayCategoriesList = this.state.action == "add";
 
       content = (
         <Fragment>
-          { this.state.deleteSuccess ? ( 
-            <AlertSuccess message={ 'La rubrique a été supprimée avec succès !' } />
-          ) : (null) }
-
-          { isDisplayCategoriesList ? (
-            <CategoriesList 
-              categories={this.props.categories} 
-              callBackDeleteCategory={this.deleteCategory} 
+          {this.state.deleteSuccess ? (
+            <AlertSuccess
+              message={"La rubrique a été supprimée avec succès !"}
             />
-          ):(<h5 className="card-header">Édition de la rubrique des Lexes suivante: </h5>)}
+          ) : null}
+
+          {isDisplayCategoriesList ? (
+            <CategoriesList
+              categories={this.props.categories}
+              callBackDeleteCategory={this.deleteCategory}
+            />
+          ) : (
+            <h5 className="card-header">
+              Édition de la rubrique des Lexes suivante:{" "}
+            </h5>
+          )}
           <div className="card-body">
+            {this.state.addSuccess ? (
+              <AlertSuccess
+                message={"La nouvelle rubrique a été ajoutée avec succès !"}
+              />
+            ) : null}
 
-            { this.state.addSuccess ? ( 
-              <AlertSuccess message={ 'La nouvelle rubrique a été ajoutée avec succès !' } />
-            ) : (null) }
+            {this.state.editSuccess ? (
+              <AlertSuccess
+                message={"La rubrique a été modifiée avec succès !"}
+              />
+            ) : null}
 
-            { this.state.editSuccess ? ( 
-              <AlertSuccess message={ 'La rubrique a été modifiée avec succès !' } />
-            ) : (null) }
+            {this.state.deleteSuccess ? (
+              <AlertSuccess
+                message={"La rubrique a été supprimée avec succès !"}
+              />
+            ) : null}
 
-            { this.state.deleteSuccess ? ( 
-              <AlertSuccess message={ 'La rubrique a été supprimée avec succès !' } />
-            ) : (null) }
-            
             <Formik
-              onSubmit={ this.submitCategory }
-              initialValues={ initialValues }
-              validateOnBlur={ false }
-              validateOnChange={ false }
-                >
-                {({
-                    handleSubmit,
-                    isSubmitting,
-                    handleChange,
-                    handleBlur,
-                }) => (    
-                  <form onSubmit={ handleSubmit }>
-                    <Field 
-                      onChange={e => { handleChange(e); this.updateUserMsg();}}
-                      onBlur={e => { handleBlur(e); this.updateUserMsg();}}
-                      placeholder="Nom de la rubrique en français à ajouter" name="nameFr" type="text" component={ CustomInput } />
-                    <ErrorMessage name="nameFr" component={ CustomError } />
+              onSubmit={this.submitCategory}
+              initialValues={initialValues}
+              validateOnBlur={false}
+              validateOnChange={false}
+            >
+              {({ handleSubmit, isSubmitting, handleChange, handleBlur }) => (
+                <form onSubmit={handleSubmit}>
+                  <Field
+                    onChange={(e) => {
+                      handleChange(e);
+                      this.updateUserMsg();
+                    }}
+                    onBlur={(e) => {
+                      handleBlur(e);
+                      this.updateUserMsg();
+                    }}
+                    placeholder="Nom de la rubrique en français à ajouter"
+                    name="nameFr"
+                    type="text"
+                    component={CustomInput}
+                  />
+                  <ErrorMessage name="nameFr" component={CustomError} />
 
-                    <Field 
-                      onChange={e => { handleChange(e); this.updateUserMsg();}}
-                      onBlur={e => { handleBlur(e); this.updateUserMsg();}}
-                      placeholder="Nom de la rubrique en anglais à ajouter" name="nameEn" type="text" component={ CustomInput } />
-                    <ErrorMessage name="nameEn" component={ CustomError } />
+                  <Field
+                    onChange={(e) => {
+                      handleChange(e);
+                      this.updateUserMsg();
+                    }}
+                    onBlur={(e) => {
+                      handleBlur(e);
+                      this.updateUserMsg();
+                    }}
+                    placeholder="Nom de la rubrique en anglais à ajouter"
+                    name="nameEn"
+                    type="text"
+                    component={CustomInput}
+                  />
+                  <ErrorMessage name="nameEn" component={CustomError} />
 
-                    <div className="my-1 text-right">
-                        <button type="submit" disabled={ isSubmitting } className="btn btn-primary">Enregistrer</button>
-                    </div>
-                  </form>
-                )}
+                  <div className="my-1 text-right">
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="btn btn-primary"
+                    >
+                      Enregistrer
+                    </button>
+                  </div>
+                </form>
+              )}
             </Formik>
           </div>
         </Fragment>
-      )
+      );
     }
     return content;
   }
 }
 
 export default withTracker(() => {
-  Meteor.subscribe('categories');
+  Meteor.subscribe("categories");
   return {
-    categories: Categories.find({}, {sort: {nameFr: 1}}).fetch(),
+    categories: Categories.find({}, { sort: { nameFr: 1 } }).fetch(),
   };
 })(Category);

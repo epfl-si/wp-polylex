@@ -1,16 +1,14 @@
 import SimpleSchema from "simpl-schema";
-
-import { DDPRateLimiter } from 'meteor/ddp-rate-limiter';
-import { _ } from 'meteor/underscore';
-import { ValidatedMethod } from "meteor/mdg:validated-method";
-
+import { _ } from "meteor/underscore";
 import { lexesSchema, Lexes } from "../collections";
 import { AppLogger } from "../logger";
 import { throwMeteorError } from "../error";
-import { trimObjValues, checkUserAndRole } from "./utils";
+import { trimObjValues } from "./utils";
 import { rateLimiter } from "./rate-limiting";
+import { Editor, PolylexValidatedMethod } from "./roles";
 
 function prepareUpdateInsertLex(lex, action) {
+
   // Trim all attributes of lex
   lex = trimObjValues(lex);
 
@@ -56,8 +54,9 @@ function prepareUpdateInsertLex(lex, action) {
   return lex;
 }
 
-const insertLex = new ValidatedMethod({
+const insertLex = new PolylexValidatedMethod({
   name: "insertLex",
+  role: Editor,
   validate(newLex) {
     let newLexDocument = {
       lex: newLex.lex,
@@ -76,8 +75,7 @@ const insertLex = new ValidatedMethod({
     lexesSchema.validate(newLexDocument);
   },
   run(newLex) {
-    checkUserAndRole(this.userId, "Only admins or editors can insert LEX.");
-
+    newLex = prepareUpdateInsertLex(newLex, "insert");
     let newLexDocument = {
       lex: newLex.lex,
       titleFr: newLex.titleFr,
@@ -92,8 +90,6 @@ const insertLex = new ValidatedMethod({
       subcategories: newLex.subcategories,
       responsibleId: newLex.responsibleId,
     };
-
-    newLex = prepareUpdateInsertLex(newLexDocument, "insert");
 
     let newLexId = Lexes.insert(newLexDocument);
     let newLexAfterInsert = Lexes.findOne({ _id: newLexId });
@@ -108,8 +104,9 @@ const insertLex = new ValidatedMethod({
   },
 });
 
-const updateLex = new ValidatedMethod({
+const updateLex = new PolylexValidatedMethod({
   name: "updateLex",
+  role: Editor,
   validate(newLex) {
     let newLexDocument = {
       _id: newLex._id,
@@ -129,8 +126,7 @@ const updateLex = new ValidatedMethod({
     lexesSchema.validate(newLexDocument);
   },
   run(newLex) {
-    checkUserAndRole(this.userId, "Only admins or editors can update LEX.");
-
+    newLex = prepareUpdateInsertLex(newLex, "update");
     let newLexDocument = {
       _id: newLex._id,
       lex: newLex.lex,
@@ -146,8 +142,6 @@ const updateLex = new ValidatedMethod({
       subcategories: newLex.subcategories,
       responsibleId: newLex.responsibleId,
     };
-
-    newLex = prepareUpdateInsertLex(newLexDocument, "update");
 
     let lexBeforeUpdate = Lexes.findOne({ _id: newLex._id });
 
@@ -165,13 +159,13 @@ const updateLex = new ValidatedMethod({
   },
 });
 
-const removeLex = new ValidatedMethod({
+const removeLex = new PolylexValidatedMethod({
   name: "removeLex",
+  role: Editor,
   validate: new SimpleSchema({
     lexId: { type: String },
   }).validator(),
   run({ lexId }) {
-    checkUserAndRole(this.userId, "Only admins or editors can remove LEX.");
     let lex = Lexes.findOne({ _id: lexId });
     Lexes.remove({ _id: lexId });
 
@@ -182,25 +176,6 @@ const removeLex = new ValidatedMethod({
     );
   },
 });
-
-// Get list of all method names on Todos
-const TODOS_METHODS = _.pluck([
-  insertLex,
-  updateLex,
-  removeLex,
-], 'name');
-
-if (Meteor.isServer) {
-  // Only allow 5 todos operations per connection per second
-  DDPRateLimiter.addRule({
-    name(name) {
-      return _.contains(TODOS_METHODS, name);
-    },
-
-    // Rate limit per connection ID
-    connectionId() { return true; },
-  }, 5, 1000);
-}
 
 rateLimiter([insertLex, updateLex, removeLex]);
 
