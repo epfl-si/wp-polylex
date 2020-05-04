@@ -139,3 +139,5 @@ polylex_image_version: '0.1.10'
 ATTENTION :
 A la différence de wp-veritas, la mise à jour de meteor 1.9 ne pose pas de problème. Donc dans le Dockerfile on utilise node en version 12
 `FROM node:12.14.0-alpine`
+
+## 

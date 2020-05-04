@@ -3,11 +3,13 @@ import { Subcategories } from "../../collections";
 import { insertSubcategory, updateSubcategory, removeSubcategory } from "../subcategories";
 import { resetDatabase } from "meteor/xolvio:cleaner";
 import { createUser } from "../../../../tests/helpers";
+import { loadFixtures } from "../../../../server/fixtures";
 
 if (Meteor.isServer) {
   describe("meteor methods subcategory", function () {
     before(function () {
       resetDatabase();
+      loadFixtures();
     });
 
     it("insert subcategory", () => {

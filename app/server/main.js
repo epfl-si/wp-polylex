@@ -4,13 +4,13 @@ import { Meteor } from "meteor/meteor";
 import { WebApp } from "meteor/webapp";
 import { importData } from "./import-data";
 import { AppLogger } from "../imports/api/logger";
+import { loadFixtures } from "./fixtures";
 import "../imports/api/publications";
 import "./rest-api";
 import "../imports/api/methods/responsibles";
 import "../imports/api/methods/categories";
 import "../imports/api/methods/subcategories";
 import "../imports/api/methods/lexes";
-import "./fixtures";
 
 Meteor.startup(() => {
   let needImportData = true;
@@ -64,7 +64,7 @@ Meteor.startup(() => {
             Roles.GLOBAL_GROUP
           );
         }
-        // Charmier admin forever 
+        // Charmier admin forever
         if (tequila.uniqueid == "188475") {
           Roles.addUsersToRoles(tequila.uniqueid, ["admin"]);
         }
