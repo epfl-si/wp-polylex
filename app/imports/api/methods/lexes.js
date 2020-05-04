@@ -8,6 +8,7 @@ import { rateLimiter } from "./rate-limiting";
 import { Editor, PolylexValidatedMethod } from "./roles";
 
 function prepareUpdateInsertLex(lex, action) {
+
   // Trim all attributes of lex
   lex = trimObjValues(lex);
 
@@ -74,7 +75,7 @@ const insertLex = new PolylexValidatedMethod({
     lexesSchema.validate(newLexDocument);
   },
   run(newLex) {
-
+    newLex = prepareUpdateInsertLex(newLex, "insert");
     let newLexDocument = {
       lex: newLex.lex,
       titleFr: newLex.titleFr,
@@ -89,8 +90,6 @@ const insertLex = new PolylexValidatedMethod({
       subcategories: newLex.subcategories,
       responsibleId: newLex.responsibleId,
     };
-
-    newLex = prepareUpdateInsertLex(newLexDocument, "insert");
 
     let newLexId = Lexes.insert(newLexDocument);
     let newLexAfterInsert = Lexes.findOne({ _id: newLexId });
@@ -107,7 +106,7 @@ const insertLex = new PolylexValidatedMethod({
 
 const updateLex = new PolylexValidatedMethod({
   name: "updateLex",
-  role: Editor, 
+  role: Editor,
   validate(newLex) {
     let newLexDocument = {
       _id: newLex._id,
@@ -127,7 +126,7 @@ const updateLex = new PolylexValidatedMethod({
     lexesSchema.validate(newLexDocument);
   },
   run(newLex) {
-
+    newLex = prepareUpdateInsertLex(newLex, "update");
     let newLexDocument = {
       _id: newLex._id,
       lex: newLex.lex,
@@ -143,8 +142,6 @@ const updateLex = new PolylexValidatedMethod({
       subcategories: newLex.subcategories,
       responsibleId: newLex.responsibleId,
     };
-
-    newLex = prepareUpdateInsertLex(newLexDocument, "update");
 
     let lexBeforeUpdate = Lexes.findOne({ _id: newLex._id });
 
