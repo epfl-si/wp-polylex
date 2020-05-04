@@ -3,7 +3,7 @@ import SimpleSchema from "simpl-schema";
 import { categoriesSchema, Categories, Lexes } from "../collections";
 import { AppLogger } from "../logger";
 import { throwMeteorError } from "../error";
-import { trimObjValues, checkUserAndRole } from "./utils";
+import { trimObjValues } from "./utils";
 import { rateLimiter } from "./rate-limiting";
 import { Editor, PolylexValidatedMethod } from "./roles";
 
@@ -78,7 +78,6 @@ const updateCategory = new PolylexValidatedMethod({
   validate: categoriesSchema.validator(),
   role: Editor,
   run(newCategory) {
-
     newCategory = prepareUpdateInsertCategory(newCategory, "update");
 
     let newCategoryDocument = {
@@ -107,11 +106,6 @@ const removeCategory = new PolylexValidatedMethod({
   }).validator(),
   role: Editor,
   run({ categoryId }) {
-    checkUserAndRole(
-      this.userId,
-      "Only admins or editors can remove category."
-    );
-
     // Check if category is used
     lexesByCategory = Lexes.find({ categoryId: categoryId }).count();
     if (lexesByCategory > 0) {

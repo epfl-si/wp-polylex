@@ -4,7 +4,7 @@ import SimpleSchema from "simpl-schema";
 import { subcategoriesSchema, Subcategories, Lexes } from "../collections";
 import { AppLogger } from "../logger";
 import { throwMeteorError } from "../error";
-import { trimObjValues, checkUserAndRole } from "./utils";
+import { trimObjValues } from "./utils";
 import { rateLimiter } from "./rate-limiting";
 
 function prepareUpdateInsertSubcategory(subcategory, action) {

@@ -3,7 +3,7 @@ import { _ } from "meteor/underscore";
 import { responsiblesSchema, Responsibles, Lexes } from "../collections";
 import { AppLogger } from "../logger";
 import { throwMeteorErrors } from "../error";
-import { trimObjValues, checkUserAndRole } from "./utils";
+import { trimObjValues } from "./utils";
 import { rateLimiter } from "./rate-limiting";
 import { Editor, PolylexValidatedMethod } from "./roles";
 
