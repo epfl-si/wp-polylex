@@ -74,7 +74,11 @@ class App extends Component {
   }
 }
 export default withTracker(() => {
+
+  console.log("Meteor.userId(): ", Meteor.userId());
   let user = Meteor.users.findOne({'_id': Meteor.userId()});
+
+  console.log("USER: ", user);
   return {  
     currentUser: user,
   };  

@@ -10,6 +10,7 @@ import "../imports/api/methods/responsibles";
 import "../imports/api/methods/categories";
 import "../imports/api/methods/subcategories";
 import "../imports/api/methods/lexes";
+import "./fixtures";
 
 Meteor.startup(() => {
   let needImportData = true;
@@ -24,9 +25,7 @@ Meteor.startup(() => {
       directives: {
         defaultSrc: ["'self'"],
         // TODO: How to remove "'unsafe-eval'" and make form validation work ?
-        scriptSrc: ["'self'", "'unsafe-inline'", 
-          "'unsafe-eval'"
-        ],
+        scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
         connectSrc: ["*"],
         imgSrc: ["'self'"],
         styleSrc: ["'self'", "'unsafe-inline'"],
@@ -45,6 +44,8 @@ Meteor.startup(() => {
     importData();
   }
 
+  loadFixtures();
+
   if (activeTequila) {
     Tequila.start({
       service: "Polylex",
@@ -53,7 +54,19 @@ Meteor.startup(() => {
       getUserId(tequila) {
         let groups = tequila.group.split(",");
         if (groups.includes("wp-polylex-admins")) {
+          console.log("Tequila: ", tequila);
+          /*
+          let roles = Roles.find({}).fetch();
+          console.log(roles);
+*/    
+          if (Meteor.roles.find({_id: "admin"}).count() === 0) {
+            Roles.createRole('admin');
+          }
+          
           Roles.setUserRoles(tequila.uniqueid, ["admin"], Roles.GLOBAL_GROUP);
+
+          
+
         } else if (groups.includes("wp-polylex-editors")) {
           Roles.setUserRoles(tequila.uniqueid, ["editor"], Roles.GLOBAL_GROUP);
         } else {
@@ -63,9 +76,9 @@ Meteor.startup(() => {
             Roles.GLOBAL_GROUP
           );
         }
-        if (tequila.uniqueid == "188475") {
-          Roles.setUserRoles(tequila.uniqueid, ["admin"], Roles.GLOBAL_GROUP);
-        }
+        /*if (tequila.uniqueid == "188475") {
+          Roles.addUsersToRoles(tequila.uniqueid, ["admin"]);
+        }*/
         return tequila.uniqueid;
       },
       upsert: (tequila) => ({

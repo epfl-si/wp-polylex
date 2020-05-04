@@ -20,12 +20,21 @@ if (Meteor.isServer) {
   Meteor.publish('users', function () { 
       return Meteor.users.find({});
   });
-
+/*
   Meteor.publish('user.roles', function () {
       return Meteor.roles.find({});
   });
-
+*/
   Meteor.publish('log.list', function() {    
     return AppLogs.find({});
+  });
+
+  Meteor.publish(null, function () {
+    console.log("this.userId", this.userId);
+    if (this.userId) {
+      return Meteor.roleAssignment.find({ "user._id": this.userId });
+    } else {
+      this.ready();
+    }
   });
 }
