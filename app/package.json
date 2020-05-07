@@ -15,7 +15,6 @@
     "draft-js-import-html": "^1.4.1",
     "formik": "^2.1.4",
     "helmet": "^3.22.0",
-    "immutable": "^4.0.0-rc.12",
     "meteor-node-stubs": "^1.0.0",
     "moment": "^2.25.2",
     "react": "^16.13.1",
@@ -30,5 +29,8 @@
       "server": "server/main.js"
     },
     "testModule": "tests/main.js"
+  },
+  "devDependencies": {
+    "immutable": "^3.8.2"
   }
 }
