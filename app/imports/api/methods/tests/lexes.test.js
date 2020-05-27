@@ -6,6 +6,7 @@ import { createUser } from "../../../../tests/helpers";
 import { insertCategory } from "../categories";
 import { insertSubcategory } from "../subcategories";
 import { insertResponsible } from "../responsibles";
+import { loadFixtures } from "../../../../server/fixtures";
 
 function createCategory(userId) {
   const context = { userId };
@@ -39,6 +40,7 @@ if (Meteor.isServer) {
   describe("meteor methods lex", function () {
     before(function () {
       resetDatabase();
+      loadFixtures();
     });
 
     it("insert lex", () => {

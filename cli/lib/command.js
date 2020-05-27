@@ -29,6 +29,7 @@ const _deleteAllDocuments = async function (connectionString, environment) {
     'lexes',
     'responsibles',
     'subcategories',
+    'roles',
   ]
   
   collectionsList.forEach(async collection => { 
@@ -158,7 +159,8 @@ const _restore = async function (source) {
 
 module.exports.deleteAllDocuments = async function () {
   const connectionString = `mongodb://localhost:3001/`;
-  await _deleteAllDocuments(connectionString);
+  const environment = 'localhost';
+  await _deleteAllDocuments(connectionString, environment);
 }
 
 module.exports.restoreTestDatabase = async function () {

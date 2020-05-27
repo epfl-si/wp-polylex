@@ -63,8 +63,22 @@ deleteSubcategoryId = () => {
   console.log("Finish!!");
 }
 
+updateRoles = () => {
+
+  Meteor.roles.rawCollection().drop();
+  
+  let users = Meteor.users.find({}).fetch();
+  users.forEach(user => {
+    Meteor.users.update(
+      { _id: user._id }, 
+      { $unset: { 'roles': '' } },
+    );
+  });
+  console.log("All roles inside users are deleted");
+}
+
 importData = () => {
-  deleteUserProfile();
+  updateRoles();
 }
 
 export { deleteAll, importData }

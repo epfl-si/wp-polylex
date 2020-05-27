@@ -7,11 +7,13 @@ import {
 } from "../responsibles";
 import { resetDatabase } from "meteor/xolvio:cleaner";
 import { createUser } from "../../../../tests/helpers";
+import { loadFixtures } from "../../../../server/fixtures";
 
 if (Meteor.isServer) {
   describe("meteor methods responsible", function () {
     before(function () {
       resetDatabase();
+      loadFixtures();
     });
 
     it("insert responsible", () => {

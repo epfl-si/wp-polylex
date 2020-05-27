@@ -81,7 +81,7 @@ export const lexesSchema = new SimpleSchema({
     },
     effectiveDate: {
         type: String,
-        label: "Date d entrées en vigueur",
+        label: "Date d'entrées en vigueur",
         optional: false,
         custom: isRequired
     },
@@ -125,6 +125,8 @@ export const categoriesSchema = new SimpleSchema({
     },
 });
 
+categoriesSchema.messageBox = messageBox;
+
 export const subcategoriesSchema = new SimpleSchema({
     // _id use to update 
     _id: {
@@ -148,6 +150,8 @@ export const subcategoriesSchema = new SimpleSchema({
         custom: isRequired
     },
 });
+
+subcategoriesSchema.messageBox = messageBox;
 
 export const responsiblesSchema = new SimpleSchema({
     // _id use to update 

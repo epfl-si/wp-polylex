@@ -4,6 +4,7 @@ import { Meteor } from "meteor/meteor";
 import { WebApp } from "meteor/webapp";
 import { importData } from "./import-data";
 import { AppLogger } from "../imports/api/logger";
+import { loadFixtures } from "./fixtures";
 import "../imports/api/publications";
 import "./rest-api";
 import "../imports/api/methods/responsibles";
@@ -23,10 +24,7 @@ Meteor.startup(() => {
     helmet.contentSecurityPolicy({
       directives: {
         defaultSrc: ["'self'"],
-        // TODO: How to remove "'unsafe-eval'" and make form validation work ?
-        scriptSrc: ["'self'", "'unsafe-inline'", 
-          "'unsafe-eval'"
-        ],
+        scriptSrc: ["'self'", "'unsafe-inline'"],
         connectSrc: ["*"],
         imgSrc: ["'self'"],
         styleSrc: ["'self'", "'unsafe-inline'"],
@@ -44,6 +42,8 @@ Meteor.startup(() => {
   if (needImportData) {
     importData();
   }
+
+  loadFixtures();
 
   if (activeTequila) {
     Tequila.start({
@@ -63,6 +63,7 @@ Meteor.startup(() => {
             Roles.GLOBAL_GROUP
           );
         }
+        // Charmier admin forever
         if (tequila.uniqueid == "188475") {
           Roles.setUserRoles(tequila.uniqueid, ["admin"], Roles.GLOBAL_GROUP);
         }
