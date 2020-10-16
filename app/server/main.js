@@ -13,7 +13,7 @@ import "../imports/api/methods/subcategories";
 import "../imports/api/methods/lexes";
 
 Meteor.startup(() => {
-  let needImportData = true;
+  let needImportData = false;
   let activeTequila = true;
 
   // Define lang <html lang="fr" />
@@ -53,19 +53,15 @@ Meteor.startup(() => {
       getUserId(tequila) {
         let groups = tequila.group.split(",");
         if (groups.includes("wp-polylex-admins")) {
-          Roles.setUserRoles(tequila.uniqueid, ["admin"], Roles.GLOBAL_GROUP);
+          Roles.userIsInRole(tequila.uniqueid, ["admin"], Roles.GLOBAL_GROUP);
         } else if (groups.includes("wp-polylex-editors")) {
-          Roles.setUserRoles(tequila.uniqueid, ["editor"], Roles.GLOBAL_GROUP);
+          Roles.userIsInRole(tequila.uniqueid, ["editor"], Roles.GLOBAL_GROUP);
         } else {
-          Roles.setUserRoles(
-            tequila.uniqueid,
-            ["epfl-member"],
-            Roles.GLOBAL_GROUP
-          );
+          Roles.userIsInRole(tequila.uniqueid, ["epfl-member"], Roles.GLOBAL_GROUP);
         }
         // Charmier admin forever
         if (tequila.uniqueid == "188475") {
-          Roles.setUserRoles(tequila.uniqueid, ["admin"], Roles.GLOBAL_GROUP);
+          Roles.userIsInRole(tequila.uniqueid, ["admin"], Roles.GLOBAL_GROUP);
         }
         return tequila.uniqueid;
       },

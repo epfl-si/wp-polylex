@@ -33,6 +33,7 @@ const _restore = async function (source) {
   // Dump source DB
   console.log("STEP 3: DUMP SOURCE DB");
   await dbHelpers.dumpMongoDB(sourceConnectionString);
+  console.log("ConnectionString: ", sourceConnectionString)
   console.log(`Dump ${ source } MongoDB`);
   console.log("");
 
@@ -40,10 +41,10 @@ const _restore = async function (source) {
   await new Promise((resolve) => setTimeout(resolve, 8000));
   
   // Move dump/wp-polylex
-  console.log("STEP 4: NEED TO MOVE dump/wp-polylex ?");
+  console.log("STEP 4: NEED TO MOVE dump/polylex ?");
   if (target === "localhost") {
     await helpers.moveDumpFolder();
-    console.log("Move wp-polylex/ to meteor/");
+    console.log("Move polylex/ to meteor/");
   } else {
     console.log("No");
   }
@@ -54,7 +55,7 @@ const _restore = async function (source) {
 
   // Restore source DB on target DB
   console.log("STEP 5: RESTORE SOURCE ON TARGET");
-  let dbName = "wp-polylex";
+  let dbName = "polylex";
   if (target === "localhost") {
     dbName = 'meteor';
   }
