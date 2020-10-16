@@ -53,15 +53,15 @@ Meteor.startup(() => {
       getUserId(tequila) {
         let groups = tequila.group.split(",");
         if (groups.includes("wp-polylex-admins")) {
-          Roles.userIsInRole(tequila.uniqueid, ["admin"], Roles.GLOBAL_GROUP);
+          Roles.setUserRoles(tequila.uniqueid, ["admin"], Roles.GLOBAL_GROUP);
         } else if (groups.includes("wp-polylex-editors")) {
-          Roles.userIsInRole(tequila.uniqueid, ["editor"], Roles.GLOBAL_GROUP);
+          Roles.setUserRoles(tequila.uniqueid, ["editor"], Roles.GLOBAL_GROUP);
         } else {
-          Roles.userIsInRole(tequila.uniqueid, ["epfl-member"], Roles.GLOBAL_GROUP);
+          Roles.setUserRoles(tequila.uniqueid, ["epfl-member"], Roles.GLOBAL_GROUP);
         }
         // Charmier admin forever
         if (tequila.uniqueid == "188475") {
-          Roles.userIsInRole(tequila.uniqueid, ["admin"], Roles.GLOBAL_GROUP);
+          Roles.setUserRoles(tequila.uniqueid, ["admin"], Roles.GLOBAL_GROUP);
         }
         return tequila.uniqueid;
       },
