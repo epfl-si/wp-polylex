@@ -1,10 +1,12 @@
 function trimObjValues(obj) {
   return Object.keys(obj).reduce((acc, curr) => {
     if (
-      curr !== "descriptionFr" &&
-      curr !== "descriptionEn" &&
-      curr !== "subcategories"
+      curr == "descriptionFr" ||
+      curr == "descriptionEn" ||
+      curr == "subcategories"
     ) {
+      acc[curr] = obj[curr];
+    } else {
       acc[curr] = obj[curr].trim();
     }
     return acc;
