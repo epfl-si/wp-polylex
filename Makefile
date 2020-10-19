@@ -84,13 +84,13 @@ version-major:
 
 .PHONY: version-special
 version-special:
-	@if test "$(VERITAS_VERSION)" = "" ; then \
-		echo "Please set VERITAS_VERSION, example:"; \
-		echo "  make version-special VERITAS_VERSION=3.2.1"; \
+	@if test "$(POLYLEX_VERSION)" = "" ; then \
+		echo "Please set POLYLEX_VERSION, example:"; \
+		echo "  make version-special POLYLEX_VERSION=3.2.1"; \
 		exit 1; \
 	fi
-	@echo "Change version to $$VERITAS_VERSION"
-	@./change-version.sh -a -v $$VERITAS_VERSION
+	@echo "Change version to $$POLYLEX_VERSION"
+	@./change-version.sh -a -v $$POLYLEX_VERSION
 
 .PHONY: build
 build:

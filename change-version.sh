@@ -101,19 +101,19 @@ change-version-package() {
 }
 
 change-version-main() {
-  echo "Changing version in ansible/roles/epfl.wp-veritas/vars/main.yml"
+  echo "Changing version in ansible/roles/epfl.polylex/vars/main.yml"
   # As the variable contains dots, sed interprate them as widlcard...
   # → https://stackoverflow.com/a/39660183/960623
-  #sed -i "s/$ORIVERSION/$VERSION/g" ansible/roles/epfl.wp-veritas/vars/main.yml
-  sed -i "s@$(echo $ORIVERSION | sed 's/\./\\./g')@$VERSION@g" ansible/roles/epfl.wp-veritas/vars/main.yml
+  #sed -i "s/$ORIVERSION/$VERSION/g" ansible/roles/epfl.polylex/vars/main.yml
+  sed -i "s@$(echo $ORIVERSION | sed 's/\./\\./g')@$VERSION@g" ansible/roles/epfl.polylex/vars/main.yml
 }
 
 change-version-header() {
-  echo "Changing version in app/imports/ui/components/header/Header.jsx"
+  echo "Changing version in app/imports/ui/header/Header.jsx"
   # As the variable contains dots, sed interprate them as widlcard...
   # → https://stackoverflow.com/a/39660183/960623
-  #sed -i "s/$ORIVERSION/$VERSION/g" app/imports/ui/components/header/Header.jsx
-  sed -i "s@$(echo $ORIVERSION | sed 's/\./\\./g')@$VERSION@g" app/imports/ui/components/header/Header.jsx
+  #sed -i "s/$ORIVERSION/$VERSION/g" app/imports/ui/header/Header.jsx
+  sed -i "s@$(echo $ORIVERSION | sed 's/\./\\./g')@$VERSION@g" app/imports/ui/header/Header.jsx
 }
 
 ################################################################################
