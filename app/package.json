@@ -1,5 +1,6 @@
 {
   "name": "wp-polylex",
+  "version": "1.7.9",
   "private": true,
   "scripts": {
     "start": "meteor run",
