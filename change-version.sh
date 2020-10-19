@@ -40,10 +40,10 @@ summary() {
   echo "  package.json: $VERSION"
   ORIVERSION=$VERSION
 
-  ANSIBLEVERSION=$(cat ansible/roles/epfl.wp-veritas/vars/main.yml | grep 'wp_veritas_image_version:' | cut -d' ' -f2 | tr -d \')
+  ANSIBLEVERSION=$(cat ansible/roles/epfl.polylex/vars/main.yml | grep 'polylex_image_version:' | cut -d' ' -f2 | tr -d \')
   echo "  main.yml:     $ANSIBLEVERSION"
 
-  HEADERVERSION=$(cat app/imports/ui/components/header/Header.jsx | grep -o 'Version [[:digit:]]\.[[:digit:]]\.[[:digit:]]' | cut -d' ' -f2)
+  HEADERVERSION=$(cat app/imports/ui/header/Header.jsx | grep -o 'version [[:digit:]]\.[[:digit:]]\.[[:digit:]]' | cut -d' ' -f2)
   echo "  Header.jsx:   $HEADERVERSION"
 }
 
