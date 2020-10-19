@@ -58,15 +58,13 @@ test: check-env
 
 .PHONY: prettier-check
 prettier-check:
-	npx prettier --check "app/{client, private, server, tests}/**/*.js"
+	npx prettier --write "app/{client,private,server,tests}/**/*.{js,jsx}"
 	npx prettier --check "cli/**/*.js"
-	npx prettier --check "test/**/*.js"
 
 .PHONY: prettier
 prettier:
-	npx prettier --write "app/{client, private, server, tests}/**/*.js"
+	npx prettier --write "app/{client,private,server,tests}/**/*.{js,jsx}"
 	npx prettier --write "cli/**/*.js"
-	npx prettier --write "test/**/*.js"
 
 .PHONY: version
 version:
