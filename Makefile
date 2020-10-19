@@ -1,4 +1,4 @@
-# wp-veritas' Makefile
+# polylex Makefile
 SHELL := /bin/bash
 VERSION=$(shell ./change-version.sh -pv)
 
@@ -6,7 +6,7 @@ VERSION=$(shell ./change-version.sh -pv)
 help:
 	@echo "Main:"
 	@echo "  make help               — Display this help"
-	@echo "  make meteor             — Run application wp-veritas on localhost"
+	@echo "  make meteor             — Run application polylex on localhost"
 	@echo "Utilities:"
 	@echo "  make print-env          — Print the environment variables"
 	@echo "  make test               — Run test suite"
@@ -14,14 +14,13 @@ help:
 	@echo "  make prettier           — Prettier all the things"
 	@echo "  make prettier-check     — Check if prettier need to be run"
 	@echo "Release:"
-	@echo "  make version            — Get the version number of wp-veritas"
-	@echo "  make version-patch      — Bump wp-veritas version (patch)"
-	@echo "  make version-minor      — Bump wp-veritas version (minor)"
-	@echo "  make version-major      — Bump wp-veritas version (major)"
-	@echo "  make version-special    — Bump wp-veritas to specified version"
+	@echo "  make version            — Get the version number of polylex"
+	@echo "  make version-patch      — Bump polylex version (patch)"
+	@echo "  make version-minor      — Bump polylex version (minor)"
+	@echo "  make version-major      — Bump polylex version (major)"
+	@echo "  make version-special    — Bump polylex to specified version"
 	@echo "Publication and deployment:"
 	@echo "  make publish            — To build, tag and push new Image"
-	@echo "  make deploy-dev         — To deploy on dev environment"
 	@echo "  make deploy-test        — To deploy on test environment"
 	@echo "  make deploy-prod        — To deploy on prod environment"
 	@echo "Development:"
@@ -29,8 +28,7 @@ help:
 	@echo "  make dev-build          — Build Docker services for development"
 	@echo "  make dev-build-force    — Force build Docker services for development"
 	@echo "  make dev-exec           — Enter the meteor container"
-	@echo "  make dev-cli            — Install veritas-cli in the meteor container"
-	@echo "  make dev-data           — load-tests-data-on-localhost-db"
+	@echo "  make dev-cli            — Install polylex-cli in the meteor container"
 
 # To add all variable to your shell, use
 # export $(xargs < /keybase/team/epfl_polylex/env);
@@ -111,20 +109,6 @@ push:
 	docker push epflsi/polylex:latest
 	@echo '**** End push: ****'
 
-.PHONY: deploy-dev
-deploy-dev:
-	@echo '**** Start deploy: ****'
-	if [ -z "$$(oc project)" ]; then \
-		echo "pas loggué"; \
-		oc login; \
-	else \
-		echo "loggué"; \
-	fi
-	cd ansible/; \
-	export $$(xargs < /keybase/team/epfl_polylex/env); \
-	ansible-playbook playbook.yml -i hosts-dev -vvv
-	@echo '**** End deploy: ****'
-
 .PHONY: deploy-test
 deploy-test:
 	@echo '**** Start deploy: ****'
@@ -155,7 +139,6 @@ deploy-prod:
 
 .PHONY: publish
 publish:
-	#$(MAKE) apidoc
 	$(MAKE) build
 	$(MAKE) tag
 	$(MAKE) push
@@ -178,12 +161,12 @@ dev-build-force:
 
 .PHONY: dev-exec
 dev-exec:
-	@docker exec -it --user root wp-veritas_meteor bash
+	@docker exec -it --user root polylex_meteor bash
 
 .PHONY: dev-cli
 dev-cli:
-	@docker exec -it --user root wp-veritas_meteor /bin/bash -c "cd /src/cli && npm install && npm install -g ./ && cd /src/ && veritas-cli --help"
+	@docker exec -it --user root polylex_meteor /bin/bash -c "cd /src/cli && npm install && npm install -g ./ && cd /src/ && polylex-cli --help"
 
 .PHONY: dev-data
 dev-data: dev-cli
-	@docker exec -it --user root wp-veritas_meteor /bin/bash -c "cd /src && veritas-cli load-tests-data-on-localhost-db"
+	@docker exec -it --user root polylex_meteor /bin/bash -c "cd /src && polylex-cli load-tests-data-on-localhost-db"
