@@ -33,46 +33,28 @@ help:
 	@echo "  make dev-data           — load-tests-data-on-localhost-db"
 
 # To add all variable to your shell, use
-# export $(xargs < /keybase/team/epfl_wpveritas/env);
+# export $(xargs < /keybase/team/epfl_polylex/env);
 check-env:
-ifeq ($(wildcard /keybase/team/epfl_wpveritas/env),)
-	@echo "Be sure to have access to /keybase/team/epfl_wpveritas/env"
+ifeq ($(wildcard /keybase/team/epfl_polylex/env),)
+	@echo "Be sure to have access to /keybase/team/epfl_polylex/env"
 	@exit 1
 else
-include /keybase/team/epfl_wpveritas/env
+include /keybase/team/epfl_polylex/env
 endif
 
 print-env: check-env
-	@echo "WP_POLYLEX_DB_PASSWORD_DEV=${WP_POLYLEX_DB_PASSWORD_DEV}"
-	@echo "WP_POLYLEX_DB_PASSWORD_TEST=${WP_POLYLEX_DB_PASSWORD_TEST}"
-	@echo "WP_POLYLEX_DB_PASSWORD_PROD=${WP_POLYLEX_DB_PASSWORD_PROD}"
-	@echo "WP_POLYLEX_BOT_TOKEN_TEST=${WP_POLYLEX_BOT_TOKEN_TEST}"
-	@echo "WP_POLYLEX_ALERTS_TELEGRAM_IDS_TEST=${WP_POLYLEX_ALERTS_TELEGRAM_IDS_TEST}"
-	@echo "WP_POLYLEX_BOT_TOKEN=${WP_POLYLEX_BOT_TOKEN}"
-	@echo "WP_POLYLEX_ALERTS_TELEGRAM_IDS=${WP_POLYLEX_ALERTS_TELEGRAM_IDS}"
+	@echo "POLYLEX_DB_PASSWORD_TEST=${POLYLEX_DB_PASSWORD_TEST}"
+	@echo "POLYLEX_DB_PASSWORD_PROD=${POLYLEX_DB_PASSWORD_PROD}"
 	@echo "MOCHA_TIMEOUT=${MOCHA_TIMEOUT}"
 
 .PHONY: meteor
 meteor: check-env
 	@echo '**** Start meteor: ****'
-	#cd app/; env WP_POLYLEX_BOT_TOKEN_TEST=$$WP_POLYLEX_BOT_TOKEN_TEST WP_POLYLEX_ALERTS_TELEGRAM_IDS_TEST=$$WP_POLYLEX_ALERTS_TELEGRAM_IDS_TEST meteor --settings meteor-settings.json
-	cd app/; meteor --settings settings.json
+	cd app/; meteor --settings meteor-settings.json
 
-#.PHONY: test
-#test: check-env
-#	@echo '**** Run test: ****'
-#	@cd app; env MOCHA_TIMEOUT=$$MOCHA_TIMEOUT WP_VERITAS_BOT_TOKEN=$$WP_VERITAS_BOT_TOKEN_TEST WP_VERITAS_ALERTS_TELEGRAM_IDS=$$WP_VERITAS_ALERTS_TELEGRAM_IDS_TEST TEST_WATCH=1 meteor test --full-app --driver-package meteortesting:mocha --port 3888
-
-#.PHONY: apidoc
-#apidoc:
-#	@echo Running: npx apidoc --single -i $$(pwd)/app/server/ -o $$(pwd)/app/public/api/ -c $$(pwd)/app/
-#	@npx apidoc --single -i $$(pwd)/app/server/ -o $$(pwd)/app/public/api/ -c $$(pwd)/app/
-#	@read -p "Want to see the API Doc? [Yy]: " -n 1 -r; \
-#	if [[ ! $$REPLY =~ ^[Yy]$$ ]]; then \
-#		exit; \
-#	else \
-#		xdg-open $$(pwd)/app/public/api/index.html; \
-#	fi
+test: check-env
+	@echo '**** Run test: ****'
+	@cd app; env MOCHA_TIMEOUT=$$MOCHA_TIMEOUT TEST_WATCH=1 meteor test --full-app --driver-package meteortesting:mocha --port 3888
 
 .PHONY: prettier-check
 prettier-check:
@@ -104,13 +86,13 @@ version-major:
 
 .PHONY: version-special
 version-special:
-	@if test "$(WP_VERITAS_VERSION)" = "" ; then \
-		echo "Please set WP_VERITAS_VERSION, example:"; \
-		echo "  make version-special WP_VERITAS_VERSION=3.2.1"; \
+	@if test "$(VERITAS_VERSION)" = "" ; then \
+		echo "Please set VERITAS_VERSION, example:"; \
+		echo "  make version-special VERITAS_VERSION=3.2.1"; \
 		exit 1; \
 	fi
-	@echo "Change version to $$WP_VERITAS_VERSION"
-	@./change-version.sh -a -v $$WP_VERITAS_VERSION
+	@echo "Change version to $$VERITAS_VERSION"
+	@./change-version.sh -a -v $$VERITAS_VERSION
 
 .PHONY: build
 build:
@@ -169,13 +151,13 @@ deploy-prod:
 		echo "loggué"; \
 	fi
 	cd ansible/; \
-	export $$(xargs < /keybase/team/epfl_wpveritas/env); \
+	export $$(xargs < /keybase/team/epfl_polylex/env); \
 	ansible-playbook playbook.yml -i hosts-prod
 	@echo '**** End deploy: ****'
 
 .PHONY: publish
 publish:
-	$(MAKE) apidoc
+	#$(MAKE) apidoc
 	$(MAKE) build
 	$(MAKE) tag
 	$(MAKE) push
