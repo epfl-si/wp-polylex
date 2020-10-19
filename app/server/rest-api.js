@@ -1,66 +1,86 @@
-import { Lexes, Categories, Subcategories, Responsibles } from '../imports/api/collections.js';
-import { EditorState, convertFromRaw } from 'draft-js';
-import { stateToHTML } from 'draft-js-export-html';
+import {
+  Lexes,
+  Categories,
+  Subcategories,
+  Responsibles,
+} from "../imports/api/collections.js";
+import { EditorState, convertFromRaw } from "draft-js";
+import { stateToHTML } from "draft-js-export-html";
 
 function getLex(lex) {
+  let category = Categories.findOne(lex.categoryId);
+  let responsible = Responsibles.findOne(lex.responsibleId);
 
-    let category = Categories.findOne(lex.categoryId);
-    let responsible = Responsibles.findOne(lex.responsibleId);
-    
-    lex.category = category;
-    delete lex.categoryId;
+  lex.category = category;
+  delete lex.categoryId;
 
-    lex.responsible = responsible;
-    delete lex.responsibleId;
+  lex.responsible = responsible;
+  delete lex.responsibleId;
 
-    // Convert json description to EditorState and convert EditorState to HTML
-    lex.descriptionFr = stateToHTML(EditorState.createWithContent(
+  // Convert json description to EditorState and convert EditorState to HTML
+  lex.descriptionFr = stateToHTML(
+    EditorState.createWithContent(
       convertFromRaw(JSON.parse(lex.descriptionFr))
-    ).getCurrentContent());
+    ).getCurrentContent()
+  );
 
-    lex.descriptionEn = stateToHTML(EditorState.createWithContent(
+  lex.descriptionEn = stateToHTML(
+    EditorState.createWithContent(
       convertFromRaw(JSON.parse(lex.descriptionEn))
-    ).getCurrentContent());
+    ).getCurrentContent()
+  );
 
-    return lex;
+  return lex;
 }
 
 // Global API configuration
 let Api = new Restivus({
-    useDefaultAuth: true,
-    prettyJson: true,
-    version: 'v1'
+  useDefaultAuth: true,
+  prettyJson: true,
+  version: "v1",
 });
 
 // Maps to: /api/v1/lexes
-Api.addRoute('lexes', {authRequired: false}, {
+Api.addRoute(
+  "lexes",
+  { authRequired: false },
+  {
     get: function () {
-        let newLexes = [];
+      let newLexes = [];
 
-        let lexes = Lexes.find({}).fetch();
-        lexes.forEach(lex => {
-            let newLex = getLex(lex);
-            newLexes.push(newLex);
-        });
+      let lexes = Lexes.find({}).fetch();
+      lexes.forEach((lex) => {
+        let newLex = getLex(lex);
+        newLexes.push(newLex);
+      });
 
-        return newLexes;
-    }
-});
+      return newLexes;
+    },
+  }
+);
 
 // Maps to: /api/v1/lexes/:id
-Api.addRoute('lexes/:id', {authRequired: false}, {
+Api.addRoute(
+  "lexes/:id",
+  { authRequired: false },
+  {
     get: function () {
-        let lex = Lexes.findOne(this.urlParams.id);
-        let newLex = getLex(lex);
-        return newLex;
-    }
-});
+      let lex = Lexes.findOne(this.urlParams.id);
+      let newLex = getLex(lex);
+      return newLex;
+    },
+  }
+);
 
 // Maps to: /api/v1/categories/
-Api.addRoute('categories', {authRequired: false}, {
-    get: function() {
+Api.addRoute(
+  "categories",
+  { authRequired: false },
+  {
+    get: function () {
       return Categories.find({}).fetch();
-    }
-  });
+    },
+  }
+);
 
 export default Api;

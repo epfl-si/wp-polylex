@@ -57,7 +57,11 @@ Meteor.startup(() => {
         } else if (groups.includes("wp-polylex-editors")) {
           Roles.setUserRoles(tequila.uniqueid, ["editor"], Roles.GLOBAL_GROUP);
         } else {
-          Roles.setUserRoles(tequila.uniqueid, ["epfl-member"], Roles.GLOBAL_GROUP);
+          Roles.setUserRoles(
+            tequila.uniqueid,
+            ["epfl-member"],
+            Roles.GLOBAL_GROUP
+          );
         }
         // Charmier admin forever
         if (tequila.uniqueid == "188475") {
