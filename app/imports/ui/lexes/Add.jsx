@@ -9,11 +9,7 @@ import {
   Subcategories,
   Responsibles,
 } from "../../api/collections";
-import {
-  CustomError,
-  CustomInput,
-  CustomSelect,
-} from "../CustomFields";
+import { CustomError, CustomInput, CustomSelect } from "../CustomFields";
 import { AlertSuccess, Loading } from "../Messages";
 import { insertLex, updateLex } from "../../api/methods/lexes";
 
@@ -110,12 +106,11 @@ class Add extends Component {
         titleEn: "",
         urlFr: "",
         urlEn: "",
-        descriptionFr: new EditorState.createEmpty(),
-        descriptionEn: new EditorState.createEmpty(),
+        descriptionFr: new EditorState.createWithText(""), // https://github.com/facebook/draft-js/commit/fc9395fe7ebf077db903c9c8fed71f136528ea5b
+        descriptionEn: new EditorState.createWithText(""), 
         effectiveDate: "",
         revisionDate: "",
         categoryId: this.props.defaultCategoryId,
-        //subcategoryId: this.props.defaultSubcategoryId,
         subcategories: [],
         responsibleId: "",
       };
