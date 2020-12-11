@@ -35,3 +35,5 @@ ostrio:logger@2.0.8               # logger
 ostrio:loggermongo@2.0.5          # logger stores in MongoDB
 mdg:validated-method@1.2.0        # Improve meteor methods
 xolvio:cleaner@0.4.0              # Clean tests DB 
+
+pfafman:filesaver                 # Export CSV

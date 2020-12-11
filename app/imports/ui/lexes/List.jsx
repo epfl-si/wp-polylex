@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
 import { Link } from 'react-router-dom';
-import { Lexes, Categories, Subcategories } from '../../api/collections';
+import { Lexes, Categories, Subcategories, Responsibles } from '../../api/collections';
 import { Loading } from '../Messages';
 import moment from 'moment';
 import { removeLex } from '../../api/methods/lexes';
@@ -71,6 +71,46 @@ class List extends Component {
     );
   }
 
+  export = () => {
+    let lexes = this.props.lexes;
+    lexes.forEach(function (lex) {
+      // Responsible info
+      let responsible = Responsibles.findOne({ _id: lex.responsibleId });
+      lex.responsibleFirstName = responsible.firstName;
+      lex.responsibleLastName = responsible.lastName;
+      lex.responsibleUrlFr = responsible.urlFr;
+      lex.responsibleUrlEn = responsible.urlEn;
+
+      // Category info
+      let category = Categories.findOne({ _id: lex.categoryId });
+      lex.categoryNameFr = category.nameFr;
+      lex.categoryNameEn = category.nameEn;
+    });
+    const csv = Papa.unparse({
+      // Define fields to export
+      fields: [
+        "_id",
+        "lex",
+        "titleFr",
+        "titleEn",
+        "urlFr",
+        "urlEn",
+        "effectiveDate",
+        "revisionDate",
+        "responsibleFirstName",
+        "responsibleLastName",
+        "responsibleUrlFr",
+        "responsibleUrlEn",
+        "categoryNameFr",
+        "categoryNameEn",
+      ],
+      data: lexes,
+    });
+
+    const blob = new Blob([csv], { type: "text/plain;charset=utf-8;" });
+    saveAs(blob, "polylex.csv");
+  }
+
   render() {
     let content;
     let isLoading = (this.props.categories == undefined || this.props.lexes == undefined);
@@ -79,7 +119,12 @@ class List extends Component {
     } else {
       content = (
         <div className="">
-          <h4 className="py-4 float-left">Polylex</h4>
+          <h4 className="py-3 float-left">Polylex</h4>
+          <div className="mt-1 text-right">
+            <button onClick={(e) => this.export(e)} className="btn btn-primary">
+              Exporter CSV
+            </button>
+          </div>
           <table className="table table-striped">
             <thead>
               <tr>
@@ -108,6 +153,7 @@ export default withTracker(() => {
   Meteor.subscribe('lexes');
   Meteor.subscribe('categories');
   Meteor.subscribe('subcategories');
+  Meteor.subscribe('responsibles');
 
   let lexes = Lexes.find({}).fetch();
   
@@ -115,5 +161,6 @@ export default withTracker(() => {
     lexes: lexes,
     categories: Categories.find({}).fetch(),
     subcategories: Subcategories.find({}).fetch(),
+    responsibles: Responsibles.find({}).fetch(),
   };
 })(List);
