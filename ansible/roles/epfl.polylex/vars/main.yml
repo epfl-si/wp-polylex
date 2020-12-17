@@ -6,10 +6,10 @@ polylex_route_name: polylex
 polylex_secret_name: "polylex"
 polylex_cname: "{{ 'polylex-admin.epfl.ch' if openshift_namespace == 'wwp' else 'polylex.128.178.222.83.nip.io' }}"
 polylex_deploy_name: polylex
-polylex_image_version: '1.8.0'
+polylex_image_version: '1.8.1'
 polylex_image_tag: 'epflsi/polylex:{{ polylex_image_version }}'
 polylex_db_name: "polylex"
 polylex_db_user: "polylex"
-polylex_db_password: "{{ lookup('env','POLYLEX_DB_PASSWORD_PROD') if openshift_namespace == 'wwp' else lookup('env','POLYLEX_DB_PASSWORD_TEST') }}"
-meteor_settings_env: " {{ lookup('env','METEOR_SETTINGS') }}"
+polylex_secrets: "{{ lookup('file', '/keybase/team/epfl_polylex/ansible_polylex_secrets.yml') | from_yaml }}"
+polylex_db_password: "{{ polylex_secrets.frontend.credentials.POLYLEX_DB_PASSWORD_PROD if openshift_namespace == 'wwp' else polylex_secrets.frontend.credentials.POLYLEX_DB_PASSWORD_TEST }}"
 db_host: "{{ 'mongodb-svc-1' if openshift_namespace == 'wwp' else 'test-mongodb-svc-1' }}"
