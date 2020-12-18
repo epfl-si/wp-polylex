@@ -62,7 +62,15 @@ updateRoles = () => {
 };
 
 importData = () => {
-  updateRoles();
+  let lexes = Lexes.find({});
+  lexes.forEach((lex) => {
+    if ( ! ("subcategories" in lex)) {  
+      Lexes.update(
+        { _id: lex._id },
+        { $set: { subcategories: [] } }
+      );
+    } 
+  });
 };
 
 export { deleteAll, importData };

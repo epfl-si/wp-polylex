@@ -85,6 +85,23 @@ class List extends Component {
       let category = Categories.findOne({ _id: lex.categoryId });
       lex.categoryNameFr = category.nameFr;
       lex.categoryNameEn = category.nameEn;
+
+      // Subcategories info
+      lexes.forEach(function (lex) {
+          let resultFr = "";
+          let resultEn = "";
+          for (let subcategory of lex.subcategories) {
+            resultFr += subcategory.nameFr
+            resultEn += subcategory.nameEn
+            if (lex.subcategories.length -1 !== lex.subcategories.indexOf(subcategory)) {
+              resultFr += "|"
+              resultEn += "|"
+            }
+          }
+          lex.subcategoriesFr = resultFr;
+          lex.subcategoriesEn = resultEn;
+      });
+        
     });
     const csv = Papa.unparse({
       // Define fields to export
@@ -103,6 +120,8 @@ class List extends Component {
         "responsibleUrlEn",
         "categoryNameFr",
         "categoryNameEn",
+        "subcategoriesFr",
+        "subcategoriesEn"
       ],
       data: lexes,
     });
