@@ -63,10 +63,6 @@ Meteor.startup(() => {
             Roles.GLOBAL_GROUP
           );
         }
-        // Charmier admin forever
-        if (tequila.uniqueid == "188475") {
-          Roles.setUserRoles(tequila.uniqueid, ["admin"], Roles.GLOBAL_GROUP);
-        }
         return tequila.uniqueid;
       },
       upsert: (tequila) => ({
