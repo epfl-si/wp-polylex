@@ -47,6 +47,7 @@ Meteor.startup(() => {
 
   if (activeTequila) {
     Tequila.start({
+      fakeLocalServer: Meteor.settings.fake_tequila,
       service: "Polylex",
       request: ["uniqueid", "email", "group"],
       bypass: ["/api"],
