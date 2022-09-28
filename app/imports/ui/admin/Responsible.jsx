@@ -127,7 +127,7 @@ const ResponsiblesList = (props) => {
   const responsibles = useFind(() => Responsibles.find({}, { sort: { lastName: 1 } }), []);
 
   if (isLoading()) {
-    return <Loading />
+    return <Loading />;
   } else {
     return (
         <>

@@ -67,10 +67,7 @@ class App extends Component {
                 <Route path="/admin/category/add" element={<Category />} />
                 <Route path="/admin/category/:_id/edit" element={<Category />} />
                 <Route path="/admin/subcategory/add" element={<Subcategory />} />
-                <Route
-                  path="/admin/subcategory/:_id/edit"
-                  element={<Subcategory />}
-                />
+                <Route path="/admin/subcategory/:_id/edit" element={<Subcategory />} />
                 {isAdmin && <Route path="/admin/log/list/*" element={<Log />} />}
               </Routes>
           ) : null}
