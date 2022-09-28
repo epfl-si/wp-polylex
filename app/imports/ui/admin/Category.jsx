@@ -13,7 +13,7 @@ import {
 
 
 export const Category = () => {
-  const isLoading = useSubscribe('responsibles');
+  const isLoading = useSubscribe('categories');
   const { _id } = useParams();
 
   window.history.replaceState({}, document.title)
@@ -55,7 +55,7 @@ export const Category = () => {
         setAddSuccess(true);
       }
     });
-  }
+  };
 
   const editCategory = (values, actions) => {
     updateCategory.call(values, (errors) => {
@@ -86,7 +86,7 @@ export const Category = () => {
   };
 
   if (isLoading()) {
-    return <Loading/>
+    return <Loading/>;
   } else {
     return (
       <>
