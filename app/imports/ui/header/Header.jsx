@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import logo from './Logo_EPFL.svg';
 import { Loading } from '../Messages';
@@ -25,8 +25,8 @@ const Header = (props) => {
                 Polylex
               </a>
               <div className="dropdown-menu" >
-                <NavLink className="dropdown-item" exact to="/" activeClassName="active">Voir les LEX</NavLink>                                
-                <NavLink className="dropdown-item" to="/add" activeClassName="active">Ajouter un nouveau lex</NavLink>
+                <NavLink className="{({isActive}) => (isActive ? 'active-style' : '')} dropdown-item" end to="/">Voir les LEX</NavLink>
+                <NavLink className="{({isActive}) => (isActive ? 'active-style' : '')} dropdown-item" to="/add">Ajouter un nouveau lex</NavLink>
               </div>
             </li>
            
@@ -36,17 +36,17 @@ const Header = (props) => {
               </a>
               <div className="dropdown-menu" aria-labelledby="navbarDropdown">
               
-                <Fragment>
-                  <NavLink className="dropdown-item" to="/admin/responsible/add" activeClassName="active">Responsables</NavLink>
-                  <NavLink className="dropdown-item" to="/admin/category/add" activeClassName="active">Rubriques</NavLink>
-                  <NavLink className="dropdown-item" to="/admin/subcategory/add" activeClassName="active">Sous-rubriques</NavLink>
-                </Fragment>
+                <>
+                  <NavLink className="{({isActive}) => (isActive ? 'active-style' : '')} dropdown-item" to="/admin/responsible/add">Responsables</NavLink>
+                  <NavLink className="{({isActive}) => (isActive ? 'active-style' : '')} dropdown-item" to="/admin/category/add">Rubriques</NavLink>
+                  <NavLink className="{({isActive}) => (isActive ? 'active-style' : '')} dropdown-item" to="/admin/subcategory/add">Sous-rubriques</NavLink>
+                </>
                 
               { isAdmin ?
-                <Fragment>
-                  <NavLink className="dropdown-item" to="/admin/log/list" activeClassName="active">Voir les logs</NavLink>
+                <>
+                  <NavLink className="{({isActive}) => (isActive ? 'active-style' : '')} dropdown-item" to="/admin/log/list">Voir les logs</NavLink>
                   <div className="dropdown-item">Polylex - version 1.8.1</div>
-                </Fragment>
+                </>
                 : null}
               </div>
             </li>

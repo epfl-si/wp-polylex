@@ -1,5 +1,5 @@
-import { BrowserRouter as Router, Route } from "react-router-dom";
-import React, { Component, Fragment } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import React, { Component } from "react";
 import { withTracker } from "meteor/react-meteor-data";
 import Footer from "./footer/Footer";
 import Header from "./header/Header";
@@ -53,37 +53,30 @@ class App extends Component {
     );
 
     return (
-      <Router>
+      <BrowserRouter>
         <div className="App container">
           {this.getEnvironment() === "PROD" ? null : ribbon}
           <Header />
           {isAdmin || isEditor ? (
-            <Fragment>
-              <Route exact path="/" component={List} />
-              <Route exact path="/add" component={Add} />
-              <Route path="/edit/:_id" component={Add} />
-              <Route path="/admin/responsible/add" component={Responsible} />
-              <Route
-                path="/admin/responsible/:_id/edit"
-                component={Responsible}
-              />
-              <Route path="/admin/category/add" component={Category} />
-              <Route path="/admin/category/:_id/edit" component={Category} />
-              <Route path="/admin/subcategory/add" component={Subcategory} />
-              <Route
-                path="/admin/subcategory/:_id/edit"
-                component={Subcategory}
-              />
-            </Fragment>
-          ) : null}
-          {isAdmin ? (
-            <Fragment>
-              <Route exact path="/admin/log/list" component={Log} />
-            </Fragment>
+              <Routes>
+                <Route path="/*" element={<List />} />
+                <Route path="/add/*" element={<Add />} />
+                <Route path="/edit/:_id" element={<Add />} />
+                <Route path="/admin/responsible/add" element={<Responsible />} />
+                <Route path="/admin/responsible/:_id/edit" element={<Responsible />} />
+                <Route path="/admin/category/add" element={<Category />} />
+                <Route path="/admin/category/:_id/edit" element={<Category />} />
+                <Route path="/admin/subcategory/add" element={<Subcategory />} />
+                <Route
+                  path="/admin/subcategory/:_id/edit"
+                  element={<Subcategory />}
+                />
+                {isAdmin && <Route path="/admin/log/list/*" element={<Log />} />}
+              </Routes>
           ) : null}
           <Footer />
         </div>
-      </Router>
+      </BrowserRouter>
     );
   }
 }
