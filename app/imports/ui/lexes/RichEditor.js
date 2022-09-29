@@ -214,7 +214,7 @@ export class PolylexRichEditor extends React.Component {
               editorState={editorState}
               handleKeyCommand={this.handleKeyCommand}
               onChange={this.onChange}
-              onTab={this.onTab}
+              keyBindingFn={self.keyBindingFn}
               placeholder=""
               ref={reference}
               spellCheck={true} 
