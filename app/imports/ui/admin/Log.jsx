@@ -1,61 +1,67 @@
-import { withTracker } from 'meteor/react-meteor-data';
-import React, { Component, Fragment } from 'react';
-import { AppLogs } from '../../api/collections';
+import { useFind, useSubscribe } from 'meteor/react-meteor-data'
+import React from 'react';
+import { AppLogs } from '../../api/collections'
 import moment from 'moment';
+import { Loading } from '../Messages'
 
-class LogCells extends Component {
 
-  getDate(date){
-    return moment(date).format("MM-DD-YYYY hh:mm:ss");
-  }
+const getDate = (date) => {
+  return moment(date).format("MM-DD-YYYY hh:mm:ss");
+}
 
-  render() {
-    
-    return ( 
+export const LogCells = (props) => {
+  return (
       <tbody>
-      { this.props.logs.map( (log, index) => (
-        <tr key={ log._id }>
-          <td scope="row">{ index+1 }</td>
-          <td>{ this.getDate(log.date) }</td>
-          <td>{ log.userId }</td>
-          <td>{ log.message }</td>
-          <td>{ JSON.stringify(log.additional.before, Object.keys(log.additional.before).sort(), 2) }</td>
-          <td>{ JSON.stringify(log.additional.after, Object.keys(log.additional.after).sort(), 2) }</td>
-        </tr>
+      { props.logs && props.logs.map( (log, index) => (
+          <tr key={ log._id }>
+            <td scope="row">{ index+1 }</td>
+            <td>{ getDate(log.date) }</td>
+            <td>{ log.userId }</td>
+            <td>{ log.message }</td>
+            { log.additional && log.additional.length ?
+                <>
+                  <td>{ JSON.stringify(log.additional.before, Object.keys(log.additional.before).sort(), 2) }</td>
+                  <td>{ JSON.stringify(log.additional.after, Object.keys(log.additional.after).sort(), 2) }</td>
+                </> :
+                <>
+                  <td></td>
+                  <td></td>
+                </>
+            }
+          </tr>
       ))}
       </tbody>
-    )
-  }
+  );
 }
 
-class Log extends Component {
+export const Log = () => {
+  const isLoading = useSubscribe('log.list');
+  const logs = useFind(() => AppLogs.find({}, { sort: { date: -1 } }), []);
 
-  render() {
-    let content;
-    content = (
-      <Fragment>
-        <h5 className="card-header">Liste des logs</h5>
-        <table id="log" className="table table-striped">
+  if (isLoading()) {
+    return <Loading />;
+  } else {
+    return (
+        <>
+          <h5 className="card-header">Liste des logs</h5>
+          <table id="log" className="table table-striped">
             <thead>
-              <tr>
-                <th scope="col" style={ { width: "5%" } }>#</th>
-                <th scope="col" style={ { width: "10%" } }>Date</th>
-                <th scope="col" style={ { width: "10%" } }>Sciper</th>
-                <th scope="col" style={ { width: "15%" } }>Message</th>
-                <th scope="col" style={ { width: "30%" } }>Avant</th>
-                <th scope="col" style={ { width: "30%" } }>Après</th>
-              </tr>
+            <tr>
+              <th scope="col" style={ { width: "5%" } }>#</th>
+              <th scope="col" style={ { width: "10%" } }>Date</th>
+              <th scope="col" style={ { width: "10%" } }>Sciper</th>
+              <th scope="col" style={ { width: "15%" } }>Message</th>
+              <th scope="col" style={ { width: "30%" } }>Avant</th>
+              <th scope="col" style={ { width: "30%" } }>Après</th>
+            </tr>
             </thead>
-            <LogCells logs={ this.props.logs } />
+            { logs &&
+                <LogCells logs={ logs }/>
+            }
           </table>
-      </Fragment>
+        </>
     );
-    return content;
   }
 }
-export default withTracker(() => {
-  Meteor.subscribe('log.list');
-  return {
-    logs: AppLogs.find({}, {sort: {date: -1}}).fetch(),
-  };
-})(Log);
+
+export default Log
