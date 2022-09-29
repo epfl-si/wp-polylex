@@ -17,7 +17,7 @@ export const LogCells = (props) => {
             <td scope="row">{ index+1 }</td>
             <td>{ getDate(log.date) }</td>
             <td>{ log.userId }</td>
-            <td>{ JSON.stringify(log.additional) }</td>
+            <td>{ log.message }</td>
             { log.additional ?
                 <>
                   <td>{ log.additional.before && JSON.stringify(log.additional.before, Object.keys(log.additional.before).sort(), 2) }</td>
