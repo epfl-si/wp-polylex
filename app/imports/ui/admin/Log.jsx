@@ -17,11 +17,11 @@ export const LogCells = (props) => {
             <td scope="row">{ index+1 }</td>
             <td>{ getDate(log.date) }</td>
             <td>{ log.userId }</td>
-            <td>{ log.message }</td>
-            { log.additional && log.additional.length ?
+            <td>{ JSON.stringify(log.additional) }</td>
+            { log.additional ?
                 <>
-                  <td>{ JSON.stringify(log.additional.before, Object.keys(log.additional.before).sort(), 2) }</td>
-                  <td>{ JSON.stringify(log.additional.after, Object.keys(log.additional.after).sort(), 2) }</td>
+                  <td>{ log.additional.before && JSON.stringify(log.additional.before, Object.keys(log.additional.before).sort(), 2) }</td>
+                  <td>{ log.additional.after && JSON.stringify(log.additional.after, Object.keys(log.additional.after).sort(), 2) }</td>
                 </> :
                 <>
                   <td></td>
