@@ -45,7 +45,7 @@ const Header = (props) => {
               { isAdmin ?
                 <>
                   <NavLink className="{({isActive}) => (isActive ? 'active-style' : '')} dropdown-item" to="/admin/log/list">Voir les logs</NavLink>
-                  <div className="dropdown-item">Polylex - version 1.8.1</div>
+                  <div className="dropdown-item">Polylex - version 1.9.0</div>
                 </>
                 : null}
               </div>
@@ -54,7 +54,9 @@ const Header = (props) => {
           </ul>                                  
         </div>
         : null}
-        <div> Utilisateur connecté: <a target="_blank" href={ peopleUrl }> { props.currentUser.username } </a></div>
+        <div>
+          Utilisateur connecté: <a target="_blank" href={ peopleUrl }> { props.currentUser.username || props.currentUser._id } </a>
+        </div>
       </header>
     )
   }
