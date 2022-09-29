@@ -7,7 +7,7 @@ import { Link, useParams } from 'react-router-dom'
 import { AlertSuccess, Loading } from "../Messages";
 import { insertResponsible, updateResponsible, removeResponsible } from "../../api/methods/responsibles";
 
-export const Responsible = () => {
+const Responsible = () => {
   const isLoading = useSubscribe('responsibles');
 
   window.history.replaceState({}, document.title)

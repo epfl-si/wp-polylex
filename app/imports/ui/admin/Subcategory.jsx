@@ -8,7 +8,7 @@ import { AlertSuccess, Loading } from "../Messages";
 import { insertSubcategory, updateSubcategory, removeSubcategory } from '../../api/methods/subcategories';
 
 
-export const Subcategory = () => {
+const Subcategory = () => {
   const isLoading = useSubscribe('subcategories');
   const { _id } = useParams();
 

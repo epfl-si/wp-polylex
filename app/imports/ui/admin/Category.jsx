@@ -12,7 +12,7 @@ import {
 } from "../../api/methods/categories";
 
 
-export const Category = () => {
+const Category = () => {
   const isLoading = useSubscribe('categories');
   const { _id } = useParams();
 
@@ -126,7 +126,7 @@ export const Category = () => {
   }
 }
 
-export const CategoriesList = (props) => {
+const CategoriesList = (props) => {
   const isLoading = useSubscribe('categories');
   const categories = useFind(() => Categories.find({}, { sort: { nameFr: 1 } }), []);
 
