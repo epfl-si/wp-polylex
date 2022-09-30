@@ -13,7 +13,7 @@ import "../imports/api/methods/subcategories";
 import "../imports/api/methods/lexes";
 
 Meteor.startup(() => {
-  let needImportData = false;
+  let needImportData = true;
   let activeTequila = true;
 
   // Define lang <html lang="fr" />
