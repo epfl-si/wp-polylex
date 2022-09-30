@@ -149,11 +149,8 @@ const LexForm = ({
   );
 
   const getLex = (lexId) => {
-    console.log(`getting lex ${lexId}`);
     // Get the URL parameter
     let lex = Lexes.findOne({ _id: lexId });
-
-    console.log(`found ${lex}`);
 
     if (lex !== undefined) {
       lex.descriptionFr = EditorState.createWithContent(
