@@ -18,35 +18,27 @@ const Cells = (props) => {
     return categoryNameFr;
   }
 
-  const getSubcategoryNameFr = (subcategoryId) => {
-    let subcategoryNameFr;
-    for(const subcategory of props.subcategories) {
-      if (subcategory._id === subcategoryId) {
-        subcategoryNameFr = subcategory.nameFr;
-        break;
-      }
-    }
-    return subcategoryNameFr;
-  }
-
   return (
       <tbody>
       {props.lexes.map( (lex) => (
           <tr key={lex._id}>
             <td><a href={lex.urlFr} target="_blank">{lex.lex}</a></td>
             <td>{lex.titleFr}</td>
-            <td>{moment(lex.effectiveDate).format('DD-MM-YYYY')}</td>
-            <td>{moment(lex.revisionDate).format('DD-MM-YYYY')}</td>
+            <td>{lex.effectiveDate && moment(lex.effectiveDate).format('DD-MM-YYYY')}</td>
+            <td>{lex.revisionDate && moment(lex.revisionDate).format('DD-MM-YYYY')}</td>
+            <td>{lex.isAbrogated && lex.abrogationDate && moment(lex.abrogationDate).format('DD-MM-YYYY')}</td>
             <td>{getCategoryNameFr(lex.categoryId)}</td>
-            <td>{getSubcategoryNameFr(lex.subcategoryId)}</td>
-            <td>
+            <td>{ lex.subcategories && lex.subcategories.map(
+                (sub) => <div key={sub._id}>{sub.nameFr}</div>
+            )}</td>
+            <td style={{whiteSpace: "nowrap"}}>
               <Link className="mr-2" to={`/edit/${lex._id}`}>
                 <button type="button" className="btn btn-outline-primary">Éditer</button>
-              </Link>
+              </Link>&nbsp;
               <button
                   type="button"
                   className="btn btn-outline-primary"
-                  onClick={ () => { if (window.confirm('Are you sure you wish to delete this item?')) this.props.deleteLex(lex._id) }}
+                  onClick={ () => { if (window.confirm('Are you sure you wish to delete this item?')) props.deleteLex(lex._id) }}
               >Supprimer</button>
             </td>
           </tr>
@@ -92,6 +84,8 @@ export const List = ({isLoading, lexes, categories, subcategories}) => {
         "urlEn",
         "effectiveDate",
         "revisionDate",
+        "isAbrogated",
+        "abrogationDate",
         "responsibleFirstName",
         "responsibleLastName",
         "responsibleUrlFr",
@@ -124,6 +118,7 @@ export const List = ({isLoading, lexes, categories, subcategories}) => {
             <th scope="col">Title</th>
             <th scope="col" className="w-25">Date d'entrée en vigueur</th>
             <th scope="col" className="w-25">Date de révision</th>
+            <th scope="col" className="w-25">Date d'abrogation</th>
             <th scope="col">Rubrique</th>
             <th scope="col">Sous-rubrique</th>
             <th className="w-50">Actions</th>
@@ -138,8 +133,6 @@ export const List = ({isLoading, lexes, categories, subcategories}) => {
       </div>
     )
   }
-
-
 }
 
 export default withTracker(() => {

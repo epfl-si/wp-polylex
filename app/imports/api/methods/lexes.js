@@ -1,11 +1,11 @@
 import SimpleSchema from "simpl-schema";
-import { _ } from "meteor/underscore";
 import { lexesSchema, Lexes } from "../collections";
 import { AppLogger } from "../logger";
 import { throwMeteorError } from "../error";
 import { trimObjValues } from "./utils";
 import { rateLimiter } from "./rate-limiting";
 import { Editor, PolylexValidatedMethod } from "./roles";
+
 
 function prepareUpdateInsertLex(lex, action) {
 
@@ -22,14 +22,14 @@ function prepareUpdateInsertLex(lex, action) {
     lex.urlEn = urlEn.slice(0, -1);
   }
 
-  // Check if LEX is unique
-  let lexes = Lexes.find({ lex: lex.lex });
+  // Check if LEX is unique in the active ones
+  let lexes = Lexes.find({ lex: lex.lex, isAbrogated: {$ne: true} });
 
   if (action === "update") {
     if (lexes.count() > 1) {
       throwMeteorError("lex", "Ce LEX existe déjà !");
-    } else if (lexes.count() == 1) {
-      if (lexes.fetch()[0]._id != lex._id) {
+    } else if (lexes.count() === 1) {
+      if (lexes.fetch()[0]._id !== lex._id) {
         throwMeteorError("lex", "Cet LEX existe déjà !");
       }
     }
@@ -44,7 +44,7 @@ function prepareUpdateInsertLex(lex, action) {
   }
 
   // Check if responsible is empty
-  if (lex.responsibleId.length == 0) {
+  if (lex.responsibleId.length === 0) {
     throwMeteorError(
       "responsibleId",
       "Vous devez sélectionner au moins 1 responsable"
@@ -68,6 +68,8 @@ const insertLex = new PolylexValidatedMethod({
       descriptionEn: newLex.jsonDescriptionEn,
       effectiveDate: newLex.effectiveDate,
       revisionDate: newLex.revisionDate,
+      isAbrogated: newLex.isAbrogated,
+      abrogationDate: newLex.abrogationDate,
       categoryId: newLex.categoryId,
       subcategories: newLex.subcategories,
       responsibleId: newLex.responsibleId,
@@ -86,6 +88,8 @@ const insertLex = new PolylexValidatedMethod({
       descriptionEn: newLex.jsonDescriptionEn,
       effectiveDate: newLex.effectiveDate,
       revisionDate: newLex.revisionDate,
+      isAbrogated: newLex.isAbrogated,
+      abrogationDate: newLex.abrogationDate,
       categoryId: newLex.categoryId,
       subcategories: newLex.subcategories,
       responsibleId: newLex.responsibleId,
@@ -119,6 +123,8 @@ const updateLex = new PolylexValidatedMethod({
       descriptionEn: newLex.jsonDescriptionEn,
       effectiveDate: newLex.effectiveDate,
       revisionDate: newLex.revisionDate,
+      isAbrogated: newLex.isAbrogated,
+      abrogationDate: newLex.abrogationDate,
       categoryId: newLex.categoryId,
       subcategories: newLex.subcategories,
       responsibleId: newLex.responsibleId,
@@ -138,6 +144,8 @@ const updateLex = new PolylexValidatedMethod({
       descriptionEn: newLex.jsonDescriptionEn,
       effectiveDate: newLex.effectiveDate,
       revisionDate: newLex.revisionDate,
+      isAbrogated: newLex.isAbrogated,
+      abrogationDate: newLex.abrogationDate,
       categoryId: newLex.categoryId,
       subcategories: newLex.subcategories,
       responsibleId: newLex.responsibleId,

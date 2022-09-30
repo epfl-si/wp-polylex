@@ -16,7 +16,7 @@ import { insertLex, updateLex } from "../../api/methods/lexes";
 import { MySelect } from "./Select";
 import "./rich-editor.css";
 import { PolylexRichEditor } from "./RichEditor";
-
+import Switch from "react-switch";
 
 const Add = ({ isLoading }) => {
 
@@ -133,6 +133,32 @@ const Add = ({ isLoading }) => {
   }
 }
 
+const AbrogeSwitch = (props) => {
+  const [checked, setChecked] = useState(!props.value);
+  const handleChange = nextChecked => {
+    setChecked(nextChecked);
+    props.setFieldValue(props.name, checked, false);
+  };
+
+  return (
+    <>
+      <span className={ 'pt-2' }>
+        <Switch
+            className="react-switch"
+            checked={ checked }
+            onChange={ handleChange }
+            uncheckedIcon={false}
+            offColor={'#F00'}
+            name={props.name}
+            value={checked}
+        />
+      </span>
+        <span className={ 'pl-2 align-self-center' }>
+        { checked ? `Active` : `Abrogé` }
+      </span>
+    </>);
+}
+
 const LexForm = ({
   lexId, onSubmit, clearUserMsg,
 }) => {
@@ -177,6 +203,8 @@ const LexForm = ({
         descriptionEn: new EditorState.createWithText(""),
         effectiveDate: "",
         revisionDate: "",
+        isAbrogated: false,
+        abrogationDate: "",
         categoryId: "",
         subcategories: [],
         responsibleId: "",
@@ -204,15 +232,25 @@ const LexForm = ({
           isSubmitting,
         }) => (
             <form onSubmit={ handleSubmit } className="bg-white border p-4">
-              <div className="my-1 text-right">
-                <button
-                    type="submit"
-                    disabled={ isSubmitting }
-                    className="btn btn-primary"
-                >
-                  Enregistrer
-                </button>
+              <div className={`d-flex justify-content-between`}>
+                <div className="text-left row justify-content-center align-self-center ml-1">
+                </div>
+                <div className="text-right">
+                  <button
+                      type="submit"
+                      disabled={ isSubmitting }
+                      className="btn btn-primary"
+                  >
+                    Enregistrer
+                  </button>
+                </div>
               </div>
+              <Field
+                  name="isAbrogated"
+                  type="checkbox"
+                  as={ AbrogeSwitch }
+                  setFieldValue={ setFieldValue }
+              />
               <Field
                   onChange={ (e) => {
                     handleChange(e);
@@ -357,6 +395,23 @@ const LexForm = ({
                     handleBlur(e);
                     clearUserMsg();
                   } }
+                  placeholder="Date d'abrogation"
+                  label="Date d'abrogation"
+                  name="abrogationDate"
+                  type="date"
+                  component={ CustomInput }
+              />
+              <ErrorMessage name="abrogationDate" component={ CustomError }/>
+
+              <Field
+                  onChange={ (e) => {
+                    handleChange(e);
+                    clearUserMsg();
+                  } }
+                  onBlur={ (e) => {
+                    handleBlur(e);
+                    clearUserMsg();
+                  } }
                   label="Rubrique"
                   name="categoryId"
                   component={ CustomSelect }
@@ -406,15 +461,22 @@ const LexForm = ({
                     name="subcategories"
                 />
               </div>
-
-              <div className="my-1 text-right">
-                <button
-                    type="submit"
-                    disabled={ isSubmitting }
-                    className="btn btn-primary"
-                >
-                  Enregistrer
-                </button>
+              <div className={`d-flex justify-content-between mb-3`}>
+                <div className="text-left row justify-content-center align-self-center ml-1">
+                  <Field
+                      onChange={ (e) => {
+                        handleChange(e);
+                        clearUserMsg();
+                      } }
+                      onBlur={ (e) => {
+                        handleBlur(e);
+                        clearUserMsg();
+                      } }
+                      name="isAbrogated"
+                      type="boolean"
+                      as={ AbrogeSwitch }
+                  />
+                </div>
               </div>
             </form>
         ) }
