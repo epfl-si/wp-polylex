@@ -458,6 +458,15 @@ const LexForm = ({
                     name="subcategories"
                 />
               </div>
+              <div className="text-right">
+                <button
+                    type="submit"
+                    disabled={ isSubmitting }
+                    className="btn btn-primary"
+                >
+                  Enregistrer
+                </button>
+              </div>
             </form>
         ) }
       </Formik>
