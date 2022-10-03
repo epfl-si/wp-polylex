@@ -1,7 +1,6 @@
 import {
   Lexes,
   Categories,
-  Subcategories,
   Responsibles,
 } from "../imports/api/collections.js";
 import { EditorState, convertFromRaw } from "draft-js";
@@ -40,15 +39,29 @@ let Api = new Restivus({
   version: "v1",
 });
 
-// Maps to: /api/v1/lexes
+// Maps to:
+// - /api/v1/lexes
+// - /api/v1/lexes?abrogated=0
+// - /api/v1/lexes?abrogated=1
 Api.addRoute(
   "lexes",
   { authRequired: false },
   {
     get: function () {
+      const query = this.queryParams;
       let newLexes = [];
+      let lexes;
 
-      let lexes = Lexes.find({}).fetch();
+      if (query.isAbrogated) {
+        if (['true', '1'].includes(query.isAbrogated)) {
+          lexes = Lexes.find({'isAbrogated': true}).fetch();
+        } else if (['false', '0'].includes(query.isAbrogated)) {
+          lexes = Lexes.find({'isAbrogated': {$ne: true}}).fetch();
+        }
+      } else {
+        lexes = Lexes.find({}).fetch();
+      }
+
       lexes.forEach((lex) => {
         let newLex = getLex(lex);
         newLexes.push(newLex);
@@ -66,8 +79,7 @@ Api.addRoute(
   {
     get: function () {
       let lex = Lexes.findOne(this.urlParams.id);
-      let newLex = getLex(lex);
-      return newLex;
+      return getLex(lex);
     },
   }
 );
