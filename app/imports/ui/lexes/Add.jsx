@@ -141,8 +141,8 @@ const AbrogeSwitch = (props) => {
   };
 
   return (
-    <>
-      <span className={ 'pt-2' }>
+    <div className={'mb-2'}>
+      <span>
         <Switch
             className="react-switch"
             checked={ checked }
@@ -153,10 +153,10 @@ const AbrogeSwitch = (props) => {
             value={checked}
         />
       </span>
-        <span className={ 'pl-2 align-self-center' }>
+      <span className={ 'pl-2' }>
         { checked ? `Actif` : `Abrogé` }
       </span>
-    </>);
+    </div>);
 }
 
 const LexForm = ({
@@ -232,24 +232,21 @@ const LexForm = ({
           isSubmitting,
         }) => (
             <form onSubmit={ handleSubmit } className="bg-white border p-4">
-              <div className={`d-flex justify-content-between`}>
-                <div className="text-left row justify-content-center align-self-center ml-1">
-                </div>
-                <div className="text-right">
-                  <button
-                      type="submit"
-                      disabled={ isSubmitting }
-                      className="btn btn-primary"
-                  >
-                    Enregistrer
-                  </button>
-                </div>
+              <div className="text-right">
+                <button
+                    type="submit"
+                    disabled={ isSubmitting }
+                    className="btn btn-primary"
+                >
+                  Enregistrer
+                </button>
               </div>
               <Field
                   name="isAbrogated"
                   type="checkbox"
                   as={ AbrogeSwitch }
                   setFieldValue={ setFieldValue }
+                  className={'mb-2'}
               />
               <Field
                   onChange={ (e) => {
@@ -460,23 +457,6 @@ const LexForm = ({
                     placeholder="Sélectionner une sous-rubrique"
                     name="subcategories"
                 />
-              </div>
-              <div className={`d-flex justify-content-between mb-3`}>
-                <div className="text-left row justify-content-center align-self-center ml-1">
-                  <Field
-                      onChange={ (e) => {
-                        handleChange(e);
-                        clearUserMsg();
-                      } }
-                      onBlur={ (e) => {
-                        handleBlur(e);
-                        clearUserMsg();
-                      } }
-                      name="isAbrogated"
-                      type="boolean"
-                      as={ AbrogeSwitch }
-                  />
-                </div>
               </div>
             </form>
         ) }
