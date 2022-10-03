@@ -3,7 +3,7 @@ import { Meteor } from "meteor/meteor";
 import { useTracker, withTracker } from "meteor/react-meteor-data";
 import { useParams } from 'react-router-dom'
 import { EditorState, convertToRaw, convertFromRaw } from "draft-js";
-import { Formik, Field, ErrorMessage } from "formik";
+import { Formik, Field, ErrorMessage, useFormikContext } from 'formik'
 import {
   Lexes,
   Categories,
@@ -17,6 +17,7 @@ import { MySelect } from "./Select";
 import "./rich-editor.css";
 import { PolylexRichEditor } from "./RichEditor";
 import Switch from "react-switch";
+import moment from 'moment'
 
 const Add = ({ isLoading }) => {
 
@@ -135,9 +136,29 @@ const Add = ({ isLoading }) => {
 
 const AbrogeSwitch = (props) => {
   const [checked, setChecked] = useState(!props.value);
+
+  const {
+    values: { abrogationDate },
+    initialValues,
+    setFieldValue,
+  } = useFormikContext();
+
   const handleChange = nextChecked => {
     setChecked(nextChecked);
     props.setFieldValue(props.name, checked, false);
+
+
+    // set or unset abrogation date on change
+    if (!nextChecked) {
+      if (!abrogationDate) {
+        setFieldValue('abrogationDate', moment().format('YYYY-MM-DD'));
+      }
+    } else {
+      // reset the value if it was not set initialy
+      if (!initialValues.abrogationDate || initialValues.abrogationDate === '') {
+        setFieldValue('abrogationDate', '');
+      }
+    }
   };
 
   return (
