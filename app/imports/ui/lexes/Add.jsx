@@ -141,7 +141,7 @@ const AbrogeSwitch = (props) => {
   };
 
   return (
-    <div className={'mb-2'}>
+    <div className={'mb-3'}>
       <span>
         <Switch
             className="react-switch"
