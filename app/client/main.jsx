@@ -1,7 +1,7 @@
 import Tequila from "meteor/epfl:accounts-tequila";
 import React from "react";
 import { Meteor } from "meteor/meteor";
-import { render } from "react-dom";
+import * as ReactDOMClient from 'react-dom/client';
 import App from "/imports/ui/App";
 import {
   Lexes,
@@ -11,7 +11,10 @@ import {
 } from "../imports/api/collections";
 
 Meteor.startup(() => {
-  render(<App />, document.getElementById("react-target"));
+  const container = document.getElementById('react-target');
+  const root = ReactDOMClient.createRoot(container);
+  root.render(<App />);
+
   Tequila.start();
 });
 

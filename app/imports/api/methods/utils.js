@@ -1,19 +1,13 @@
 function trimObjValues(obj) {
-  return Object.keys(obj).reduce((acc, curr) => {
-    if (
-      curr == "descriptionFr" ||
-      curr == "descriptionEn" ||
-      curr == "subcategories"
-    ) {
-      acc[curr] = obj[curr];
-    } else {
-      acc[curr] = obj[curr].trim();
+  Object.keys(obj).forEach((key) => {
+    if (obj[key].hasOwnProperty('trim')) {
+      obj[key] = obj[key].trim();
     }
-    return acc;
-  }, {});
+  });
+  return obj;
 }
 
-checkUserAndRole = (userId, roles, msg) => {
+const checkUserAndRole = (userId, roles, msg) => {
   if (!userId) {
     throw new Meteor.Error("not connected");
   }
