@@ -24,9 +24,9 @@ const Cells = (props) => {
           <tr key={lex._id}>
             <td><a href={lex.urlFr} target="_blank">{lex.lex}</a></td>
             <td>{lex.titleFr}</td>
-            <td>{lex.effectiveDate && moment(lex.effectiveDate).format('DD-MM-YYYY')}</td>
-            <td>{lex.revisionDate && moment(lex.revisionDate).format('DD-MM-YYYY')}</td>
-            <td>{lex.isAbrogated && lex.abrogationDate && moment(lex.abrogationDate).format('DD-MM-YYYY')}</td>
+            <td>{lex.effectiveDate && moment(lex.effectiveDate).format('DD.MM.YYYY')}</td>
+            <td>{lex.revisionDate && moment(lex.revisionDate).format('DD.MM.YYYY')}</td>
+            <td>{lex.isAbrogated && lex.abrogationDate && moment(lex.abrogationDate).format('DD.MM.YYYY')}</td>
             <td>{getCategoryNameFr(lex.categoryId)}</td>
             <td>{ lex.subcategories && lex.subcategories.map(
                 (sub) => <div key={sub._id}>{sub.nameFr}</div>
@@ -119,11 +119,11 @@ export const List = ({isLoading, lexes, categories, subcategories}) => {
           <tr>
             <th scope="col">LEX</th>
             <th scope="col">Title</th>
-            <th scope="col" className="w-25">Date d'entrée en vigueur</th>
-            <th scope="col" className="w-25">Date de révision</th>
-            <th scope="col" className="w-25">Date d'abrogation</th>
+            <th scope="col" className="w-25">Entrée en vigueur</th>
+            <th scope="col" className="w-25">Révision</th>
+            <th scope="col" className="w-25">Abrogation</th>
             <th scope="col">Rubrique</th>
-            <th scope="col">Sous-rubrique</th>
+            <th scope="col" style={{ whiteSpace: 'nowrap' }}>Sous-rubrique</th>
             <th className="w-50">Actions</th>
           </tr>
           </thead>
