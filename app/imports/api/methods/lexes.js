@@ -25,16 +25,18 @@ function prepareUpdateInsertLex(lex, action) {
   // Check if LEX is unique in the active ones
   let lexes = Lexes.find({ lex: lex.lex, isAbrogated: {$ne: true} });
 
-  if (action === "update") {
-    if (lexes.count() > 1) {
-      throwMeteorError("lex", "Ce LEX existe déjà !");
-    } else if (lexes.count() === 1) {
-      if (lexes.fetch()[0]._id !== lex._id) {
-        throwMeteorError("lex", "Cet LEX existe déjà !");
+  if (!lex.isAbrogated) {  // abrogated ones don't need such validations
+    if (action === "update") {
+      if (lexes.count() > 1) {
+        throwMeteorError("lex", "Ce LEX existe déjà !");
+      } else if (lexes.count() === 1) {
+        if (lexes.fetch()[0]._id !== lex._id) {
+          throwMeteorError("lex", "Ce LEX existe déjà !");
+        }
       }
+    } else if (action === "insert" && lexes.count() > 0) {
+      throwMeteorError("lex", "Ce LEX existe déjà");
     }
-  } else if (action === "insert" && lexes.count() > 0) {
-    throwMeteorError("lex", "Ce LEX existe déjà");
   }
 
   // Check if LEX is format x.x.x or x.x.x.x
