@@ -37,20 +37,20 @@ function prepareUpdateInsertLex(lex, action) {
     } else if (action === "insert" && lexes.count() > 0) {
       throwMeteorError("lex", "Ce LEX existe déjà");
     }
+
+    // Check if responsible is empty
+    if (lex.responsibleId.length === 0) {
+      throwMeteorError(
+        "responsibleId",
+        "Vous devez sélectionner au moins 1 responsable"
+      );
+    }
   }
 
   // Check if LEX is format x.x.x or x.x.x.x
   var lexRE = /^\d+.\d+.\d+|\d+.\d+.\d+.\d+$/;
   if (!lex.lex.match(lexRE)) {
     throwMeteorError("lex", "Le format d'un LEX doit être x.x.x ou x.x.x.x");
-  }
-
-  // Check if responsible is empty
-  if (lex.responsibleId.length === 0) {
-    throwMeteorError(
-      "responsibleId",
-      "Vous devez sélectionner au moins 1 responsable"
-    );
   }
 
   return lex;
