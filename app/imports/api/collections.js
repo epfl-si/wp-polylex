@@ -91,11 +91,20 @@ export const lexesSchema = new SimpleSchema({
         optional: false,
         custom: isRequired
     },
-    responsibleId: {  
+    isAbrogated: {
+        type: Boolean,
+        label: "Abrogé",
+        optional: true,
+    },
+    abrogationDate: {
+      type: String,
+      label: "Date d'abrogation'",
+      optional: true,
+    },
+    responsibleId: {
         type: String,
         label: "Responsable",
-        optional: false,
-        custom: isRequired
+        optional: true,
     },
 }, { check });
 
