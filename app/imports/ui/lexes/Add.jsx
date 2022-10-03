@@ -3,7 +3,7 @@ import { Meteor } from "meteor/meteor";
 import { useTracker, withTracker } from "meteor/react-meteor-data";
 import { useParams } from 'react-router-dom'
 import { EditorState, convertToRaw, convertFromRaw } from "draft-js";
-import { Formik, Field, ErrorMessage, useFormikContext } from 'formik'
+import { Formik, Field, ErrorMessage, useFormikContext } from 'formik';
 import {
   Lexes,
   Categories,
@@ -17,7 +17,7 @@ import { MySelect } from "./Select";
 import "./rich-editor.css";
 import { PolylexRichEditor } from "./RichEditor";
 import Switch from "react-switch";
-import moment from 'moment'
+import moment from 'moment';
 
 const Add = ({ isLoading }) => {
 
