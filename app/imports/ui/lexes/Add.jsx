@@ -154,7 +154,7 @@ const AbrogeSwitch = (props) => {
         />
       </span>
         <span className={ 'pl-2 align-self-center' }>
-        { checked ? `Active` : `Abrogé` }
+        { checked ? `Actif` : `Abrogé` }
       </span>
     </>);
 }

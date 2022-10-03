@@ -72,6 +72,9 @@ export const List = ({isLoading, lexes, categories, subcategories}) => {
       let category = Categories.findOne({ _id: lex.categoryId });
       lex.categoryNameFr = category.nameFr;
       lex.categoryNameEn = category.nameEn;
+
+      // abrogated status
+      lex.status = lex.isAbrogated ? 'Abrogé' : 'Actif';
     });
     const csv = Papa.unparse({
       // Define fields to export
@@ -84,7 +87,7 @@ export const List = ({isLoading, lexes, categories, subcategories}) => {
         "urlEn",
         "effectiveDate",
         "revisionDate",
-        "isAbrogated",
+        "status",
         "abrogationDate",
         "responsibleFirstName",
         "responsibleLastName",
