@@ -12,8 +12,6 @@
           version: "{{ polylex_image_version }}"
         labels:
           app: "{{ polylex_app_name }}"
-          author: gcharmier
-          team: idev-fsd
           version: "{{ polylex_image_version }}"
         name: "{{ polylex_deploy_name }}"
         namespace: "{{ openshift_namespace }}"
@@ -26,8 +24,6 @@
           metadata:
             labels:
               app: "{{ polylex_app_name }}"
-              author: gcharmier
-              team: idev-fsd
               deployment: "{{ polylex_deploy_name }}"
           spec:
             containers:
@@ -70,10 +66,6 @@
         namespace: "{{ openshift_namespace }}"
         labels:
           app: "{{ polylex_app_name }}"
-          author: gcharmier
-          team: idev-fsd
-        annotations:
-          authors: idev-fsd
       spec:
         ports:
         - name: "80"
@@ -98,10 +90,6 @@
         namespace: "{{ openshift_namespace }}"
         labels:
           app: "{{ polylex_app_name }}"
-          author: gcharmier
-          team: idev-fsd
-        annotations:
-          authors: idev-fsd
       spec:
         host: "{{ polylex_cname }}"
         port:
