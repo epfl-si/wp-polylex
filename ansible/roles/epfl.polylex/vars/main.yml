@@ -1,5 +1,6 @@
 ---
 # vars file for epfl.polylex
+openshift_image_registry_inside: "docker-registry.default.svc:5000"
 polylex_app_name: polylex
 polylex_svc_name: polylex
 polylex_route_name: polylex
@@ -8,6 +9,7 @@ polylex_cname: "{{ 'polylex-admin.epfl.ch' if openshift_namespace == 'wwp' else 
 polylex_deploy_name: polylex
 polylex_image_version: '1.9.0'
 polylex_image_tag: 'epflsi/polylex:{{ polylex_image_version }}'
+polylex_imagestream_name: "polylex"
 polylex_db_name: "polylex"
 polylex_db_user: "polylex"
 polylex_secrets: "{{ lookup('file', '/keybase/team/epfl_wppolylex/ansible_polylex_secrets.yml') | from_yaml }}"
