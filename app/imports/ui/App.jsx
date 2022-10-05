@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { withTracker } from "meteor/react-meteor-data";
 import Footer from "./footer/Footer";
 import Header from "./header/Header";
-import List from "./lexes/List";
+import { ListActive, ListAbrogated } from "./lexes/List";
 import Add from "./lexes/Add";
 import Responsible from "./admin/Responsible";
 import Category from "./admin/Category";
@@ -59,7 +59,8 @@ class App extends Component {
           <Header />
           {isAdmin || isEditor ? (
               <Routes>
-                <Route path="/*" element={<List />} />
+                <Route path="/*" element={<ListActive />} />
+                <Route path="/abrogated/*" element={<ListAbrogated />} />
                 <Route path="/add/*" element={<Add />} />
                 <Route path="/edit/:_id" element={<Add />} />
                 <Route path="/admin/responsible/add" element={<Responsible />} />
