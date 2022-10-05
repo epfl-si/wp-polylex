@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+
+set -e
+cd "$(cd "$(dirname "$0")"; pwd)"
+
+help () {
+    fatal <<HELP_MSG
+Usage:
+
+  $0 [ -t sometag ] [ ... ]
+HELP_MSG
+}
+
+ensure_ansible () {
+    if ! test -f ansible-deps-cache/.versions 2>/dev/null; then
+        curl https://raw.githubusercontent.com/epfl-si/ansible.suitcase/master/install.sh | \
+            SUITCASE_DIR=$PWD/ansible-deps-cache \
+            SUITCASE_ANSIBLE_VERSION=6.3.0 \
+            SUITCASE_ANSIBLE_REQUIREMENTS=requirements.yml \
+            bash -x
+    fi
+    export PATH="$PWD/ansible-deps-cache/bin:$PATH"
+    export ANSIBLE_ROLES_PATH="$PWD/ansible-deps-cache/roles"
+    export ANSIBLE_COLLECTIONS_PATHS="$PWD/ansible-deps-cache"
+
+    . ansible-deps-cache/lib.sh
+}
+
+ensure_ansible
+#ensure_oc_login
+
+[ "$1" == "--help" ] && help
+
+inventory_mode="test"
+inventories () {
+    case "$inventory_mode" in
+        prod) echo "-i inventory/prod.yml" ;;
+        test) echo "-i inventory/test.yml" ;;
+        *) fatal "Invalid inventory_mode" ;;
+    esac
+}
+
+declare -a ansible_args
+ansible_args=(-e "polysible_suitcase_dir=$PWD/ansible-deps-cache")
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    --help)
+      help ;;
+    --prod) inventory_mode="prod"
+        shift ;;
+    --test) inventory_mode="test"
+        shift ;;
+    *)
+      ansible_args+=("$1")
+      shift ;;
+  esac
+done
+
+ansible-playbook $(inventories) playbook.yml "${ansible_args[@]}"

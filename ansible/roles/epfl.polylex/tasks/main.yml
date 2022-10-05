@@ -1,3 +1,38 @@
+- name: Polylex ImageStream
+  openshift:
+    state: latest
+    kind: ImageStream
+    apiVersion: image.openshift.io/v1
+    metadata:
+      labels:
+        app: "{{ polylex_app_name }}"
+      name: "{{ polylex_app_name }}"
+      namespace: "{{ openshift_namespace }}"
+
+- name: Polylex BuildConfig
+  openshift:
+    state: latest
+    kind: BuildConfig
+    apiVersion: build.openshift.io/v1
+    metadata:
+      labels:
+        app: "{{ polylex_app_name }}"
+      name: "{{ polylex_app_name }}"
+      namespace: "{{ openshift_namespace }}"
+    spec:
+      source:
+        type: Git
+        git:
+          uri: https://github.com/epfl-si/wp-polylex
+      strategy:
+        type: Docker
+        dockerStrategy:
+          dockerfilePath: Dockerfile    # Look for Dockerfile in: gitUri/contextDir/dockerfilePath
+      output:
+        to:
+          kind: ImageStreamTag
+          name: "{{polylex_imagestream_name}}:latest"
+
 - name: polylex deploy
   openshift:
     state: latest
@@ -42,7 +77,7 @@
                        secretKeyRef:
                         name: '{{ polylex_secret_name }}'
                         key: meteor-settings
-                image: "{{ polylex_image_tag }}"
+                image: "{{ openshift_image_registry_inside}}/{{ openshift_namespace }}/{{ polylex_imagestream_name }}"
                 imagePullPolicy: Always
                 name: pod-polylex
                 ports:
@@ -76,6 +111,7 @@
           app: "{{ polylex_app_name }}"
           deployment: "{{ polylex_deploy_name }}"
         type: ClusterIP
+
 - name: polylex route
   openshift:
     state: latest
@@ -102,4 +138,4 @@
           weight: 100
         wildcardPolicy: None
 - name: polylex secrets
-  include_tasks: '{{ "secrets.yml" }}' 
+  include_tasks: '{{ "secrets.yml" }}'
