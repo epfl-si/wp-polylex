@@ -1,8 +1,9 @@
 import React from 'react';
 import { withTracker } from 'meteor/react-meteor-data'
 import { Link } from 'react-router-dom';
-import { Lexes, Categories, Subcategories, Responsibles } from '../../api/collections'
+import { Lexes, Categories, Subcategories } from '../../api/collections'
 import { Loading } from '../Messages';
+import exporter from './exporter'
 import moment from 'moment';
 import { removeLex } from '../../api/methods/lexes';
 
@@ -59,50 +60,6 @@ export const List = ({isLoading, lexes, categories, subcategories}) => {
     );
   }
 
-  const exporter = () => {
-    lexes.forEach(function (lex) {
-      // Responsible info
-      let responsible = Responsibles.findOne({ _id: lex.responsibleId });
-      lex.responsibleFirstName = responsible.firstName;
-      lex.responsibleLastName = responsible.lastName;
-      lex.responsibleUrlFr = responsible.urlFr;
-      lex.responsibleUrlEn = responsible.urlEn;
-
-      // Category info
-      let category = Categories.findOne({ _id: lex.categoryId });
-      lex.categoryNameFr = category.nameFr;
-      lex.categoryNameEn = category.nameEn;
-
-      // abrogated status
-      lex.status = lex.isAbrogated ? 'Abrogé' : 'Actif';
-    });
-    const csv = Papa.unparse({
-      // Define fields to export
-      fields: [
-        "_id",
-        "lex",
-        "titleFr",
-        "titleEn",
-        "urlFr",
-        "urlEn",
-        "effectiveDate",
-        "revisionDate",
-        "status",
-        "abrogationDate",
-        "responsibleFirstName",
-        "responsibleLastName",
-        "responsibleUrlFr",
-        "responsibleUrlEn",
-        "categoryNameFr",
-        "categoryNameEn",
-      ],
-      data: lexes,
-    });
-
-    const blob = new Blob([csv], { type: "text/plain;charset=utf-8;" });
-    saveAs(blob, "polylex.csv");
-  }
-
   if (isLoading) {
     return <Loading />;
   } else {
@@ -110,7 +67,7 @@ export const List = ({isLoading, lexes, categories, subcategories}) => {
       <div className="">
         <h4 className="py-3 float-left">Polylex</h4>
         <div className="mt-1 text-right">
-          <button onClick={(e) => exporter(e)} className="btn btn-primary">
+          <button onClick={() => exporter(lexes)} className="btn btn-primary">
             Exporter CSV
           </button>
         </div>
