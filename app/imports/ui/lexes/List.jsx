@@ -23,7 +23,15 @@ const Cells = (props) => {
       <tbody>
       {props.lexes.map( (lex) => (
           <tr key={lex._id}>
-            <td><a href={lex.urlFr} target="_blank">{lex.lex}</a></td>
+            <td>
+              <a
+                href={lex.urlFr}
+                target="_blank"
+                style={ {color: lex.isAbrogated ? 'darkred':''} }
+              >
+                {lex.lex}
+              </a>
+            </td>
             <td>{lex.titleFr}</td>
             <td>{lex.effectiveDate && moment(lex.effectiveDate).format('DD.MM.YYYY')}</td>
             <td>{lex.revisionDate && moment(lex.revisionDate).format('DD.MM.YYYY')}</td>
