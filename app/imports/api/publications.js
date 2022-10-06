@@ -8,7 +8,7 @@ import {
 
 if (Meteor.isServer) {
   Meteor.publish("lexes", function () {
-    return Lexes.find();
+    return Lexes.find({}, { sort: { lex: 1, effectiveDate: 1 } });
   });
 
   Meteor.publish("categories", function () {
