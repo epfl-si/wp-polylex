@@ -66,7 +66,7 @@ export const List = ({isLoading, lexes, categories, subcategories}) => {
     return (
       <div className="">
         <h4 className="py-3 float-left">Polylex</h4>
-        <div className="mt-1 text-right">
+        <div className="pt-3 text-right">
           <button onClick={() => exporter(lexes)} className="btn btn-primary">
             Exporter CSV
           </button>
