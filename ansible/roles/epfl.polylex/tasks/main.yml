@@ -1,4 +1,4 @@
-- name: Polylex ImageStream
+- name: ImageStream
   openshift:
     state: latest
     kind: ImageStream
@@ -9,7 +9,7 @@
       name: "{{ polylex_app_name }}"
       namespace: "{{ openshift_namespace }}"
 
-- name: Polylex BuildConfig
+- name: BuildConfig
   openshift:
     state: latest
     kind: BuildConfig
@@ -33,7 +33,7 @@
           kind: ImageStreamTag
           name: "{{polylex_imagestream_name}}:latest"
 
-- name: polylex deploy
+- name: Deployment
   openshift:
     state: latest
     resource: Deployment
@@ -45,6 +45,16 @@
       metadata:
         annotations:
           version: "{{ polylex_image_version }}"
+          image.openshift.io/triggers: |-
+            [
+              {
+                "from": {
+                  "kind": "ImageStreamTag",
+                  "name": "{{ polylex_imagestream_name }}:latest"
+                },
+                "fieldPath": "spec.template.spec.containers[0].image"
+              }
+            ]
         labels:
           app: "{{ polylex_app_name }}"
           version: "{{ polylex_image_version }}"
@@ -87,7 +97,8 @@
             restartPolicy: Always
             schedulerName: default-scheduler
             terminationGracePeriodSeconds: 30
-- name: polylex service
+
+- name: Service
   openshift:
     state: latest
     resource: Service
@@ -112,7 +123,7 @@
           deployment: "{{ polylex_deploy_name }}"
         type: ClusterIP
 
-- name: polylex route
+- name: Route
   openshift:
     state: latest
     resource: Route
@@ -137,5 +148,27 @@
           name: "{{ polylex_svc_name }}"
           weight: 100
         wildcardPolicy: None
-- name: polylex secrets
+
+- name: Secrets
   include_tasks: '{{ "secrets.yml" }}'
+
+- name: Build and deploy
+  when: openshift_namespace == polylex_build_on_namespace
+  shell:
+    cmd: |
+      oc -n "{{ openshift_namespace }}" start-build "{{ polylex_imagestream_name }}"
+  tags:
+  - build-and-deploy
+  - never
+
+- name: "Promote to production"
+  when: >-
+    openshift_namespace == 'wwp' and
+    ("promote" in ansible_run_tags)
+  local_action:
+    module: shell
+    cmd: |
+      oc tag {{ polylex_build_on_namespace }}/{{ polylex_imagestream_name }}:latest wwp/{{ polylex_imagestream_name }}:latest
+  tags:
+    - promote
+    - never

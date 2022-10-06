@@ -1,6 +1,7 @@
 ---
 # vars file for epfl.polylex
 openshift_image_registry_inside: "docker-registry.default.svc:5000"
+polylex_build_on_namespace: wwp-test
 polylex_app_name: polylex
 polylex_svc_name: polylex
 polylex_route_name: polylex

@@ -90,41 +90,18 @@ Commands:
 ```
 
 ## Déployer une nouvelle version sur l'environnement de test d'openshift
-
-Pour commencer, on doit changer le numéro de version : 
+Pour commencer, on doit changer le numéro de version :
 - Fichier ansible/roles/epfl.polylex/vars/main.yml
 - Dans le composant Header app/imports/ui/header/Header.jsx
-- On commit/push 
+- On commit/push
 - On crée le tag : `git tag -a 1.0 -m "polylex version 1.0"`
 - On push le tag : `git push --follow-tags`
+Puis,
+- `./ansible/polysible -t build-and-deploy`
 
-On commence par builder l'image :
+## Déployer de test vers la prod. d'openshift
 
-`docker build -t epflsi/polylex .`
-
-On crée un tag pour cette image 
-
-`docker tag epflsi/polylex:latest epflsi/polylex:0.1.10`
-
-On pousse l'image dans dockerhub
-
-`docker push epflsi/polylex:0.1.10`
-
-`docker push epflsi/polylex:latest`
-
-Ensuite on doit modifier la référence à cette image dans le déploiment openshift en éditant le fichier ansible/main.yml.
-
-`
-polylex_image_version: '0.1.10'
-`
-
-`cd ansible/`
-
-`ansible-playbook playbook.yml -i hosts-test`
-
-## Déployer une nouvelle version sur l'environnement de prod d'openshift
-
-`ansible-playbook playbook.yml -i hosts-prod`
+`./ansible/polysible --prod -t promote`
 
 ## Plus d'info sur la configuration OpenShift
 
