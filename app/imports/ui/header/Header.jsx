@@ -26,7 +26,6 @@ const Header = (props) => {
               </a>
               <div className="dropdown-menu" >
                 <NavLink className="{({isActive}) => (isActive ? 'active-style' : '')} dropdown-item" end to="/">Voir les LEX</NavLink>
-                <NavLink className="{({isActive}) => (isActive ? 'active-style' : '')} dropdown-item" end to="/abrogated">Voir les LEX abrogés</NavLink>
                 <NavLink className="{({isActive}) => (isActive ? 'active-style' : '')} dropdown-item" to="/add">Ajouter un nouveau lex</NavLink>
               </div>
             </li>

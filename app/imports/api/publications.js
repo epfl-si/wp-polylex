@@ -11,14 +11,6 @@ if (Meteor.isServer) {
     return Lexes.find();
   });
 
-  Meteor.publish("lexesActive", function () {
-    return Lexes.find({ isAbrogated: { $ne: true } });
-  });
-
-  Meteor.publish("lexesAbrogated", function () {
-    return Lexes.find({ isAbrogated: true });
-  });
-
   Meteor.publish("categories", function () {
     return Categories.find();
   });

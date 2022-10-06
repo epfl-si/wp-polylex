@@ -26,12 +26,8 @@ const Cells = (props) => {
             <td><a href={lex.urlFr} target="_blank">{lex.lex}</a></td>
             <td>{lex.titleFr}</td>
             <td>{lex.effectiveDate && moment(lex.effectiveDate).format('DD.MM.YYYY')}</td>
-            <td>
-              { props.isAbrogated ?
-              lex.isAbrogated && lex.abrogationDate && moment(lex.abrogationDate).format('DD.MM.YYYY') :
-              lex.revisionDate && moment(lex.revisionDate).format('DD.MM.YYYY')
-              }
-            </td>
+            <td>{lex.revisionDate && moment(lex.revisionDate).format('DD.MM.YYYY')}</td>
+            <td>{lex.isAbrogated && lex.abrogationDate && moment(lex.abrogationDate).format('DD.MM.YYYY')}</td>
             <td>{getCategoryNameFr(lex.categoryId)}</td>
             <td>{ lex.subcategories && lex.subcategories.map(
                 (sub) => <div key={sub._id}>{sub.nameFr}</div>
@@ -52,7 +48,7 @@ const Cells = (props) => {
   )
 }
 
-export const List = ({isLoading, lexes, categories, subcategories, isAbrogated}) => {
+export const List = ({isLoading, lexes, categories, subcategories}) => {
   const deleteLex = (lexId) => {
     removeLex.call(
         {lexId},
@@ -81,11 +77,8 @@ export const List = ({isLoading, lexes, categories, subcategories, isAbrogated})
             <th scope="col">LEX</th>
             <th scope="col">Title</th>
             <th scope="col" className="w-25">Entrée en vigueur</th>
-            <th scope="col" className="w-25">
-            { isAbrogated ?
-              <>Abrogation</> : <>Révision</>
-            }
-            </th>
+            <th scope="col" className="w-25">Révision</th>
+            <th scope="col" className="w-25">Abrogation</th>
             <th scope="col">Rubrique</th>
             <th scope="col" style={{ whiteSpace: 'nowrap' }}>Sous-rubrique</th>
             <th className="w-50">Actions</th>
@@ -95,18 +88,16 @@ export const List = ({isLoading, lexes, categories, subcategories, isAbrogated})
               lexes={lexes}
               categories={categories}
               subcategories={subcategories}
-              deleteLex={ deleteLex }
-              isAbrogated={ isAbrogated }
-          />
+              deleteLex={ deleteLex }/>
         </table>
       </div>
     )
   }
 }
 
-export const ListActive = withTracker(() => {
+export default withTracker(() => {
   const handles = [
-    Meteor.subscribe('lexesActive'),
+    Meteor.subscribe('lexes'),
     Meteor.subscribe('categories'),
     Meteor.subscribe('subcategories'),
     Meteor.subscribe('responsibles'),
@@ -121,27 +112,5 @@ export const ListActive = withTracker(() => {
     lexes: Lexes.find({}).fetch(),
     categories: Categories.find({}).fetch(),
     subcategories: Subcategories.find({}).fetch(),
-    isAbrogated: false,
-  };
-})(List);
-
-export const ListAbrogated = withTracker(() => {
-  const handles = [
-    Meteor.subscribe('lexesAbrogated'),
-    Meteor.subscribe('categories'),
-    Meteor.subscribe('subcategories'),
-    Meteor.subscribe('responsibles'),
-  ];
-
-  const areHandlesReady = () => {
-    return handles.every((handle) => handle.ready());
-  }
-
-  return {
-    isLoading: !areHandlesReady(),
-    lexes: Lexes.find({}).fetch(),
-    categories: Categories.find({}).fetch(),
-    subcategories: Subcategories.find({}).fetch(),
-    isAbrogated: true,
   };
 })(List);
