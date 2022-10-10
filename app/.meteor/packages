@@ -30,7 +30,7 @@ check@1.3.1                       # Check schema mongoDB
 harrison:papa-parse@1.1.7         # parse csv
 rocketchat:restivus               # Rest APi
 alanning:roles@3.2.2              # roles
-epfl:accounts-tequila@0.3.1       # Tequila
+epfl:accounts-tequila@0.6.2       # Tequila
 ostrio:logger@2.1.1               # logger
 ostrio:loggermongo@2.1.0          # logger stores in MongoDB
 mdg:validated-method@1.2.0        # Improve meteor methods
