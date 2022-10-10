@@ -1,6 +1,5 @@
 # polylex Makefile
 SHELL := /bin/bash
-VERSION=$(shell ./change-version.sh -pv)
 
 .PHONY: help
 help:
@@ -13,12 +12,6 @@ help:
 	@echo "  make apidoc             — Refresh API documentation"
 	@echo "  make prettier           — Prettier all the things"
 	@echo "  make prettier-check     — Check if prettier need to be run"
-	@echo "Release:"
-	@echo "  make version            — Get the version number of polylex"
-	@echo "  make version-patch      — Bump polylex version (patch)"
-	@echo "  make version-minor      — Bump polylex version (minor)"
-	@echo "  make version-major      — Bump polylex version (major)"
-	@echo "  make version-special    — Bump polylex to specified version"
 	@echo "Publication and deployment:"
 	@echo "  make publish            — To build, tag and push new Image"
 	@echo "  make deploy-test        — To deploy on test environment"
@@ -64,32 +57,6 @@ prettier:
 	npx prettier --write "app/{client,private,server,tests}/**/*.{js,jsx}"
 	npx prettier --write "cli/**/*.js"
 
-.PHONY: version
-version:
-	@echo $(VERSION)
-
-.PHONY: version-patch
-version-patch:
-	@./change-version.sh -a
-
-.PHONY: version-minor
-version-minor:
-	@./change-version.sh -a -v minor
-
-.PHONY: version-major
-version-major:
-	@./change-version.sh -a -v major
-
-.PHONY: version-special
-version-special:
-	@if test "$(POLYLEX_VERSION)" = "" ; then \
-		echo "Please set POLYLEX_VERSION, example:"; \
-		echo "  make version-special POLYLEX_VERSION=3.2.1"; \
-		exit 1; \
-	fi
-	@echo "Change version to $$POLYLEX_VERSION"
-	@./change-version.sh -a -v $$POLYLEX_VERSION
-
 .PHONY: build
 build:
 	@echo '**** Start build: ****'
@@ -99,13 +66,13 @@ build:
 .PHONY: tag
 tag:
 	@echo '**** Start tag: ****'
-	docker tag epflsi/polylex:latest epflsi/polylex:$(VERSION)
+	docker tag epflsi/polylex:latest epflsi/polylex:latest
 	@echo '**** End tag: ****'
 
 .PHONY: push
 push:
 	@echo '**** Start push: ****'
-	docker push epflsi/polylex:$(VERSION)
+	docker push epflsi/polylex:latest
 	docker push epflsi/polylex:latest
 	@echo '**** End push: ****'
 
