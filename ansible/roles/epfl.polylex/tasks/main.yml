@@ -44,7 +44,6 @@
       kind: Deployment
       metadata:
         annotations:
-          version: "{{ polylex_image_version }}"
           image.openshift.io/triggers: |-
             [
               {
@@ -57,7 +56,6 @@
             ]
         labels:
           app: "{{ polylex_app_name }}"
-          version: "{{ polylex_image_version }}"
         name: "{{ polylex_deploy_name }}"
         namespace: "{{ openshift_namespace }}"
       spec:
