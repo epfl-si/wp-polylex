@@ -5,10 +5,11 @@
 Cette application a pour but de stocker les textes légaux abrogés.
 
 ## Lancer l'application en local 
-
-Se positionner dans le répertoire app/ et lancer la commande :
+Se placer dans l'app :
 
 `cd app/`
+
+Puis lancer la commande :
 
 `meteor --settings settings.json`
 
@@ -44,7 +45,7 @@ Commands:
   help [command]           display help for command
 ```
 
-## Déployer une nouvelle version sur l'environnement de test d'openshift
+## Déployer une nouvelle version sur l'environnement de test d'Openshift
 Pour commencer, on doit changer le numéro de version :
 - Fichier ansible/roles/epfl.polylex/vars/main.yml
 - Dans le composant Header app/imports/ui/header/Header.jsx
@@ -54,7 +55,7 @@ Pour commencer, on doit changer le numéro de version :
 Puis,
 - `./ansible/polysible -t build-and-deploy`
 
-## Déployer de test vers la prod. d'openshift
+## Déployer de test vers la prod. d'Openshift
 
 `./ansible/polysible --prod -t promote`
 
