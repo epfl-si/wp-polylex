@@ -12,7 +12,7 @@ export const lexesSchema = new SimpleSchema({
     },
     lex: {
         type: String,
-        label: "LEX",
+        label: "Lex",
         optional: false,
         custom: isRequired
     },
