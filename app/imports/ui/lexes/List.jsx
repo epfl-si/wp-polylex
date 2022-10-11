@@ -83,7 +83,7 @@ export const List = ({isLoading, lexes, categories, subcategories}) => {
           <thead>
           <tr>
             <th scope="col">LEX</th>
-            <th scope="col">Title</th>
+            <th scope="col">Titre</th>
             <th scope="col" className="w-25">Entrée en vigueur</th>
             <th scope="col" className="w-25">Révision</th>
             <th scope="col" className="w-25">Abrogation</th>
