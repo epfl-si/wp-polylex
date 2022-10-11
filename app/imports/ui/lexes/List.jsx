@@ -47,7 +47,7 @@ const Cells = (props) => {
               <button
                   type="button"
                   className="btn btn-outline-primary"
-                  onClick={ () => { if (window.confirm('Are you sure you wish to delete this item?')) props.deleteLex(lex._id) }}
+                  onClick={ () => { if (window.confirm('Êtes vous sûr de vouloir supprimer cette entrée ?')) props.deleteLex(lex._id) }}
               >Supprimer</button>
             </td>
           </tr>
