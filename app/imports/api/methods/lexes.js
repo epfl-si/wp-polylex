@@ -50,7 +50,7 @@ function prepareUpdateInsertLex(lex, action) {
   // Check if LEX is format x.x.x or x.x.x.x
   var lexRE = /^\d+.\d+.\d+|\d+.\d+.\d+.\d+$/;
   if (!lex.lex.match(lexRE)) {
-    throwMeteorError("lex", "Le format d'un LEX doit être x.x.x ou x.x.x.x");
+    throwMeteorError("lex", "Le format d'une lex doit être x.x.x ou x.x.x.x");
   }
 
   return lex;

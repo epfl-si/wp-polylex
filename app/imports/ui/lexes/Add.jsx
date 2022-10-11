@@ -102,17 +102,17 @@ const Add = ({ isLoading }) => {
       <div className="card my-2">
         <h5 className="card-header">
           { _id ?
-              "Modifier le lex ci-dessous" :
-              "Ajouter un nouveau lex"
+              "Modifier la lex ci-dessous" :
+              "Ajouter une nouvelle lex"
           }
         </h5>
         { addSuccess &&
           <AlertSuccess
-              message={"Le nouveau lex a été ajouté avec succès !"}
+              message={"La nouvelle lex a été ajoutée avec succès !"}
           />
         }
         { editSuccess &&
-          <AlertSuccess message={"Le lex a été modifié avec succès !"} />
+          <AlertSuccess message={"La lex a été modifiée avec succès !"} />
         }
         { <LexForm
             lexId={ _id }
@@ -124,11 +124,11 @@ const Add = ({ isLoading }) => {
       </div>
       { addSuccess &&
       <AlertSuccess
-          message={"Le nouveau lex a été ajouté avec succès !"}
+          message={"La nouvelle lex a été ajoutée avec succès !"}
       />
       }
       { editSuccess &&
-      <AlertSuccess message={"Le lex a été modifié avec succès !"} />
+      <AlertSuccess message={"La lex a été modifiée avec succès !"} />
       }
     </>);
   }
@@ -279,7 +279,7 @@ const LexForm = ({
                     clearUserMsg();
                   } }
                   placeholder="LEX à ajouter"
-                  label="LEX"
+                  label="Lex"
                   name="lex"
                   type="text"
                   component={ CustomInput }
@@ -295,7 +295,7 @@ const LexForm = ({
                     handleBlur(e);
                     clearUserMsg();
                   } }
-                  placeholder="Titre en français du LEX à ajouter"
+                  placeholder="Titre en français de la lex à ajouter"
                   label="Titre en français"
                   name="titleFr"
                   type="text"
@@ -312,7 +312,7 @@ const LexForm = ({
                     handleBlur(e);
                     clearUserMsg();
                   } }
-                  placeholder="Titre en anglais du LEX à ajouter"
+                  placeholder="Titre en anglais de la lex à ajouter"
                   label="Titre en anglais"
                   name="titleEn"
                   type="text"
@@ -329,7 +329,7 @@ const LexForm = ({
                     handleBlur(e);
                     clearUserMsg();
                   } }
-                  placeholder="URL en français du LEX à ajouter"
+                  placeholder="URL en français de la lex à ajouter"
                   label="URL en français"
                   name="urlFr"
                   type="text"
@@ -346,7 +346,7 @@ const LexForm = ({
                     handleBlur(e);
                     clearUserMsg();
                   } }
-                  placeholder="URL en anglais du LEX à ajouter"
+                  placeholder="URL en anglais de la lex à ajouter"
                   label="URL en anglais"
                   name="urlEn"
                   type="text"
