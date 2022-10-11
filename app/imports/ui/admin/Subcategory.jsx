@@ -181,13 +181,13 @@ const SubcategoryForm = ({ subcategory, onSubmit, clearUserMsg }) => {
               <Field
                   onChange={e => { handleChange(e); clearUserMsg();}}
                   onBlur={e => { handleBlur(e); clearUserMsg();}}
-                  placeholder="Nom de la sous rubrique en français à ajouter" name="nameFr" type="text" component={ CustomInput } />
+                  placeholder="Nom de la sous-rubrique en français à ajouter" name="nameFr" type="text" component={ CustomInput } />
               <ErrorMessage name="nameFr" component={ CustomError } />
 
               <Field
                   onChange={e => { handleChange(e); clearUserMsg();}}
                   onBlur={e => { handleBlur(e); clearUserMsg();}}
-                  placeholder="Nom de la sous rubrique en anglais à ajouter" name="nameEn" type="text" component={ CustomInput } />
+                  placeholder="Nom de la sous-rubrique en anglais à ajouter" name="nameEn" type="text" component={ CustomInput } />
               <ErrorMessage name="nameEn" component={ CustomError } />
 
               <div className="my-1 text-right">

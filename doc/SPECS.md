@@ -20,7 +20,7 @@ Les champs obligatoires sont :
 * URL en FR et EN
 * Description en FR et EN
 * Rubrique: a une valeur par défaut.
-* Sous rubrique: a une valeur par défaut.
+* Sous-rubrique: a une valeur par défaut.
 * Responsable: a une valeur par défaut.
 * Date d'entrée en vigueur
 * Date de révision
@@ -37,7 +37,7 @@ Avec ce rôle, l'utilisateur ne peut pour l'instant rien faire.
 
 Un utilisateur avec le rôle éditeur peut lister, créer, éditer, supprimer des lexes mais ne peut pas gérer les rubriques, les sous-rubriques et les responsables.
 
-L'admin peut tout faire. Il devrait avoir conscience des conséquences lors d'un changement sur les rubriques, sous rubriques et responsables.
+L'admin peut tout faire. Il devrait avoir conscience des conséquences lors d'un changement sur les rubriques, sous-rubriques et responsables.
 
 Cas d'utilisation n°1: Changement d'un responsable
 Un responsable quitte l'EPFL. Un successeur doit "hériter" de tous ses lexes.
