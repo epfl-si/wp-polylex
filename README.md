@@ -87,4 +87,5 @@ De plus, le user n'a plus d'attributs roles mais une nouvelle collection `role-a
 
 Lancer le déploiement => ce qui va exécuter `updateRoles` qui supprime la collection `roles` et qui supprime l'attribut roles dans chaque user. La collection est re-créée automatiquement.
 
-
+## Spécification de l'application
+Voir [documentation](doc/SPECS.md)
