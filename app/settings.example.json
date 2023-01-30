@@ -1,0 +1,9 @@
+{
+  "fake_tequila": {
+    "requestauth": {
+      "uniqueid": "111111",
+      "displayname": "John Doe",
+      "group": "wp-polylex-admins"
+    }
+  }
+}
