@@ -46,9 +46,9 @@ Commands:
 ```
 
 ## Déployer une nouvelle version sur l'environnement de test d'Openshift
-Pour commencer, on doit changer le numéro de version :
-- Fichier ansible/roles/epfl.polylex/vars/main.yml
-- Dans le composant Header app/imports/ui/header/Header.jsx
+Pour commencer, si ce n'est déjà fait, on doit changer le numéro de version :
+- Dans le fichier app/package.json
+- Dans le composant Header app/imports/ui/header/Header.jsx pour correspondre à la version du fichier app/package.json
 - On commit/push
 - On crée le tag : `git tag -a 1.0 -m "polylex version 1.0"`
 - On push le tag : `git push --follow-tags`
