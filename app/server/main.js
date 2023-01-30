@@ -7,6 +7,7 @@ import { AppLogger } from "../imports/api/logger";
 import { loadFixtures } from "./fixtures";
 import "../imports/api/publications";
 import "./rest-api";
+import "./lex-redirect";
 import "../imports/api/methods/responsibles";
 import "../imports/api/methods/categories";
 import "../imports/api/methods/subcategories";
