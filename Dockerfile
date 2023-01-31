@@ -16,7 +16,7 @@ RUN meteor npm i
 RUN meteor build --allow-superuser /usr --directory
 RUN cd /usr/bundle/programs/server && npm install
 
-FROM node:14.19.3-alpine
+FROM public.ecr.aws/docker/library/node:14.19.3-alpine
 
 COPY --from=0 /usr/bundle /usr/bundle/
 WORKDIR /usr/bundle
