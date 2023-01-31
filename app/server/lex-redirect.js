@@ -16,7 +16,7 @@ LexRedirect.addRoute(
   }, {
     get: function() {
       let lex = Lexes.findOne({ // Let's assume the lex is not abrogated
-        isAbrogated: false,
+        isAbrogated: {$ne: true},
         lex: this.urlParams.id
       }) ?? Lexes.findOne({ // If no lex found, let's try with an abrogated one
         isAbrogated: true,
