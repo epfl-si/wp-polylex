@@ -150,6 +150,16 @@
 - name: Secrets
   include_tasks: '{{ "secrets.yml" }}'
 
+- name: Build on the local machine and deploy
+  shell:
+    cmd: |
+      docker build --tag {{ polylex_remote_image_tag }} ..
+      oc whoami -t | docker login {{ openshift_image_registry }} -u unused --password-stdin
+      docker push {{ polylex_remote_image_tag }}
+  tags:
+    - locally-build-and-deploy
+    - never
+
 - name: Build and deploy
   when: openshift_namespace == polylex_build_on_namespace
   shell:

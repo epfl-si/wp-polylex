@@ -55,6 +55,9 @@ Pour commencer, si ce n'est déjà fait, on doit changer le numéro de version :
 Puis,
 - `./ansible/polysible -t build-and-deploy`
 
+Si le build est difficile sur Openshift, on peut le faire localement et ensuite pusher l'image avec:
+- `./ansible/polysible -t locally-build-and-deploy`
+
 ## Déployer de test vers la prod. d'Openshift
 
 `./ansible/polysible --prod -t promote`
