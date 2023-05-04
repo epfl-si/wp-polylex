@@ -45,7 +45,7 @@ const Header = (props) => {
               { isAdmin ?
                 <>
                   <NavLink className="{({isActive}) => (isActive ? 'active-style' : '')} dropdown-item" to="/admin/log/list">Voir les logs</NavLink>
-                  <div className="dropdown-item">Polylex - version 1.10.1</div>
+                  <div className="dropdown-item">Polylex - version 1.11.0</div>
                 </>
                 : null}
               </div>

@@ -83,13 +83,11 @@ export const lexesSchema = new SimpleSchema({
         type: String,
         label: "Date d'entrées en vigueur",
         optional: false,
-        custom: isRequired
     },
     revisionDate: {
         type: String,
         label: "Date de révision",
         optional: false,
-        custom: isRequired
     },
     isAbrogated: {
         type: Boolean,
