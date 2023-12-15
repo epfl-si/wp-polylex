@@ -220,6 +220,8 @@ const LexForm = ({
         titleEn: "",
         urlFr: "",
         urlEn: "",
+        urlLastConsEn: "",
+        urlLastConsFR: "",
         descriptionFr: new EditorState.createWithText(""), // https://github.com/facebook/draft-js/commit/fc9395fe7ebf077db903c9c8fed71f136528ea5b
         descriptionEn: new EditorState.createWithText(""),
         effectiveDate: "",
@@ -353,6 +355,40 @@ const LexForm = ({
                   component={ CustomInput }
               />
               <ErrorMessage name="urlEn" component={ CustomError }/>
+
+              <Field
+                  onChange={ (e) => {
+                    handleChange(e);
+                    clearUserMsg();
+                  } }
+                  onBlur={ (e) => {
+                    handleBlur(e);
+                    clearUserMsg();
+                  } }
+                  placeholder="URL en anglais de la dernière consultation"
+                  label="URL dernière consultation en anglais"
+                  name="urlLastConsEn"
+                  type="text"
+                  component={ CustomInput }
+              />
+              <ErrorMessage name="urlLastConsEn" component={ CustomError }/>
+
+              <Field
+                  onChange={ (e) => {
+                    handleChange(e);
+                    clearUserMsg();
+                  } }
+                  onBlur={ (e) => {
+                    handleBlur(e);
+                    clearUserMsg();
+                  } }
+                  placeholder="URL en français de la dernière consultation"
+                  label="URL dernière consultation en français"
+                  name="urlLastConsFr"
+                  type="text"
+                  component={ CustomInput }
+              />
+              <ErrorMessage name="urlLastConsFr" component={ CustomError }/>
 
               <label>Description en français</label>
               <PolylexRichEditor

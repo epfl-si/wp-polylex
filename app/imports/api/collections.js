@@ -41,8 +41,34 @@ export const lexesSchema = new SimpleSchema({
         optional: false,
         custom: isRequired,
         regEx: SimpleSchema.RegEx.Url,
-    },    
-    categoryId: {
+    },
+    urlLastConsEn: {
+      type: String,
+      label: "URL dernière consultation en anglais",
+      optional: true,
+      custom: function () {
+        const url = this.value;
+        if (url && url.trim() !== '') {
+          if (!SimpleSchema.RegEx.Url.test(url)) {
+            return 'invalidUrl';
+          }
+        }
+      }
+    },
+    urlLastConsFr: {
+      type: String,
+      label: "URL dernière consultation en français",
+      optional: true,
+      custom: function () {
+        const url = this.value;
+        if (url && url.trim() !== '') {
+          if (!SimpleSchema.RegEx.Url.test(url)) {
+            return 'invalidUrl';
+          }
+        }
+      }
+    },
+  categoryId: {
         type: String,
         label: "Catégorie",
         optional: false,
@@ -70,12 +96,12 @@ export const lexesSchema = new SimpleSchema({
       optional: true
     },
     descriptionFr: {
-        type: String, 
+        type: String,
         label: "Description en francais",
         optional: true,
     },
     descriptionEn: {
-        type: String, 
+        type: String,
         label: "Description en anglais",
         optional: true,
     },
@@ -109,7 +135,7 @@ export const lexesSchema = new SimpleSchema({
 lexesSchema.messageBox = messageBox;
 
 export const categoriesSchema = new SimpleSchema({
-    // _id use to update 
+    // _id use to update
     _id: {
         type: String,
         optional: true,
@@ -135,7 +161,7 @@ export const categoriesSchema = new SimpleSchema({
 categoriesSchema.messageBox = messageBox;
 
 export const subcategoriesSchema = new SimpleSchema({
-    // _id use to update 
+    // _id use to update
     _id: {
         type: String,
         optional: true,
@@ -161,7 +187,7 @@ export const subcategoriesSchema = new SimpleSchema({
 subcategoriesSchema.messageBox = messageBox;
 
 export const responsiblesSchema = new SimpleSchema({
-    // _id use to update 
+    // _id use to update
     _id: {
         type: String,
         optional: true,
@@ -187,19 +213,19 @@ export const responsiblesSchema = new SimpleSchema({
         label: "URL",
         optional: false,
         max: 255,
-        min: 1, 
+        min: 1,
         custom: isRequired,
         regEx: SimpleSchema.RegEx.Url,
-    },   
+    },
     urlEn: {
         type: String,
         label: "URL",
         optional: false,
         max: 255,
-        min: 1, 
+        min: 1,
         custom: isRequired,
         regEx: SimpleSchema.RegEx.Url,
-    },   
+    },
 });
 
 responsiblesSchema.messageBox = messageBox;
