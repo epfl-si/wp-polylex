@@ -38,6 +38,7 @@ const messageBox = new MessageBox({
         }
       },
       keyNotInSchema:  (context) => `${context.name} n'est pas autorisé par le schéma`,
+      invalidUrl: () => `Cette URL est invalide`,
     },
   },
   tracker: Tracker,

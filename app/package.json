@@ -1,6 +1,6 @@
 {
   "name": "wp-polylex",
-  "version": "1.11.0",
+  "version": "1.12.0",
   "private": true,
   "scripts": {
     "start": "meteor run",
@@ -9,19 +9,20 @@
     "visualize": "meteor --production --extra-packages bundle-visualizer"
   },
   "dependencies": {
-    "@babel/runtime": "^7.19.0",
+    "@babel/runtime": "^7.23.6",
     "bcrypt": "^5.0.1",
     "draft-js": "^0.11.7",
     "draft-js-export-html": "^1.4.1",
     "draft-js-import-html": "^1.4.1",
-    "formik": "^2.2.9",
-    "helmet": "^6.0.0",
+    "formik": "^2.4.5",
+    "helmet": "^6.2.0",
+    "message-box": "^0.2.7",
     "meteor-node-stubs": "^1.2.5",
     "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.4.1",
-    "react-select": "^5.4.0",
+    "react-router-dom": "^6.21.0",
+    "react-select": "^5.8.0",
     "react-switch": "^7.0.0",
     "simpl-schema": "^1.13.1"
   },
