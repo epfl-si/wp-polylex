@@ -1,5 +1,7 @@
 # wp-polylex
 
+[![Test](https://github.com/epfl-si/wp-polylex/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/epfl-si/wp-polylex/actions/workflows/test.yml)
+
 Cette application a pour but de stocker les textes légaux abrogés.
 
 ## Lancer l'application en local 
