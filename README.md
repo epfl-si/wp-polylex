@@ -1,7 +1,5 @@
 # wp-polylex
 
-[![Build Status](https://travis-ci.org/epfl-si/wp-polylex.svg?branch=master)](https://travis-ci.org/epfl-si/wp-polylex)
-
 Cette application a pour but de stocker les textes légaux abrogés.
 
 ## Lancer l'application en local 
