@@ -1,0 +1,30 @@
+name: Test
+
+on: [push, pull_request]
+
+env:
+  METEOR_VERSION: 2.7.3
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: Test
+
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 14
+
+      - name: Install meteor
+        run: |
+          curl https://install.meteor.com/?release=$METEOR_VERSION | sh
+
+      - name: Test
+        run: |
+          cd app/
+          meteor npm i
+          npm test
