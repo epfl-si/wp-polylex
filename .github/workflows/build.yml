@@ -43,5 +43,5 @@ jobs:
           docker tag wp-polylex $IMAGE_ID:latest
           docker push $IMAGE_ID:latest
 
-          docker tag wp-polylex $IMAGE_ID:${GITHUB_REF_NAME#v}
-          docker push $IMAGE_ID:${GITHUB_REF_NAME#v}
+          docker tag wp-polylex $IMAGE_ID:${GITHUB_REF_NAME}
+          docker push $IMAGE_ID:${GITHUB_REF_NAME}
