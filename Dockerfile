@@ -1,13 +1,16 @@
 FROM ubuntu:focal
 
+ENV METEOR_VERSION=2.7.3
+
 RUN set -e -x; export DEBIAN_FRONTEND=noninteractive; \
     apt -qy update; \
     apt -qy install curl gnupg
 
-RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash - && apt-get -qy install nodejs
+RUN curl -fsSL https://deb.nodesource.com/setup_14.x | grep -v 'sleep' | bash - \
+    && apt-get -qy install nodejs
 
 # not recommended by the Meteor guide, but still works:
-RUN curl https://install.meteor.com/ | sh
+RUN curl https://install.meteor.com/?release=$METEOR_VERSION | sh
 
 RUN mkdir -p /usr/src/app/
 COPY ./app /usr/src/app
