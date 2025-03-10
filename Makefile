@@ -12,10 +12,6 @@ help:
 	@echo "  make apidoc             — Refresh API documentation"
 	@echo "  make prettier           — Prettier all the things"
 	@echo "  make prettier-check     — Check if prettier need to be run"
-	@echo "Publication and deployment:"
-	@echo "  make publish            — To build, tag and push new Image"
-	@echo "  make deploy-test        — To deploy on test environment"
-	@echo "  make deploy-prod        — To deploy on prod environment"
 	@echo "Development:"
 	@echo "  make dev-up             — Brings up Docker services for development"
 	@echo "  make dev-build          — Build Docker services for development"
@@ -56,60 +52,6 @@ prettier-check:
 prettier:
 	npx prettier --write "app/{client,private,server,tests}/**/*.{js,jsx}"
 	npx prettier --write "cli/**/*.js"
-
-.PHONY: build
-build:
-	@echo '**** Start build: ****'
-	docker build -t epflsi/polylex .
-	@echo '**** End build: ****'
-
-.PHONY: tag
-tag:
-	@echo '**** Start tag: ****'
-	docker tag epflsi/polylex:latest epflsi/polylex:latest
-	@echo '**** End tag: ****'
-
-.PHONY: push
-push:
-	@echo '**** Start push: ****'
-	docker push epflsi/polylex:latest
-	docker push epflsi/polylex:latest
-	@echo '**** End push: ****'
-
-.PHONY: deploy-test
-deploy-test:
-	@echo '**** Start deploy: ****'
-	if [ -z "$$(oc project)" ]; then \
-		echo "pas loggué"; \
-		oc login; \
-	else \
-		echo "loggué"; \
-	fi
-	cd ansible/; \
-	export $$(xargs < /keybase/team/epfl_wppolylex/env); \
-	ansible-playbook playbook.yml -i hosts-test
-	@echo '**** End deploy: ****'
-
-.PHONY: deploy-prod
-deploy-prod:
-	@echo '**** Start deploy: ****'
-	if [ -z "$$(oc project)" ]; then \
-		echo "pas loggué"; \
-		oc login; \
-	else \
-		echo "loggué"; \
-	fi
-	cd ansible/; \
-	export $$(xargs < /keybase/team/epfl_wppolylex/env); \
-	ansible-playbook playbook.yml -i hosts-prod
-	@echo '**** End deploy: ****'
-
-.PHONY: publish
-publish:
-	$(MAKE) build
-	$(MAKE) tag
-	$(MAKE) push
-
 
 ################################################################################
 # Targets for development purpose only                                         #
