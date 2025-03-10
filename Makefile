@@ -24,13 +24,13 @@ help:
 	@echo "  make dev-cli            — Install polylex-cli in the meteor container"
 
 # To add all variable to your shell, use
-# export $(xargs < /keybase/team/epfl_polylex/env);
+# export $(xargs < /keybase/team/epfl_wppolylex/env);
 check-env:
-ifeq ($(wildcard /keybase/team/epfl_polylex/env),)
-	@echo "Be sure to have access to /keybase/team/epfl_polylex/env"
+ifeq ($(wildcard /keybase/team/epfl_wppolylex/env),)
+	@echo "Be sure to have access to /keybase/team/epfl_wppolylex/env"
 	@exit 1
 else
-include /keybase/team/epfl_polylex/env
+include /keybase/team/epfl_wppolylex/env
 endif
 
 print-env: check-env
@@ -86,7 +86,7 @@ deploy-test:
 		echo "loggué"; \
 	fi
 	cd ansible/; \
-	export $$(xargs < /keybase/team/epfl_polylex/env); \
+	export $$(xargs < /keybase/team/epfl_wppolylex/env); \
 	ansible-playbook playbook.yml -i hosts-test
 	@echo '**** End deploy: ****'
 
@@ -100,7 +100,7 @@ deploy-prod:
 		echo "loggué"; \
 	fi
 	cd ansible/; \
-	export $$(xargs < /keybase/team/epfl_polylex/env); \
+	export $$(xargs < /keybase/team/epfl_wppolylex/env); \
 	ansible-playbook playbook.yml -i hosts-prod
 	@echo '**** End deploy: ****'
 
