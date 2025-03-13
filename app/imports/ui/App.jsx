@@ -18,7 +18,7 @@ class App extends Component {
     if (absoluteUrl.startsWith("http://localhost:3000/")) {
       environment = "LOCALHOST";
     } else if (
-      absoluteUrl.startsWith("https://polylex.128.178.222.83.nip.io/")
+      absoluteUrl.startsWith("https://polylex-admin-test.epfl.ch/")
     ) {
       environment = "TEST";
     } else {
