@@ -3,4 +3,3 @@
   gather_facts: no   # Not yet
   roles:
     - role: roles/epfl.wp-polylex
- 
