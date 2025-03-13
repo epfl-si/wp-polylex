@@ -46,22 +46,16 @@ Commands:
   help [command]           display help for command
 ```
 
-## Déployer une nouvelle version sur l'environnement de test d'Openshift
+## Déployer une nouvelle version sur Openshift
 Pour commencer, si ce n'est déjà fait, on doit changer le numéro de version :
 - Dans le fichier app/package.json
 - Dans le composant Header app/imports/ui/header/Header.jsx pour correspondre à la version du fichier app/package.json
+- Dans les fichiers d'inventaire Ansible ansible/inventory/*.yml
 - On commit/push
 - On crée le tag : `git tag -a 1.0 -m "polylex version 1.0"`
 - On push le tag : `git push --follow-tags`
 Puis,
-- `./ansible/polysible -t build-and-deploy`
-
-Si le build est difficile sur Openshift, on peut le faire localement et ensuite pusher l'image avec:
-- `./ansible/polysible -t locally-build-and-deploy`
-
-## Déployer de test vers la prod. d'Openshift
-
-`./ansible/polysible --prod -t promote`
+- `./ansible/polysible [--prod]`
 
 ## Plus d'info sur la configuration OpenShift
 
