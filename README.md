@@ -57,19 +57,11 @@ Pour commencer, si ce n'est déjà fait, on doit changer le numéro de version :
 Puis,
 - `./ansible/polysible [--prod]`
 
-## Plus d'info sur la configuration OpenShift
-
-<a href="https://docs.google.com/document/d/165DWXhxMyjb4EY8wQMwvGlTYUddYvgMnaAP2OR7-Foo" target="_blank">Déploiement de Polylex sur OpenShift</a>
-
 ## Autentification Tequila et rôle
 
 - Pour se connecter à l'application, il se faut s'authentifier Tequila.
 - Pour obtenir le rôle 'admin' il faut appartenir au groupe 'wp-polylex-admins' de l'application groups.epfl.ch
 - Pour obtenir le rôle 'editor' il faut appartenir au groupe 'wp-polylex-editors' de l'application groups.epfl.ch
-
-ATTENTION :
-A la différence de wp-veritas, la mise à jour de meteor 1.9 ne pose pas de problème. Donc dans le Dockerfile on utilise node en version 12
-`FROM node:12.14.0-alpine`
 
 ## Exécuter les tests en local
 
