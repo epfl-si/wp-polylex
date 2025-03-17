@@ -1,0 +1,21 @@
+- name: Secrets tasks
+  ansible.builtin.include_tasks:
+    file: 'secrets.yml'
+    apply:
+      tags: wppolylex.secrets
+  tags: wppolylex.secrets
+
+- name: Route tasks
+  ansible.builtin.include_tasks:
+    file: 'route.yml'
+    apply:
+      tags: wppolylex.route
+  tags: wppolylex.route
+
+- name: App tasks
+  ansible.builtin.include_tasks:
+    file: 'app.yml'
+    apply:
+      tags: wppolylex.app
+  tags:
+    - wppolylex.app
