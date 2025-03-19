@@ -18,8 +18,8 @@ table#log {
   height: 88px;
   overflow: hidden;
   position: absolute;
-  top: -3px;
-  right: -3px
+  top: 0;
+  right: 0;
 }
 
 .ribbon {
@@ -39,8 +39,8 @@ table#log {
   position: relative;
   padding: 7px 0;
   right: 20px;
-  top: 21px;
-  width: 140px;
+  top: 18px;
+  width: 143px;
   height: 28px;
   -webkit-box-shadow: 0 0 3px rgba(0, 0, 0, .3);
   box-shadow: 0 0 3px rgba(0, 0, 0, .3);
