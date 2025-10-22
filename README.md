@@ -1,7 +1,7 @@
 # wp-polylex
 
-[![Test](https://github.com/epfl-si/wp-polylex/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/epfl-si/wp-polylex/actions/workflows/test.yml)
-[![Build](https://github.com/epfl-si/wp-polylex/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/epfl-si/wp-polylex/actions/workflows/build.yml)
+[![Test](https://github.com/epfl-si/wp-polylex/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/epfl-si/wp-polylex/actions/workflows/test.yml)
+[![Build](https://github.com/epfl-si/wp-polylex/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/epfl-si/wp-polylex/actions/workflows/build.yml)
 
 Cette application a pour but de stocker les textes légaux abrogés.
 
