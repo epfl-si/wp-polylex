@@ -1,6 +1,6 @@
 FROM ubuntu:focal
 
-ENV METEOR_VERSION=2.7.3
+ENV METEOR_VERSION=2.16
 
 RUN set -e -x; export DEBIAN_FRONTEND=noninteractive; \
     apt -qy update; \
@@ -19,7 +19,7 @@ RUN meteor npm i
 RUN meteor build --allow-superuser /usr --directory
 RUN cd /usr/bundle/programs/server && npm install
 
-FROM public.ecr.aws/docker/library/node:14.19.3-alpine
+FROM public.ecr.aws/docker/library/node:14-alpine
 
 COPY --from=0 /usr/bundle /usr/bundle/
 WORKDIR /usr/bundle
