@@ -10,6 +10,10 @@ Se placer dans l'app :
 
 `cd app/`
 
+La première fois, installer les paquets :
+
+`meteor npm i`
+
 Puis lancer la commande :
 
 `meteor --settings settings.json`
