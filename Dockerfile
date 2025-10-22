@@ -29,4 +29,4 @@ RUN \
     "s/auth_check: auth_check/auth_check: auth_check, allowedrequesthosts: '10.180.21.0\/24'/" \
     programs/server/npm/node_modules/meteor/epfl_accounts-tequila/node_modules/passport-tequila/lib/passport-tequila/protocol.js
 
-CMD node main.js
+CMD ["node", "main.js"]
