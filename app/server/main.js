@@ -2,7 +2,6 @@ import helmet from "helmet";
 import Tequila from "meteor/epfl:accounts-tequila";
 import { Meteor } from "meteor/meteor";
 import { WebApp } from "meteor/webapp";
-import { importData } from "./import-data";
 import { AppLogger } from "../imports/api/logger";
 import { loadFixtures } from "./fixtures";
 import "../imports/api/publications";
@@ -14,7 +13,6 @@ import "../imports/api/methods/subcategories";
 import "../imports/api/methods/lexes";
 
 Meteor.startup(() => {
-  let needImportData = false;
   let activeTequila = true;
 
   // Define lang <html lang="fr" />
@@ -39,10 +37,6 @@ Meteor.startup(() => {
 
   // Setting up logs
   new AppLogger();
-
-  if (needImportData) {
-    importData();
-  }
 
   loadFixtures();
 
