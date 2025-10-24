@@ -16,6 +16,7 @@
     "draft-js-import-html": "^1.4.1",
     "formik": "^2.4.5",
     "helmet": "^6.2.0",
+    "immutable": "^3",
     "message-box": "^0.2.7",
     "meteor-node-stubs": "^1.2.5",
     "moment": "^2.29.4",
