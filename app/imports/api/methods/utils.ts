@@ -1,3 +1,7 @@
+import { Roles } from "meteor/alanning:roles";
+import { Meteor } from "meteor/meteor";
+
+
 function trimObjValues(obj) {
   Object.keys(obj).forEach((key) => {
     if (obj[key].hasOwnProperty('trim')) {

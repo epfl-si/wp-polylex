@@ -1,8 +1,7 @@
-import {
-  Lexes
-} from "../imports/api/collections.js"
+import {Lexes} from "/imports/api/collections/lexes";
 
 // Global API configuration
+// @ts-ignore
 let LexRedirect = new Restivus({
   apiPath: '/lex',
   useDefaultAuth: false

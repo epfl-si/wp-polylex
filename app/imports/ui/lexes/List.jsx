@@ -1,11 +1,12 @@
 import React from 'react';
 import { withTracker } from 'meteor/react-meteor-data'
 import { Link } from 'react-router-dom';
-import { Lexes, Categories, Subcategories } from '../../api/collections'
+import { Categories, Subcategories } from '../../api/collections'
 import { Loading } from '../Messages';
 import exporter from './exporter'
 import moment from 'moment';
 import { removeLex } from '../../api/methods/lexes';
+import { Lexes } from '/imports/api/collections/lexes'
 
 const Cells = (props) => {
   const getCategoryNameFr = (categoryId) => {

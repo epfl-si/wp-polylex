@@ -1,11 +1,13 @@
+import { Meteor } from "meteor/meteor";
 import SimpleSchema from "simpl-schema";
-import { _ } from "meteor/underscore";
-import { responsiblesSchema, Responsibles, Lexes } from "../collections";
+
+import {Responsibles, responsiblesSchema} from "/imports/api/collections/responsibles";
 import { AppLogger } from "../logger";
 import { throwMeteorErrors } from "../error";
 import { trimObjValues } from "./utils";
 import { rateLimiter } from "./rate-limiting";
 import { Editor, PolylexValidatedMethod } from "./roles";
+import {Lexes} from "/imports/api/collections/lexes";
 
 function prepareUpdateInsertResponsible(responsible, action) {
   // Trim all attributes of responsible
@@ -55,7 +57,7 @@ const insertResponsible = new PolylexValidatedMethod({
     });
 
     AppLogger.getLog().info(
-      `Insert responsible ID ${newResponsibleAfterInsert._id}`,
+      `Insert responsible ID ${newResponsibleAfterInsert!._id}`,
       { before: "", after: newResponsibleAfterInsert },
       this.userId
     );
@@ -105,7 +107,7 @@ const removeResponsible = new PolylexValidatedMethod({
   }).validator(),
   run({ responsibleId }) {
     // Check if responsible is used
-    lexesByResponsible = Lexes.find({ responsibleId: responsibleId }).count();
+    const lexesByResponsible = Lexes.find({ responsibleId: responsibleId }).count();
     if (lexesByResponsible > 0) {
       throw new Meteor.Error(
         "Remove responsible",

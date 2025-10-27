@@ -1,5 +1,5 @@
 import assert from "assert";
-import { Lexes, Subcategories } from "../../collections";
+import { Subcategories } from "../../collections";
 import { insertLex, updateLex, removeLex } from "../lexes";
 import { resetDatabase } from "meteor/xolvio:cleaner";
 import { createUser } from "../../../../tests/helpers";
@@ -7,6 +7,7 @@ import { insertCategory } from "../categories";
 import { insertSubcategory } from "../subcategories";
 import { insertResponsible } from "../responsibles";
 import { loadFixtures } from "../../../../server/fixtures";
+import { Lexes } from '/imports/api/collections/lexes'
 
 function createCategory(userId) {
   const context = { userId };

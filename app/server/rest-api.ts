@@ -1,10 +1,17 @@
 import {
-  Lexes,
   Categories,
   Responsibles,
-} from "../imports/api/collections.js";
+} from "/imports/api/collections";
 import { EditorState, convertFromRaw } from "draft-js";
 import { stateToHTML } from "draft-js-export-html";
+import {Lexes} from "/imports/api/collections/lexes";
+
+
+declare class Restivus {
+  constructor (options?: any);
+  public addCollection<T>(collection: Mongo.Collection<T>);
+  public addRoute<T>(path: string, conf: {}, routes: {});
+}
 
 function getLex(lex) {
   let category = Categories.findOne(lex.categoryId);
@@ -49,7 +56,7 @@ Api.addRoute(
   {
     get: function () {
       const query = this.queryParams;
-      let newLexes = [];
+      let newLexes: any[] = [];
       let lexes;
 
       if (query.isAbrogated) {

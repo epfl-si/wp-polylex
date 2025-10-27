@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import React from 'react';
+import { Roles } from "meteor/alanning:roles";
 import { Link, NavLink } from 'react-router-dom';
 import logo from './Logo_EPFL.svg';
 import { Loading } from '../Messages';
@@ -10,9 +11,16 @@ const Header = (props) => {
   if (props.currentUser === undefined) { 
     content = <Loading />
   } else { 
-    let isAdmin = Roles.userIsInRole(Meteor.userId(), 'admin', Roles.GLOBAL_GROUP);
-    let isEditor = Roles.userIsInRole(Meteor.userId(), 'editor', Roles.GLOBAL_GROUP);
+    let isAdmin = Meteor.userId() &&
+      Roles.userIsInRole(
+        Meteor.userId()!, 'admin', Roles.GLOBAL_GROUP
+      );
+    let isEditor = Meteor.userId() &&
+      Roles.userIsInRole(
+        Meteor.userId()!, 'editor', Roles.GLOBAL_GROUP
+      );
     let peopleUrl = "https://people.epfl.ch/" + props.currentUser._id;
+
     content =  (
       <header className="navbar navbar-expand-lg navbar-light bg-light border-bottom">
         <Link className="navbar-brand" to="/"><img src={logo} className="App-logo" alt="logo"/></Link>

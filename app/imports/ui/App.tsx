@@ -1,6 +1,8 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import React, { Component } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { withTracker } from "meteor/react-meteor-data";
+import { Roles } from "meteor/alanning:roles";
+
 import Footer from "./footer/Footer";
 import Header from "./header/Header";
 import List from "./lexes/List";
@@ -10,6 +12,7 @@ import Category from "./admin/Category";
 import Subcategory from "./admin/Subcategory";
 import Log from "./admin/Log";
 import { Loading } from "./Messages";
+
 
 class App extends Component {
   getEnvironment() {
@@ -30,20 +33,23 @@ class App extends Component {
   render() {
     let isAdmin;
     let isEditor;
+    // @ts-ignore
     let isLoading = this.props.currentUser === undefined;
     if (isLoading) {
       return <Loading />;
     } else {
-      isAdmin = Roles.userIsInRole(
-        Meteor.userId(),
-        "admin",
-        Roles.GLOBAL_GROUP
+      isAdmin = Meteor.userId() &&
+        Roles.userIsInRole(
+          Meteor.userId()!,
+          "admin",
+          Roles.GLOBAL_GROUP
       );
-      isEditor = Roles.userIsInRole(
-        Meteor.userId(),
-        "editor",
-        Roles.GLOBAL_GROUP
-      );
+      isEditor = Meteor.userId() &&
+        Roles.userIsInRole(
+          Meteor.userId()!,
+          "editor",
+          Roles.GLOBAL_GROUP
+        );
     }
 
     const ribbon = (
@@ -78,8 +84,11 @@ class App extends Component {
   }
 }
 export default withTracker(() => {
-  let user = Meteor.users.findOne({ _id: Meteor.userId() });
+  let user = Meteor.userId() ?
+    Meteor.users.findOne({ _id: Meteor.userId()! }) :
+    undefined;
   return {
     currentUser: user,
   };
+// @ts-ignore
 })(App);
