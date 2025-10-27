@@ -5,6 +5,7 @@ import { Roles } from "meteor/alanning:roles";
 import { Link, NavLink } from 'react-router-dom';
 import logo from './Logo_EPFL.svg';
 import { Loading } from '../Messages';
+import packageJson from '/package.json'
 
 const Header = (props) => {
   let content;
@@ -53,7 +54,7 @@ const Header = (props) => {
               { isAdmin ?
                 <>
                   <NavLink className="{({isActive}) => (isActive ? 'active-style' : '')} dropdown-item" to="/admin/log/list">Voir les logs</NavLink>
-                  <div className="dropdown-item">Polylex - version 1.14.1</div>
+                  <div className="dropdown-item">Polylex - version { packageJson.version }</div>
                 </>
                 : null}
               </div>
