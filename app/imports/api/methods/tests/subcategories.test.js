@@ -1,9 +1,9 @@
 import assert from "assert";
 import { Subcategories } from "../../collections";
 import { insertSubcategory, updateSubcategory, removeSubcategory } from "../subcategories";
-import { resetDatabase } from "meteor/xolvio:cleaner";
 import { createUser } from '/tests/helpers';
 import { setRolesFixtures } from '/server/fixtures'
+import { resetDatabase } from '/tests/resetDatabase';
 
 if (Meteor.isServer) {
   describe("meteor methods subcategory", function () {

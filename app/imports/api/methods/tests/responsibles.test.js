@@ -5,9 +5,9 @@ import {
   updateResponsible,
   removeResponsible,
 } from "../responsibles";
-import { resetDatabase } from "meteor/xolvio:cleaner";
 import { createUser } from '/tests/helpers';
 import { setRolesFixtures } from '/server/fixtures';
+import { resetDatabase } from '/tests/resetDatabase';
 
 if (Meteor.isServer) {
   describe("meteor methods responsible", function () {

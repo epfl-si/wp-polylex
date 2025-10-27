@@ -32,7 +32,6 @@ alanning:roles@3.6.3              # roles
 ostrio:logger@2.1.1               # logger
 ostrio:loggermongo@2.1.0          # logger stores in MongoDB
 mdg:validated-method@1.2.0        # Improve meteor methods
-xolvio:cleaner@0.4.0              # Clean tests DB 
 typescript                        # Cleaner than JS
 zodern:types                      # Meteor types
 service-configuration

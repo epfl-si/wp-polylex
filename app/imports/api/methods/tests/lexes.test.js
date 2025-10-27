@@ -1,13 +1,13 @@
 import assert from "assert";
 import { Subcategories } from "../../collections";
 import { insertLex, updateLex, removeLex } from "../lexes";
-import { resetDatabase } from "meteor/xolvio:cleaner";
 import { createUser } from '/tests/helpers';
 import { insertCategory } from "../categories";
 import { insertSubcategory } from "../subcategories";
 import { insertResponsible } from "../responsibles";
 import { setRolesFixtures } from '/server/fixtures';
 import { Lexes } from '/imports/api/collections/lexes'
+import { resetDatabase } from '/tests/resetDatabase';
 
 function createCategory(userId) {
   const context = { userId };
