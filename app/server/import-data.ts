@@ -1,6 +1,8 @@
-import { Subcategories, Lexes } from "../imports/api/collections";
+import { Subcategories } from "/imports/api/collections";
+import {Lexes} from "/imports/api/collections/lexes";
 
-deleteUserProfile = () => {
+
+export const deleteUserProfile = () => {
   let users = Meteor.users.find({}).fetch();
   users.forEach((user) => {
     Meteor.users.update({ _id: user._id }, { $unset: { profile: "" } });
@@ -8,7 +10,7 @@ deleteUserProfile = () => {
   console.log("All profiles are deleted");
 };
 
-convertSubcategoryIdToSubcategories = () => {
+export const convertSubcategoryIdToSubcategories = () => {
   console.log("Convert subcategoryId to subcategories is starting ...");
 
   let lexes = Lexes.find({}).fetch();
@@ -20,6 +22,7 @@ convertSubcategoryIdToSubcategories = () => {
       let subcategories = [];
       let subcategory = Subcategories.findOne({ _id: lex.subcategoryId });
 
+      // @ts-ignore
       subcategories.push(subcategory);
 
       Lexes.update(
@@ -35,7 +38,7 @@ convertSubcategoryIdToSubcategories = () => {
   console.log("Convert subcategoryId to subcategories is complete !");
 };
 
-deleteSubcategoryId = () => {
+export const deleteSubcategoryId = () => {
   console.log("Delete Field subcategoryId for all sites ...");
   let lexes = Lexes.find({});
   let lexAfter;
@@ -50,5 +53,3 @@ deleteSubcategoryId = () => {
   });
   console.log("Finish!!");
 };
-
-export { deleteAll };

@@ -1,18 +1,33 @@
-import { Categories, Responsibles } from '../../api/collections'
+import Papa from 'papaparse'
+import { saveAs } from 'file-saver';
 
-export const exporter = (lexes) => {
-    lexes.forEach(function (lex) {
+import { Categories, Responsibles } from '../../api/collections'
+import {Lex} from "/imports/api/collections/lexes";
+
+
+type LexExportable = Lex & {
+  responsibleFirstName?: string
+  responsibleLastName?: string
+  responsibleUrlFr?: string
+  responsibleUrlEn?: string
+  categoryNameFr?: string
+  categoryNameEn?: string
+  status: 'Abrogé' | 'Actif'
+}
+
+export const exporter = (lexes: Lex[]) => {
+    lexes.forEach(function (lex: LexExportable) {
         // Responsible info
         let responsible = Responsibles.findOne({ _id: lex.responsibleId });
-        lex.responsibleFirstName = responsible.firstName;
-        lex.responsibleLastName = responsible.lastName;
-        lex.responsibleUrlFr = responsible.urlFr;
-        lex.responsibleUrlEn = responsible.urlEn;
+        lex.responsibleFirstName = responsible?.firstName;
+        lex.responsibleLastName = responsible?.lastName;
+        lex.responsibleUrlFr = responsible?.urlFr;
+        lex.responsibleUrlEn = responsible?.urlEn;
 
         // Category info
         let category = Categories.findOne({ _id: lex.categoryId });
-        lex.categoryNameFr = category.nameFr;
-        lex.categoryNameEn = category.nameEn;
+        lex.categoryNameFr = category?.nameFr;
+        lex.categoryNameEn = category?.nameEn;
 
         // abrogated status
         lex.status = lex.isAbrogated ? 'Abrogé' : 'Actif';

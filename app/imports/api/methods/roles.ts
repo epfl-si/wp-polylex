@@ -1,3 +1,8 @@
+/// <reference path="../../../node_modules/@types/meteor-mdg-validated-method/index.d.ts" />
+// have to reference the type file because the ':' in the package name. See:
+// https://forums.meteor.com/t/typescript-trouble-importing-types-for-meteor-packages-in-vscode/54756
+import {ValidatedMethod} from "meteor/mdg:validated-method";
+
 import { checkUserAndRole } from "./utils";
 
 /**
@@ -6,7 +11,7 @@ import { checkUserAndRole } from "./utils";
  *
  * Pour cela, on ajoute à la méthode validate la vérification de l'utilisateur
  */
-class PolylexValidatedMethod extends ValidatedMethod {
+class PolylexValidatedMethod extends ValidatedMethod<any, any> {
   constructor(args) {
     const validateOrig = args.validate;
     args.validate = function () {

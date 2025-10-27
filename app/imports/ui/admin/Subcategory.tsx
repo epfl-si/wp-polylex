@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useFind, useSubscribe } from 'meteor/react-meteor-data'
 import { Formik, Field, ErrorMessage } from "formik";
-import { Subcategories } from '../../api/collections'
+import { Subcategories, SubCategory } from '../../api/collections/categories'
 import { CustomError, CustomInput } from "../CustomFields";
 import { Link, useParams } from 'react-router-dom'
 import { AlertSuccess, Loading } from "../Messages";
@@ -42,7 +42,8 @@ const Subcategory = () => {
           if (errors) {
             console.log(errors);
             let formErrors = {};
-            errors.details.forEach(function(error) {
+            // @ts-ignore
+            errors.details?.forEach(function(error) {
               formErrors[error.name] = error.message;
             });
             actions.setErrors(formErrors);
@@ -63,7 +64,8 @@ const Subcategory = () => {
         if (errors) {
           console.log(errors);
           let formErrors = {};
-          errors.details.forEach(function(error) {
+          // @ts-ignore
+          errors.details?.forEach(function(error) {
             formErrors[error.name] = error.message;
           });
           actions.setErrors(formErrors);
@@ -127,7 +129,10 @@ const Subcategory = () => {
 
 const SubcategoriesList = (props) => {
   const isLoading = useSubscribe('subcategories');
-  const subcategories = useFind(() => Subcategories.find({}, { sort: { lastName: 1 } }), []);
+  const subcategories: SubCategory[] = useFind(
+    () => Subcategories.find({}, { sort: { lastName: 1 } }) as any,
+    []
+  );
 
   if (isLoading()) {
     return <Loading />;

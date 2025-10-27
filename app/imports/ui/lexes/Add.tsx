@@ -5,7 +5,6 @@ import { useParams } from 'react-router-dom'
 import { EditorState, convertToRaw, convertFromRaw } from "draft-js";
 import { Formik, Field, ErrorMessage, useFormikContext } from 'formik';
 import {
-  Lexes,
   Categories,
   Subcategories,
   Responsibles,
@@ -18,6 +17,7 @@ import "./rich-editor.css";
 import { PolylexRichEditor } from "./RichEditor";
 import Switch from "react-switch";
 import moment from 'moment';
+import {Lex, Lexes} from "/imports/api/collections/lexes";
 
 const Add = ({ isLoading }) => {
 
@@ -57,7 +57,8 @@ const Add = ({ isLoading }) => {
       if (errors) {
         console.log(errors);
         let formErrors = {};
-        errors.details.forEach(function (error) {
+        // @ts-ignore
+        errors.details?.forEach(function (error) {
           formErrors[error.name] = error.message;
         });
         actions.setErrors(formErrors);
@@ -83,7 +84,8 @@ const Add = ({ isLoading }) => {
       if (errors) {
         console.log(errors);
         let formErrors = {};
-        errors.details.forEach(function (error) {
+        // @ts-ignore
+        errors.details?.forEach(function (error) {
           formErrors[error.name] = error.message;
         });
         actions.setErrors(formErrors);
@@ -138,6 +140,7 @@ const AbrogeSwitch = (props) => {
   const [checked, setChecked] = useState(!props.value);
 
   const {
+    // @ts-ignore
     values: { abrogationDate },
     initialValues,
     setFieldValue,
@@ -147,15 +150,16 @@ const AbrogeSwitch = (props) => {
     setChecked(nextChecked);
     props.setFieldValue(props.name, checked, false);
 
-
     // set or unset abrogation date on change
     if (!nextChecked) {
       if (!abrogationDate) {
         setFieldValue('abrogationDate', moment().format('YYYY-MM-DD'));
       }
     } else {
-      // reset the value if it was not set initialy
-      if (!initialValues.abrogationDate || initialValues.abrogationDate === '') {
+      const initialLex = initialValues as Lex
+
+      // reset the value if it was not set initially
+      if (!initialLex.abrogationDate || initialLex.abrogationDate === '') {
         setFieldValue('abrogationDate', '');
       }
     }
@@ -171,7 +175,7 @@ const AbrogeSwitch = (props) => {
             uncheckedIcon={false}
             offColor={'#F00'}
             name={props.name}
-            value={checked}
+            value={checked.toString()}
         />
       </span>
       <span className={ 'pl-2' }>
@@ -201,38 +205,45 @@ const LexForm = ({
 
     if (lex !== undefined) {
       lex.descriptionFr = EditorState.createWithContent(
-          convertFromRaw(JSON.parse(lex.descriptionFr))
+          convertFromRaw(JSON.parse(lex.descriptionFr as string ?? ""))
       );
       lex.descriptionEn = EditorState.createWithContent(
-          convertFromRaw(JSON.parse(lex.descriptionEn))
+          convertFromRaw(JSON.parse(lex.descriptionEn as string ?? ""))
       );
     }
     return lex;
   };
 
   const getInitialValues = (_id) => {
-    if (_id) {
-      return getLex(_id);
-    } else {
-      return {
-        lex: "",
-        titleFr: "",
-        titleEn: "",
-        urlFr: "",
-        urlEn: "",
-        urlLastConsEn: "",
-        urlLastConsFR: "",
-        descriptionFr: new EditorState.createWithText(""), // https://github.com/facebook/draft-js/commit/fc9395fe7ebf077db903c9c8fed71f136528ea5b
-        descriptionEn: new EditorState.createWithText(""),
-        effectiveDate: "",
-        revisionDate: "",
-        isAbrogated: false,
-        abrogationDate: "",
-        categoryId: "",
-        subcategories: [],
-        responsibleId: "",
-      };
+    let defaultLex: Lex = {
+      lex: "",
+      titleFr: "",
+      titleEn: "",
+      urlFr: "",
+      urlEn: "",
+      urlLastConsEn: "",
+      urlLastConsFr: "",
+      // @ts-ignore
+      descriptionFr: new EditorState.createWithText(""), // https://github.com/facebook/draft-js/commit/fc9395fe7ebf077db903c9c8fed71f136528ea5b
+      // @ts-ignore
+      descriptionEn: new EditorState.createWithText(""),
+      effectiveDate: "",
+      revisionDate: "",
+      isAbrogated: false,
+      abrogationDate: "",
+      categoryId: "",
+      subcategories: [],
+      responsibleId: "",
     }
+
+    if (_id) {
+      const lex =  getLex(_id)
+      if (lex) {
+        return lex;
+      }
+    }
+
+    return defaultLex;
   };
 
   return (

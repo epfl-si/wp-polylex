@@ -31,7 +31,7 @@ const messageBox = new MessageBox({
       notAllowed: () => `Ce champ n\'a pas une valeur autorisée`,
       expectedType: (context) =>
         `${context.label} doit être de type ${context.dataType}`,
-      regEx({ label, regExp }) {
+      regEx({ regExp }) {
         switch (regExp) {
           case SimpleSchema.RegEx.Url.toString():
             return "Cette URL est invalide";

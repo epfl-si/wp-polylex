@@ -1,11 +1,13 @@
-import { Editor, PolylexValidatedMethod } from "./roles";
-import { _ } from "meteor/underscore";
 import SimpleSchema from "simpl-schema";
-import { subcategoriesSchema, Subcategories, Lexes } from "../collections";
+
+import { Editor, PolylexValidatedMethod } from "./roles";
+import { subcategoriesSchema, Subcategories } from "../collections/categories";
 import { AppLogger } from "../logger";
 import { throwMeteorError } from "../error";
 import { trimObjValues } from "./utils";
 import { rateLimiter } from "./rate-limiting";
+import { Meteor } from "meteor/meteor";
+import {Lexes} from "/imports/api/collections/lexes";
 
 function prepareUpdateInsertSubcategory(subcategory, action) {
   // Trim all attributes of subcategory
@@ -72,7 +74,7 @@ const insertSubcategory = new PolylexValidatedMethod({
     });
 
     AppLogger.getLog().info(
-      `Insert subcategory ID ${newSubcategoryAfterInsert._id}`,
+      `Insert subcategory ID ${newSubcategoryAfterInsert!._id}`,
       { before: "", after: newSubcategoryAfterInsert },
       this.userId
     );
@@ -120,7 +122,7 @@ const removeSubcategory = new PolylexValidatedMethod({
   }).validator(),
   run({ subcategoryId }) {
     // Check if subcategory is used
-    lexesBySubcategory = Lexes.find({ subcategoryId: subcategoryId }).count();
+    const lexesBySubcategory = Lexes.find({ subcategoryId: subcategoryId }).count();
     if (lexesBySubcategory > 0) {
       throw new Meteor.Error(
         "Remove subcategory",

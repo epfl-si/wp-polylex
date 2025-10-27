@@ -1,10 +1,10 @@
 import {
-  Lexes,
   Categories,
   Subcategories,
   Responsibles,
   AppLogs,
 } from "./collections";
+import {Lexes} from "/imports/api/collections/lexes";
 
 if (Meteor.isServer) {
   Meteor.publish("lexes", function () {
@@ -34,6 +34,7 @@ if (Meteor.isServer) {
   Meteor.publish(null, function () {
     console.log("this.userId", this.userId);
     if (this.userId) {
+      // @ts-ignore
       return Meteor.roleAssignment.find({ "user._id": this.userId });
     } else {
       this.ready();

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useFind, useSubscribe } from "meteor/react-meteor-data";
 import { Formik, Field, ErrorMessage } from 'formik'
-import { Responsibles } from "../../api/collections";
+import { Responsibles, Responsible } from "../../api/collections/responsibles";
 import { CustomError, CustomInput } from "../CustomFields";
 import { Link, useParams } from 'react-router-dom'
 import { AlertSuccess, Loading } from "../Messages";
 import { insertResponsible, updateResponsible, removeResponsible } from "../../api/methods/responsibles";
+
 
 const Responsible = () => {
   const isLoading = useSubscribe('responsibles');
@@ -40,7 +41,8 @@ const Responsible = () => {
       if (errors) {
         console.log(errors);
         let formErrors = {};
-        errors.details.forEach(function (error) {
+        // @ts-ignore
+        errors.details?.forEach(function (error) {
           formErrors[error.name] = error.message;
         });
         actions.setErrors(formErrors);
@@ -58,7 +60,8 @@ const Responsible = () => {
       if (errors) {
         console.log(errors);
         let formErrors = {};
-        errors.details.forEach(function (error) {
+        // @ts-ignore
+        errors.details?.forEach(function (error) {
           formErrors[error.name] = error.message;
         });
         actions.setErrors(formErrors);
@@ -124,7 +127,10 @@ const Responsible = () => {
 
 const ResponsiblesList = (props) => {
   const isLoading = useSubscribe('responsibles');
-  const responsibles = useFind(() => Responsibles.find({}, { sort: { lastName: 1 } }), []);
+  const responsibles: Responsible[] = useFind(
+    () => Responsibles.find({}, { sort: { lastName: 1 } }) as any,
+    []
+  );
 
   if (isLoading()) {
     return <Loading />;

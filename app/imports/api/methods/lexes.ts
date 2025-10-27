@@ -1,10 +1,11 @@
 import SimpleSchema from "simpl-schema";
-import { lexesSchema, Lexes } from "../collections";
+
 import { AppLogger } from "../logger";
 import { throwMeteorError } from "../error";
 import { trimObjValues } from "./utils";
 import { rateLimiter } from "./rate-limiting";
 import { Editor, PolylexValidatedMethod } from "./roles";
+import {Lexes, lexesSchema} from "/imports/api/collections/lexes";
 
 
 function prepareUpdateInsertLex(lex, action) {

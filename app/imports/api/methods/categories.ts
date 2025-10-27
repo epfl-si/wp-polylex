@@ -1,11 +1,13 @@
-import { _ } from "meteor/underscore";
+import { Meteor } from "meteor/meteor";
 import SimpleSchema from "simpl-schema";
-import { categoriesSchema, Categories, Lexes } from "../collections";
+
+import { Categories, categoriesSchema } from "../collections/categories";
 import { AppLogger } from "../logger";
 import { throwMeteorError } from "../error";
 import { trimObjValues } from "./utils";
 import { rateLimiter } from "./rate-limiting";
 import { Editor, PolylexValidatedMethod } from "./roles";
+import {Lexes} from "/imports/api/collections/lexes";
 
 function prepareUpdateInsertCategory(category, action) {
   // Trim all attributes of category
@@ -64,7 +66,7 @@ const insertCategory = new PolylexValidatedMethod({
     let newCategoryAfterInsert = Categories.findOne({ _id: newCategoryId });
 
     AppLogger.getLog().info(
-      `Insert category ID ${newCategoryAfterInsert._id}`,
+      `Insert category ID ${newCategoryAfterInsert!._id}`,
       { before: "", after: newCategoryAfterInsert },
       this.userId
     );
@@ -107,7 +109,7 @@ const removeCategory = new PolylexValidatedMethod({
   role: Editor,
   run({ categoryId }) {
     // Check if category is used
-    lexesByCategory = Lexes.find({ categoryId: categoryId }).count();
+    const lexesByCategory = Lexes.find({ categoryId: categoryId }).count();
     if (lexesByCategory > 0) {
       throw new Meteor.Error(
         "Remove category",

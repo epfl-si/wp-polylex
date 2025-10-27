@@ -1,9 +1,14 @@
-import helmet from "helmet";
-import Tequila from "meteor/epfl:accounts-tequila";
 import { Meteor } from "meteor/meteor";
 import { WebApp } from "meteor/webapp";
-import { AppLogger } from "../imports/api/logger";
+import { Roles } from "meteor/alanning:roles";
+import helmet from "helmet";
+
+// @ts-ignore
+import Tequila from "meteor/epfl:accounts-tequila";
+
+import { AppLogger } from "/imports/api/logger";
 import { loadFixtures } from "./fixtures";
+
 import "../imports/api/publications";
 import "./rest-api";
 import "./lex-redirect";
@@ -19,6 +24,7 @@ Meteor.startup(() => {
   WebApp.addHtmlAttributeHook(() => ({ lang: "fr" }));
 
   // https://guide.meteor.com/security.html#httpheaders
+
   WebApp.connectHandlers.use(
     helmet.contentSecurityPolicy({
       directives: {
@@ -28,6 +34,7 @@ Meteor.startup(() => {
         imgSrc: ["'self'"],
         styleSrc: ["'self'", "'unsafe-inline'"],
       },
+      // @ts-ignore
       browserSniff: false,
     })
   );
