@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import { Roles } from "meteor/alanning:roles";
+import { Roles } from "meteor/roles"
 import { useTracker } from 'meteor/react-meteor-data';
 import logo from './Logo_EPFL.svg';
 import { Loading } from '../Messages';

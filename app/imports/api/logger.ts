@@ -1,7 +1,7 @@
 // @ts-ignore
 import { Logger } from 'meteor/ostrio:logger';
 // @ts-ignore
-import { LoggerMongo } from 'meteor/ostrio:loggermongo';
+import { LoggerMongo } from 'meteor/epfl:loggermongo';
 import { AppLogs } from './collections';
 
 class AppLogger {

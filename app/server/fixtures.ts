@@ -1,4 +1,4 @@
-import { Roles } from "meteor/alanning:roles";
+import { Roles } from "meteor/roles"
 
 
 export const setRolesFixtures = async () => {

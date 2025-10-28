@@ -1,3 +1,5 @@
+import MakaRest from 'meteor/maka:rest';
+
 import {
   Categories,
   Responsibles,
@@ -7,15 +9,9 @@ import { stateToHTML } from "draft-js-export-html";
 import {Lexes} from "/imports/api/collections/lexes";
 
 
-declare class Restivus {
-  constructor (options?: any);
-  public addCollection<T>(collection: Mongo.Collection<T>);
-  public addRoute<T>(path: string, conf: {}, routes: {});
-}
-
-function getLex(lex) {
-  let category = Categories.findOne(lex.categoryId);
-  let responsible = Responsibles.findOne(lex.responsibleId);
+async function getLex(lex) {
+  let category = await Categories.findOneAsync(lex.categoryId);
+  let responsible = await Responsibles.findOneAsync(lex.responsibleId);
 
   lex.category = category;
   delete lex.categoryId;
@@ -40,10 +36,13 @@ function getLex(lex) {
 }
 
 // Global API configuration
-let Api = new Restivus({
-  useDefaultAuth: true,
+let Api = new MakaRest({
+  apiPath: "api/",
   prettyJson: true,
   version: "v1",
+  auth: {
+    loginType: null
+  }
 });
 
 // Maps to:
@@ -54,25 +53,25 @@ Api.addRoute(
   "lexes",
   { authRequired: false },
   {
-    get: function () {
+    get: async function () {
       const query = this.queryParams;
       let newLexes: any[] = [];
       let lexes;
 
       if (query.isAbrogated) {
         if (['true', '1'].includes(query.isAbrogated)) {
-          lexes = Lexes.find({'isAbrogated': true}).fetch();
+          lexes = await Lexes.find({'isAbrogated': true}).fetchAsync();
         } else if (['false', '0'].includes(query.isAbrogated)) {
-          lexes = Lexes.find({'isAbrogated': {$ne: true}}).fetch();
+          lexes = await Lexes.find({'isAbrogated': {$ne: true}}).fetchAsync();
         }
       } else {
-        lexes = Lexes.find({}).fetch();
+        lexes = await Lexes.find({}).fetchAsync();
       }
 
-      lexes.forEach((lex) => {
-        let newLex = getLex(lex);
+      for (const lex of lexes) {
+        let newLex = await getLex(lex);
         newLexes.push(newLex);
-      });
+      }
 
       return newLexes;
     },
@@ -84,9 +83,9 @@ Api.addRoute(
   "lexes/:id",
   { authRequired: false },
   {
-    get: function () {
-      let lex = Lexes.findOne(this.urlParams.id);
-      return getLex(lex);
+    get: async function () {
+      let lex = await Lexes.findOneAsync(this.urlParams.id);
+      return await getLex(lex);
     },
   }
 );
@@ -96,8 +95,8 @@ Api.addRoute(
   "categories",
   { authRequired: false },
   {
-    get: function () {
-      return Categories.find({}).fetch();
+    get: async function () {
+      return await Categories.find({}).fetchAsync();
     },
   }
 );
