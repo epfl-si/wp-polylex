@@ -1,17 +1,16 @@
-import React, { Component } from "react";
+import React, {useEffect} from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { withTracker } from "meteor/react-meteor-data";
+import { useTracker } from "meteor/react-meteor-data";
 import { Roles } from "meteor/alanning:roles";
 
 import Footer from "./footer/Footer";
-import Header from "./header/Header";
+import { Header } from "./header/Header";
 import List from "./lexes/List";
 import Add from "./lexes/Add";
 import Responsible from "./admin/Responsible";
 import Category from "./admin/Category";
 import Subcategory from "./admin/Subcategory";
 import Log from "./admin/Log";
-import { Loading } from "./Messages";
 
 
 class App extends Component {
@@ -29,6 +28,26 @@ class App extends Component {
     }
     return environment;
   }
+const getEnvironment = () => {
+  const absoluteUrl = Meteor.absoluteUrl();
+
+  if (absoluteUrl.startsWith("http://localhost:3000/")) {
+    return "LOCALHOST";
+  } else if (
+    absoluteUrl.startsWith("https://polylex-admin-test.epfl.ch/")
+  ) {
+    return "TEST";
+  } else {
+    return "PROD";
+  }
+}
+
+const Ribbon = () => <>
+  <div className="ribbon-wrapper">
+    <div className="ribbon">{ getEnvironment() }</div>
+  </div>
+</>;
+
 
   render() {
     let isAdmin;
@@ -51,44 +70,46 @@ class App extends Component {
           Roles.GLOBAL_GROUP
         );
     }
+export const App = () => {
+  const user = useTracker(() => Accounts.user(), []);
 
-    const ribbon = (
-      <div className="ribbon-wrapper">
-        <div className="ribbon">{this.getEnvironment()}</div>
+
+  if (!user) return <h1>Loading...</h1>
+
+
+  const isAdmin = Roles.userIsInRole(
+    user._id,
+    "admin",
+    Roles.GLOBAL_GROUP
+  ) ?? false
+
+  const isEditor = Roles.userIsInRole(
+    user._id,
+    "editor",
+    Roles.GLOBAL_GROUP
+  ) ?? false
+
+  return <>
+    <BrowserRouter>
+      <div className="App container">
+        { getEnvironment() === "PROD" && <Ribbon /> }
+        <Header />
+        { isAdmin || isEditor && (
+          <Routes>
+            <Route path="/*" element={<List />} />
+            <Route path="/add/*" element={<Add />} />
+            <Route path="/edit/:_id" element={<Add />} />
+            <Route path="/admin/responsible/add" element={<Responsible />} />
+            <Route path="/admin/responsible/:_id/edit" element={<Responsible />} />
+            <Route path="/admin/category/add" element={<Category />} />
+            <Route path="/admin/category/:_id/edit" element={<Category />} />
+            <Route path="/admin/subcategory/add" element={<Subcategory />} />
+            <Route path="/admin/subcategory/:_id/edit" element={<Subcategory />} />
+            {isAdmin && <Route path="/admin/log/list/*" element={<Log />} />}
+          </Routes>
+        ) }
+        <Footer />
       </div>
-    );
-
-    return (
-      <BrowserRouter>
-        <div className="App container">
-          {this.getEnvironment() === "PROD" ? null : ribbon}
-          <Header />
-          {isAdmin || isEditor ? (
-              <Routes>
-                <Route path="/*" element={<List />} />
-                <Route path="/add/*" element={<Add />} />
-                <Route path="/edit/:_id" element={<Add />} />
-                <Route path="/admin/responsible/add" element={<Responsible />} />
-                <Route path="/admin/responsible/:_id/edit" element={<Responsible />} />
-                <Route path="/admin/category/add" element={<Category />} />
-                <Route path="/admin/category/:_id/edit" element={<Category />} />
-                <Route path="/admin/subcategory/add" element={<Subcategory />} />
-                <Route path="/admin/subcategory/:_id/edit" element={<Subcategory />} />
-                {isAdmin && <Route path="/admin/log/list/*" element={<Log />} />}
-              </Routes>
-          ) : null}
-          <Footer />
-        </div>
-      </BrowserRouter>
-    );
-  }
+    </BrowserRouter>
+  </>
 }
-export default withTracker(() => {
-  let user = Meteor.userId() ?
-    Meteor.users.findOne({ _id: Meteor.userId()! }) :
-    undefined;
-  return {
-    currentUser: user,
-  };
-// @ts-ignore
-})(App);
