@@ -1,27 +1,34 @@
-FROM ubuntu:focal
+## Setup a meteor image in production mode
+#
+ARG BASE_IMAGE=node:22-trixie
 
-ENV METEOR_VERSION=2.16
+FROM $BASE_IMAGE AS build
 
-RUN set -e -x; export DEBIAN_FRONTEND=noninteractive; \
-    apt -qy update; \
-    apt -qy install curl gnupg
+# Install meteor
+RUN npx meteor
 
-RUN curl -fsSL https://deb.nodesource.com/setup_14.x | grep -v 'sleep' | bash - \
-    && apt-get -qy install nodejs
+ENV NODE_ENV=production
+# to ignore caniuse-lite outdated warning
+ENV BROWSERSLIST_IGNORE_OLD_DATA=1
 
-# not recommended by the Meteor guide, but still works:
-RUN curl https://install.meteor.com/?release=$METEOR_VERSION | sh
+ENV PATH=$PATH:/root/.meteor
+ENV METEOR_ALLOW_SUPERUSER=1
 
-RUN mkdir -p /usr/src/app/
-COPY ./app /usr/src/app
-WORKDIR /usr/src/app/
-RUN meteor npm i
-RUN meteor build --allow-superuser /usr --directory
-RUN cd /usr/bundle/programs/server && npm install
+WORKDIR /app
 
-FROM public.ecr.aws/docker/library/node:14-alpine
+COPY ./app/package.json ./app/package-lock ./
 
-COPY --from=0 /usr/bundle /usr/bundle/
-WORKDIR /usr/bundle
+RUN meteor npm install --production
+
+COPY ./app .
+
+RUN meteor build --directory /built-app
+RUN cd /built-app/bundle/programs/server && meteor npm install --production
+
+FROM $BASE_IMAGE
+
+ENV NODE_ENV=production
+COPY --from=build /built-app/bundle /app
+WORKDIR /app
 
 CMD ["node", "main.js"]
