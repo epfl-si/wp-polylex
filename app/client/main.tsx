@@ -1,24 +1,20 @@
-// @ts-ignore
-import Tequila from "meteor/epfl:accounts-tequila";
 import React from "react";
 import { Meteor } from "meteor/meteor";
-import * as ReactDOMClient from 'react-dom/client';
+import { createRoot } from 'react-dom/client';
 
 import {
   Categories,
   Subcategories,
   Responsibles,
 } from '/imports/api/collections';
-import {Lexes} from "/imports/api/collections/lexes";
-import App from "/imports/ui/App";
+import { Lexes } from "/imports/api/collections/lexes";
+import { App } from "/imports/ui/App";
 
 
 Meteor.startup(() => {
   const container = document.getElementById('react-target');
-  const root = ReactDOMClient.createRoot(container);
+  const root = createRoot(container);
   root.render(<App />);
-
-  Tequila.start();
 });
 
 // allow the use of the console to read some values
