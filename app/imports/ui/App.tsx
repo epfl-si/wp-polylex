@@ -94,7 +94,7 @@ export const App = () => {
       <div className="App container">
         { getEnvironment() === "PROD" && <Ribbon /> }
         <Header />
-        { isAdmin || isEditor && (
+        { ( isAdmin || isEditor ) && (
           <Routes>
             <Route path="/*" element={<List />} />
             <Route path="/add/*" element={<Add />} />
