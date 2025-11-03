@@ -29,10 +29,11 @@ peppelg:bootstrap-3-modal@1.0.4   # bootstrap 3 modal but works with bootstrap 4
 check@1.4.1                       # Check schema mongoDB
 rocketchat:restivus               # Rest APi
 alanning:roles@3.6.3              # roles
-epfl:accounts-tequila@0.6.3       # Tequila
 ostrio:logger@2.1.1               # logger
 ostrio:loggermongo@2.1.0          # logger stores in MongoDB
 mdg:validated-method@1.2.0        # Improve meteor methods
 xolvio:cleaner@0.4.0              # Clean tests DB 
 typescript                        # Cleaner than JS
 zodern:types                      # Meteor types
+service-configuration
+epfl:accounts-entra

@@ -13,21 +13,6 @@ import Subcategory from "./admin/Subcategory";
 import Log from "./admin/Log";
 
 
-class App extends Component {
-  getEnvironment() {
-    const absoluteUrl = Meteor.absoluteUrl();
-    let environment;
-    if (absoluteUrl.startsWith("http://localhost:3000/")) {
-      environment = "LOCALHOST";
-    } else if (
-      absoluteUrl.startsWith("https://polylex-admin-test.epfl.ch/")
-    ) {
-      environment = "TEST";
-    } else {
-      environment = "PROD";
-    }
-    return environment;
-  }
 const getEnvironment = () => {
   const absoluteUrl = Meteor.absoluteUrl();
 
@@ -48,34 +33,30 @@ const Ribbon = () => <>
   </div>
 </>;
 
+/**
+ * This component obliges the user to be connected
+ */
+const AutoLoginComponent = () => {
+  useEffect(() => {
+    Meteor.entraSignIn(
+      {
+        // This set the scope parameter when doing Entra calls.
+        // Using something else will remove you the login capacity
+        // or, worse, disallows you to get the idToken with id data in it
+        requestPermissions: ['openid'],
+      },
+    );
+  });
+  return <></>
+}
 
-  render() {
-    let isAdmin;
-    let isEditor;
-    // @ts-ignore
-    let isLoading = this.props.currentUser === undefined;
-    if (isLoading) {
-      return <Loading />;
-    } else {
-      isAdmin = Meteor.userId() &&
-        Roles.userIsInRole(
-          Meteor.userId()!,
-          "admin",
-          Roles.GLOBAL_GROUP
-      );
-      isEditor = Meteor.userId() &&
-        Roles.userIsInRole(
-          Meteor.userId()!,
-          "editor",
-          Roles.GLOBAL_GROUP
-        );
-    }
 export const App = () => {
+  const loginServiceConfigured = useTracker(() => Accounts.loginServicesConfigured(), []);
   const user = useTracker(() => Accounts.user(), []);
 
+  if (!loginServiceConfigured) return <>Loading auth info...</>
 
-  if (!user) return <h1>Loading...</h1>
-
+  if (!user) return <div>Signing in...<AutoLoginComponent/></div>
 
   const isAdmin = Roles.userIsInRole(
     user._id,
