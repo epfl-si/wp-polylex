@@ -10,4 +10,4 @@ all:
     route:
       host: polylex-admin-test.epfl.ch
       availability: private
-    tag: 1.15.0
+    tag: test
