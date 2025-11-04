@@ -2,11 +2,11 @@ import assert from "assert";
 import { Subcategories } from "../../collections";
 import { insertLex, updateLex, removeLex } from "../lexes";
 import { resetDatabase } from "meteor/xolvio:cleaner";
-import { createUser } from "../../../../tests/helpers";
+import { createUser } from '/tests/helpers';
 import { insertCategory } from "../categories";
 import { insertSubcategory } from "../subcategories";
 import { insertResponsible } from "../responsibles";
-import { loadFixtures } from "../../../../server/fixtures";
+import { setRolesFixtures } from '/server/fixtures';
 import { Lexes } from '/imports/api/collections/lexes'
 
 function createCategory(userId) {
@@ -39,13 +39,13 @@ function createResponsible(userId) {
 
 if (Meteor.isServer) {
   describe("meteor methods lex", function () {
-    before(function () {
+    before(async function () {
       resetDatabase();
-      loadFixtures();
+      await setRolesFixtures();
     });
 
-    it("insert lex", () => {
-      let userId = createUser();
+    it("insert lex", async () => {
+      let userId = await createUser();
 
       let categoryId = createCategory(userId);
       let subcategoryId1 = createSubcategory(userId, {
@@ -102,8 +102,8 @@ if (Meteor.isServer) {
       assert.strictEqual(lex.titleEn, enTitle);
     });
 
-    it("update lex", () => {
-      let userId = createUser();
+    it("update lex", async () => {
+      let userId = await createUser();
 
       let lex = Lexes.findOne({
         lex: "1.1.1",
@@ -138,8 +138,8 @@ if (Meteor.isServer) {
       assert.strictEqual(lexeAfterUpdate.lex, "1.1.2");
     });
 
-    it("remove lex", () => {
-      let userId = createUser();
+    it("remove lex", async () => {
+      let userId = await createUser();
       let lex = Lexes.findOne({
         lex: "1.1.2",
       });

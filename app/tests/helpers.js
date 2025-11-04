@@ -1,7 +1,7 @@
-import { loadFixtures } from "../server/fixtures";
+import { setRolesFixtures } from '/server/fixtures'
 
-function createUser() {
-  Meteor.users.upsert(
+async function createUser() {
+  await Meteor.users.upsertAsync(
     { username: "toto" },
     {
       // Modifier
@@ -12,14 +12,12 @@ function createUser() {
     }
   );
 
-  let user = Meteor.users.findOne({ username: "toto" });
+  let user = await Meteor.users.findOneAsync({ username: "toto" });
   let userId = user._id;
 
-  if (Meteor.roles.find({}).count() === 0) {
-    loadFixtures();
-  }
+  await setRolesFixtures();
 
-  Roles.setUserRoles(userId, ["admin"], Roles.GLOBAL_GROUP);
+  await Roles.setUserRolesAsync(userId, ["admin"], Roles.GLOBAL_GROUP);
 
   return userId;
 }

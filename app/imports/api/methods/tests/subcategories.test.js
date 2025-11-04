@@ -2,18 +2,18 @@ import assert from "assert";
 import { Subcategories } from "../../collections";
 import { insertSubcategory, updateSubcategory, removeSubcategory } from "../subcategories";
 import { resetDatabase } from "meteor/xolvio:cleaner";
-import { createUser } from "../../../../tests/helpers";
-import { loadFixtures } from "../../../../server/fixtures";
+import { createUser } from '/tests/helpers';
+import { setRolesFixtures } from '/server/fixtures'
 
 if (Meteor.isServer) {
   describe("meteor methods subcategory", function () {
-    before(function () {
+    before(async function () {
       resetDatabase();
-      loadFixtures();
+      await setRolesFixtures();
     });
 
-    it("insert subcategory", () => {
-      let userId = createUser();
+    it("insert subcategory", async () => {
+      let userId = await createUser();
 
       // Set up method arguments and context
       const context = { userId };
@@ -31,8 +31,8 @@ if (Meteor.isServer) {
       assert.strictEqual(subcategory.nameFr, "Super nouvelle sous-catégorie");
     });
 
-    it("update subcategory", () => {
-      let userId = createUser();
+    it("update subcategory", async () => {
+      let userId = await createUser();
 
       let subcategory = Subcategories.findOne({ nameFr: "Super nouvelle sous-catégorie" });
 
@@ -53,8 +53,8 @@ if (Meteor.isServer) {
       assert.strictEqual(subcategoryAfterUpdate.nameFr, "Mega nouvelle sous-catégorie");
     });
 
-    it("remove subcategory", () => {
-      let userId = createUser();
+    it("remove subcategory", async () => {
+      let userId = await createUser();
       let subcategory = Subcategories.findOne({ nameFr: "Mega nouvelle sous-catégorie" });
 
       const context = { userId };
