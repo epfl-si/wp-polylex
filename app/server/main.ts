@@ -2,9 +2,6 @@ import { Meteor } from "meteor/meteor";
 import { WebApp } from "meteor/webapp";
 import helmet from "helmet";
 
-// @ts-ignore
-import Tequila from "meteor/epfl:accounts-tequila";
-
 import { AppLogger } from "/imports/api/logger";
 import { loadFixtures } from "./fixtures";
 import { setEntraAuthConfig } from "/server/entraAuth";
