@@ -10,4 +10,4 @@ all:
     route:
       host: polylex-admin.epfl.ch
       availability: public
-    tag: 1.14.1
+    tag: 1.15.0
