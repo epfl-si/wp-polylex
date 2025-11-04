@@ -67,7 +67,7 @@ export const Header = () => {
         </div>
         : null}
       <div>
-        Utilisateur connecté: <a target="_blank" href={ peopleUrl }> { user.username || user._id } </a>
+        Utilisateur connecté: <a target="_blank" href={ peopleUrl }> { user.services?.entra?.gaspar || user._id } </a>
       </div>
     </header>
   </>
