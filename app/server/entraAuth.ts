@@ -9,9 +9,10 @@ export const setEntraAuthConfig = async () => {
   const clientId = process.env.AUTH_ENTRA_CLIENT_ID
   const secret = process.env.AUTH_ENTRA_SECRET
 
-  if ( !(
-    clientId && secret && tenantId
-  )) {
+  if (
+    !(clientId && secret && tenantId) &&
+    !Meteor.isAppTest
+  ) {
     throw Error(`
       Missing env vars:
         AUTH_ENTRA_TENANT_ID 
