@@ -1,10 +1,15 @@
+import MakaRest from 'meteor/maka:rest';
+
 import {Lexes} from "/imports/api/collections/lexes";
 
 // Global API configuration
 // @ts-ignore
-let LexRedirect = new Restivus({
+let LexRedirect = new MakaRest({
   apiPath: '/lex',
-  useDefaultAuth: false
+  version: "v1",
+  auth: {
+    loginType: null
+  }
 });
 
 // Maps to:
@@ -13,11 +18,11 @@ LexRedirect.addRoute(
   ":id", {
     authRequired: false
   }, {
-    get: function() {
-      let lex = Lexes.findOne({ // Let's assume the lex is not abrogated
+    get: async function() {
+      let lex = await Lexes.findOneAsync({ // Let's assume the lex is not abrogated
         isAbrogated: {$ne: true},
         lex: this.urlParams.id
-      }) ?? Lexes.findOne({ // If no lex found, let's try with an abrogated one
+      }) ?? await Lexes.findOneAsync({ // If no lex found, let's try with an abrogated one
         isAbrogated: true,
         lex: this.urlParams.id
       })

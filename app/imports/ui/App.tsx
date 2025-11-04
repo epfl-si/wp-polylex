@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useTracker } from "meteor/react-meteor-data";
-import { Roles } from "meteor/alanning:roles";
+import { Roles } from "meteor/roles"
 
 import Footer from "./footer/Footer";
 import { Header } from "./header/Header";
