@@ -73,7 +73,7 @@ export const App = () => {
   return <>
     <BrowserRouter>
       <div className="App container">
-        { getEnvironment() === "PROD" && <Ribbon /> }
+        { getEnvironment() !== "PROD" && <Ribbon /> }
         <Header />
         { ( isAdmin || isEditor ) && (
           <Routes>
