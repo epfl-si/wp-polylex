@@ -52,14 +52,10 @@ Accounts.onCreateUser( (_options, user) => {
     ( groupName: string ) => groupName.replace(/_AppGrpU$/, '')
   ) ?? []
 
-  console.log(`onCreateUser called: ${JSON.stringify(user)}`);
-
   return user;
 });
 
 Accounts.onLogin(async (loginDetails: any) => {
-  console.log(`onLogin called: ${JSON.stringify(loginDetails)}`);
-
   const sciper: string | undefined = loginDetails.user?._id
 
   if (!sciper) {
