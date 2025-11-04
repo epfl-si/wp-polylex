@@ -2,18 +2,18 @@ import assert from "assert";
 import { Categories } from "../../collections";
 import { insertCategory, updateCategory, removeCategory } from "../categories";
 import { resetDatabase } from "meteor/xolvio:cleaner";
-import { createUser } from "../../../../tests/helpers";
-import { loadFixtures } from "../../../../server/fixtures";
+import { createUser } from '/tests/helpers';
+import { setRolesFixtures } from '/server/fixtures'
 
 if (Meteor.isServer) {
   describe("meteor methods category", function () {
-    before(function () {
+    before(async function () {
       resetDatabase();
-      loadFixtures();
+      await setRolesFixtures();
     });
 
-    it("insert category", () => {
-      let userId = createUser();
+    it("insert category", async () => {
+      let userId = await createUser();
 
       // Set up method arguments and context
       const context = { userId };
@@ -31,8 +31,8 @@ if (Meteor.isServer) {
       assert.strictEqual(category.nameFr, "Super nouvelle catégorie");
     });
 
-    it("update category", () => {
-      let userId = createUser();
+    it("update category", async () => {
+      let userId = await createUser();
 
       let category = Categories.findOne({ nameFr: "Super nouvelle catégorie" });
 
@@ -53,8 +53,8 @@ if (Meteor.isServer) {
       assert.strictEqual(categoryAfterUpdate.nameFr, "Mega nouvelle catégorie");
     });
 
-    it("remove category", () => {
-      let userId = createUser();
+    it("remove category", async () => {
+      let userId = await createUser();
       let category = Categories.findOne({ nameFr: "Mega nouvelle catégorie" });
 
       const context = { userId };

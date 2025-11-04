@@ -6,18 +6,18 @@ import {
   removeResponsible,
 } from "../responsibles";
 import { resetDatabase } from "meteor/xolvio:cleaner";
-import { createUser } from "../../../../tests/helpers";
-import { loadFixtures } from "../../../../server/fixtures";
+import { createUser } from '/tests/helpers';
+import { setRolesFixtures } from '/server/fixtures';
 
 if (Meteor.isServer) {
   describe("meteor methods responsible", function () {
-    before(function () {
+    before(async function () {
       resetDatabase();
-      loadFixtures();
+      await setRolesFixtures();
     });
 
-    it("insert responsible", () => {
-      let userId = createUser();
+    it("insert responsible", async () => {
+      let userId = await createUser();
 
       // Set up method arguments and context
       const context = { userId };
@@ -41,8 +41,8 @@ if (Meteor.isServer) {
       assert.strictEqual(responsible.lastName, "Sadeghi");
     });
 
-    it("update responsible", () => {
-      let userId = createUser();
+    it("update responsible", async () => {
+      let userId = await createUser();
 
       let responsible = Responsibles.findOne({
         firstName: "Hassan",
@@ -71,8 +71,8 @@ if (Meteor.isServer) {
       assert.strictEqual(responsibleAfterUpdate.lastName, "Sadeghi");
     });
 
-    it("remove responsible", () => {
-      let userId = createUser();
+    it("remove responsible", async () => {
+      let userId = await createUser();
       let responsible = Responsibles.findOne({
         firstName: "Roger",
         lastName: "Sadeghi",

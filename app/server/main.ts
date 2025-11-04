@@ -3,7 +3,7 @@ import { WebApp } from "meteor/webapp";
 import helmet from "helmet";
 
 import { AppLogger } from "/imports/api/logger";
-import { loadFixtures } from "./fixtures";
+import { setRolesFixtures } from "./fixtures";
 import { setEntraAuthConfig } from "/server/entraAuth";
 
 import "../imports/api/publications";
@@ -41,7 +41,7 @@ Meteor.startup(async () => {
   // Setting up logs
   new AppLogger();
 
-  loadFixtures();
+  await setRolesFixtures();
 
   await setEntraAuthConfig();
 });
