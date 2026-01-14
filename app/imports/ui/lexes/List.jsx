@@ -24,13 +24,14 @@ const Cells = (props) => {
       <tbody>
       {props.lexes.map( (lex) => (
           <tr key={lex._id}>
+            <td>{lex.type}</td>
             <td>
               <a
                 href={lex.urlFr}
                 target="_blank"
                 style={ {color: lex.isAbrogated ? 'darkred':''} }
               >
-                {lex.lex}
+                {lex.number}
               </a>
             </td>
             <td>{lex.titleFr}</td>
@@ -48,7 +49,7 @@ const Cells = (props) => {
               <button
                   type="button"
                   className="btn btn-outline-primary"
-                  onClick={ () => { if (window.confirm('Êtes vous sûr de vouloir supprimer cette lex ?')) props.deleteLex(lex._id) }}
+                  onClick={ () => { if (window.confirm('Êtes-vous sûr de vouloir supprimer cette lex / doc ?')) props.deleteLex(lex._id) }}
               >Supprimer</button>
             </td>
           </tr>
@@ -83,7 +84,8 @@ export const List = ({isLoading, lexes, categories, subcategories}) => {
         <table className="table table-striped">
           <thead>
           <tr>
-            <th scope="col">Lex</th>
+            <th scope="col">Type</th>
+            <th scope="col">Numéro</th>
             <th scope="col">Titre</th>
             <th scope="col" className="w-25">Entrée en vigueur</th>
             <th scope="col" className="w-25">Révision</th>
@@ -107,6 +109,7 @@ export const List = ({isLoading, lexes, categories, subcategories}) => {
 export default withTracker(() => {
   const handles = [
     Meteor.subscribe('lexes'),
+    Meteor.subscribe('types'),
     Meteor.subscribe('categories'),
     Meteor.subscribe('subcategories'),
     Meteor.subscribe('responsibles'),

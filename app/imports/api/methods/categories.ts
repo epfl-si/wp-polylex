@@ -113,7 +113,7 @@ const removeCategory = new PolylexValidatedMethod({
     if (lexesByCategory > 0) {
       throw new Meteor.Error(
         "Remove category",
-        "Cette catégorie ne peut pas être supprimée car elle est encore liée à, au moins, une lex."
+        "Cette catégorie ne peut pas être supprimée car elle est encore liée à, au moins, une lex / doc."
       );
     }
 

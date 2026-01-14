@@ -6,21 +6,14 @@
 Cette application a pour but de stocker les textes légaux abrogés.
 
 ## Lancer l'application en local 
-Se placer dans l'app :
 
-`cd app/`
+1) Se placer dans l'app : `cd app/`.
 
-La première fois, installer les paquets :
+2) La première fois, installer les paquets : `meteor npm i` et copier le fichier *meteor-settings.example.json* puis le renommer en *meteor-settings.json*.
 
-`meteor npm i`
+3) Exporter les variables utiles pour EntraID depuis */keybase/team/epfl_wppolylex/ansible_polylex_secrets.yml* : `export AUTH_ENTRA_<...>="..."`.
 
-Puis lancer la commande :
-
-`meteor --settings settings.json`
-
-Ensuite aller à l'adresse http://localhost:3000
-
-Vous êtes alors redirigé sur une URL du type https://localhost:3000/?key=aop0wd1yo3abmhr0z5w1wbcz9sj6z9cc il suffit alors de supprimer le s de https://
+4) Lancer l'application : `meteor --settings meteor-settings.json` puis se rendre à l'adresse http://localhost:3000.
 
 ## Utilisation du CLI
 
@@ -53,19 +46,21 @@ Commands:
 ## Déployer une nouvelle version sur Openshift
 Pour commencer, si ce n'est déjà fait, on doit changer le numéro de version :
 - Dans le fichier app/package.json
-- Dans le composant Header app/imports/ui/header/Header.jsx pour correspondre à la version du fichier app/package.json
 - Dans les fichiers d'inventaire Ansible ansible/inventory/*.yml
 - On commit/push
-- On crée le tag : `git tag -a 1.0 -m "polylex version 1.0"`
+- On crée le tag : `git tag -a <version> -m "polylex version <version>"`
 - On push le tag : `git push --follow-tags`
 Puis,
 - `./ansible/polysible [--prod]`
 
 ## Autentification Tequila et rôle
 
+**Note: l'authentification Tequila n'est plus d'actualité.**
+
 - Pour se connecter à l'application, il se faut s'authentifier Tequila.
 - Pour obtenir le rôle 'admin' il faut appartenir au groupe 'wp-polylex-admins' de l'application groups.epfl.ch
 - Pour obtenir le rôle 'editor' il faut appartenir au groupe 'wp-polylex-editors' de l'application groups.epfl.ch
+
 
 ## Exécuter les tests en local
 

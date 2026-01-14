@@ -71,7 +71,8 @@ if (Meteor.isServer) {
       // Set up method arguments and context
       const context = { userId };
       const args = {
-        lex: "1.1.1",
+        type: "DOC",
+        number: "1.1.1",
         titleFr: frTitle,
         titleEn: enTitle,
         urlFr:
@@ -93,11 +94,13 @@ if (Meteor.isServer) {
 
       let nb = Lexes.find({}).count();
       let lex = Lexes.findOne({
-        lex: "1.1.1",
+        type: "DOC",
+        number: "1.1.1",
       });
 
       assert.strictEqual(nb, 1);
-      assert.strictEqual(lex.lex, "1.1.1");
+      assert.strictEqual(lex.type, "DOC");
+      assert.strictEqual(lex.number, "1.1.1");
       assert.strictEqual(lex.titleFr, frTitle);
       assert.strictEqual(lex.titleEn, enTitle);
     });
@@ -106,14 +109,15 @@ if (Meteor.isServer) {
       let userId = await createUser();
 
       let lex = Lexes.findOne({
-        lex: "1.1.1",
+        number: "1.1.1",
       });
 
       // Set up method arguments and context
       const context = { userId };
       const args = {
         _id: lex._id,
-        lex: "1.1.2",
+        type: "LEX",
+        number: "1.1.2",
         titleFr: lex.titleFr,
         titleEn: lex.titleEn,
         urlFr: lex.urlFr,
@@ -135,13 +139,13 @@ if (Meteor.isServer) {
       });
 
       assert.strictEqual(nb, 1);
-      assert.strictEqual(lexeAfterUpdate.lex, "1.1.2");
+      assert.strictEqual(lexeAfterUpdate.number, "1.1.2");
     });
 
     it("remove lex", async () => {
       let userId = await createUser();
       let lex = Lexes.findOne({
-        lex: "1.1.2",
+        number: "1.1.2",
       });
 
       const context = { userId };

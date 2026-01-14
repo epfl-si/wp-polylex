@@ -37,8 +37,8 @@ export const Header = () => {
                 Polylex
               </a>
               <div className="dropdown-menu" >
-                <NavLink className="{({isActive}) => (isActive ? 'active-style' : '')} dropdown-item" end to="/">Voir les lexes</NavLink>
-                <NavLink className="{({isActive}) => (isActive ? 'active-style' : '')} dropdown-item" to="/add">Ajouter une nouvelle lex</NavLink>
+                <NavLink className="{({isActive}) => (isActive ? 'active-style' : '')} dropdown-item" end to="/">Voir les lexes / docs</NavLink>
+                <NavLink className="{({isActive}) => (isActive ? 'active-style' : '')} dropdown-item" to="/add">Ajouter une nouvelle lex / doc</NavLink>
               </div>
             </li>
 

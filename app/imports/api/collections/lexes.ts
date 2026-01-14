@@ -12,7 +12,8 @@ type Subcategory = {
 
 export type Lex = {
   _id?: string;
-  lex: string;
+  type: string
+  number: string;
   titleFr: string;
   titleEn: string;
   urlFr: string;
@@ -37,9 +38,15 @@ export const lexesSchema = new SimpleSchema({
     type: String,
     optional: true,
   },
-  lex: {
+  type: {
     type: String,
-    label: "Lex",
+    label: "Type",
+    optional: false,
+    custom: isRequired
+  },
+  number: {
+    type: String,
+    label: "Numéro",
     optional: false,
     custom: isRequired
   },
