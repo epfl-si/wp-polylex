@@ -1,7 +1,7 @@
 import SimpleSchema from "simpl-schema";
 
 import { AppLogger } from "../logger";
-import { throwMeteorError } from "../error";
+import { throwMeteorError, throwMeteorErrors } from "../error";
 import { trimObjValues } from "./utils";
 import { rateLimiter } from "./rate-limiting";
 import { Editor, PolylexValidatedMethod } from "./roles";
@@ -23,20 +23,20 @@ function prepareUpdateInsertLex(lex, action) {
     lex.urlEn = urlEn.slice(0, -1);
   }
 
-  // Check if LEX is unique in the active ones
-  let lexes = Lexes.find({ lex: lex.lex, isAbrogated: {$ne: true} });
-
+  // Check if LEX / DOC is unique in the active ones
+  let lexes = Lexes.find({ type: lex.type, number: lex.number, isAbrogated: {$ne: true} });
+  let duplicationErrorMessage = `La ${lex.type}/${lex.number} existe déjà !`;
   if (!lex.isAbrogated) {  // abrogated ones don't need such validations
     if (action === "update") {
       if (lexes.count() > 1) {
-        throwMeteorError("lex", "Ce LEX existe déjà !");
+        throwMeteorErrors(["type", "number"], duplicationErrorMessage);
       } else if (lexes.count() === 1) {
         if (lexes.fetch()[0]._id !== lex._id) {
-          throwMeteorError("lex", "Ce LEX existe déjà !");
+          throwMeteorErrors(["type", "number"], duplicationErrorMessage);
         }
       }
     } else if (action === "insert" && lexes.count() > 0) {
-      throwMeteorError("lex", "Ce LEX existe déjà");
+      throwMeteorErrors(["type", "number"], duplicationErrorMessage);
     }
 
     // Check if responsible is empty
@@ -48,10 +48,10 @@ function prepareUpdateInsertLex(lex, action) {
     }
   }
 
-  // Check if LEX is format x.x.x or x.x.x.x
+  // Check if number is format x.x.x or x.x.x.x
   var lexRE = /^(?:\d+\.\d+\.\d+|\d+\.\d+\.\d+\.\d+)$/;
-  if (!lex.lex.match(lexRE)) {
-    throwMeteorError("lex", "Le format d'une lex doit être x.x.x ou x.x.x.x");
+  if (!lex.number.match(lexRE)) {
+    throwMeteorError("number", "Le format d'une lex / doc doit être x.x.x ou x.x.x.x");
   }
 
   return lex;
@@ -62,7 +62,8 @@ const insertLex = new PolylexValidatedMethod({
   role: Editor,
   validate(newLex) {
     let newLexDocument = {
-      lex: newLex.lex,
+      type: newLex.type,
+      number: newLex.number,
       titleFr: newLex.titleFr,
       titleEn: newLex.titleEn,
       urlFr: newLex.urlFr,
@@ -84,7 +85,8 @@ const insertLex = new PolylexValidatedMethod({
   run(newLex) {
     newLex = prepareUpdateInsertLex(newLex, "insert");
     let newLexDocument = {
-      lex: newLex.lex,
+      type: newLex.type,
+      number: newLex.number,
       titleFr: newLex.titleFr,
       titleEn: newLex.titleEn,
       urlFr: newLex.urlFr,
@@ -106,7 +108,7 @@ const insertLex = new PolylexValidatedMethod({
     let newLexAfterInsert = Lexes.findOne({ _id: newLexId });
 
     AppLogger.getLog().info(
-      `Insert lex ID ${newLexId}`,
+      `Insert lex / doc ID ${newLexId}`,
       { before: "", after: newLexAfterInsert },
       this.userId
     );
@@ -121,7 +123,8 @@ const updateLex = new PolylexValidatedMethod({
   validate(newLex) {
     let newLexDocument = {
       _id: newLex._id,
-      lex: newLex.lex,
+      type: newLex.type,
+      number: newLex.number,
       titleFr: newLex.titleFr,
       titleEn: newLex.titleEn,
       urlFr: newLex.urlFr,
@@ -144,7 +147,8 @@ const updateLex = new PolylexValidatedMethod({
     newLex = prepareUpdateInsertLex(newLex, "update");
     let newLexDocument = {
       _id: newLex._id,
-      lex: newLex.lex,
+      type: newLex.type,
+      number: newLex.number,
       titleFr: newLex.titleFr,
       titleEn: newLex.titleEn,
       urlFr: newLex.urlFr,
@@ -169,7 +173,7 @@ const updateLex = new PolylexValidatedMethod({
     let updatedLex = Lexes.findOne({ _id: newLex._id });
 
     AppLogger.getLog().info(
-      `Update lex ID ${newLex._id}`,
+      `Update lex / doc ID ${newLex._id}`,
       { before: lexBeforeUpdate, after: updatedLex },
       this.userId
     );
@@ -189,7 +193,7 @@ const removeLex = new PolylexValidatedMethod({
     Lexes.remove({ _id: lexId });
 
     AppLogger.getLog().info(
-      `Delete lex ID ${lexId}`,
+      `Delete lex / doc ID ${lexId}`,
       { before: lex, after: "" },
       this.userId
     );

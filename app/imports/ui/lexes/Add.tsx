@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom'
 import { EditorState, convertToRaw, convertFromRaw } from "draft-js";
 import { Formik, Field, ErrorMessage, useFormikContext } from 'formik';
 import {
+  Types,
   Categories,
   Subcategories,
   Responsibles,
@@ -104,17 +105,17 @@ const Add = ({ isLoading }) => {
       <div className="card my-2">
         <h5 className="card-header">
           { _id ?
-              "Modifier la lex ci-dessous" :
-              "Ajouter une nouvelle lex"
+              "Modifier la lex / doc ci-dessous" :
+              "Compléter la nouvelle lex / doc"
           }
         </h5>
         { addSuccess &&
           <AlertSuccess
-              message={"La nouvelle lex a été ajoutée avec succès !"}
+              message={"La nouvelle lex / doc a été ajoutée avec succès !"}
           />
         }
         { editSuccess &&
-          <AlertSuccess message={"La lex a été modifiée avec succès !"} />
+          <AlertSuccess message={"La lex / doc a été modifiée avec succès !"} />
         }
         { <LexForm
             lexId={ _id }
@@ -126,11 +127,11 @@ const Add = ({ isLoading }) => {
       </div>
       { addSuccess &&
       <AlertSuccess
-          message={"La nouvelle lex a été ajoutée avec succès !"}
+          message={"La nouvelle lex / doc a été ajoutée avec succès !"}
       />
       }
       { editSuccess &&
-      <AlertSuccess message={"La lex a été modifiée avec succès !"} />
+      <AlertSuccess message={"La lex / doc a été modifiée avec succès !"} />
       }
     </>);
   }
@@ -187,7 +188,9 @@ const AbrogeSwitch = (props) => {
 const LexForm = ({
   lexId, onSubmit, clearUserMsg,
 }) => {
-
+  const types = useTracker(
+      () => Types.find({}, { sort: { value: 1 } }).fetch(), []
+  );
   const categories = useTracker(
       () => Categories.find({}, { sort: { nameFr: 1 } }).fetch(), []
   );
@@ -216,7 +219,8 @@ const LexForm = ({
 
   const getInitialValues = (_id) => {
     let defaultLex: Lex = {
-      lex: "",
+      type: "",
+      number: "",
       titleFr: "",
       titleEn: "",
       urlFr: "",
@@ -282,22 +286,6 @@ const LexForm = ({
                   setFieldValue={ setFieldValue }
                   className={'mb-2'}
               />
-              <Field
-                  onChange={ (e) => {
-                    handleChange(e);
-                    clearUserMsg();
-                  } }
-                  onBlur={ (e) => {
-                    handleBlur(e);
-                    clearUserMsg();
-                  } }
-                  placeholder="LEX à ajouter"
-                  label="Lex"
-                  name="lex"
-                  type="text"
-                  component={ CustomInput }
-              />
-              <ErrorMessage name="lex" component={ CustomError }/>
 
               <Field
                   onChange={ (e) => {
@@ -308,7 +296,46 @@ const LexForm = ({
                     handleBlur(e);
                     clearUserMsg();
                   } }
-                  placeholder="Titre en français de la lex à ajouter"
+                  label="Type"
+                  name="type"
+                  component={ CustomSelect }
+              >
+                <option value={''}></option>
+                { types.map((type) => (
+                    <option key={ type._id } value={ type.value }>
+                      { type.value }
+                    </option>
+                )) }
+              </Field>
+              <ErrorMessage name="type" component={ CustomError }/>
+
+              <Field
+                  onChange={ (e) => {
+                    handleChange(e);
+                    clearUserMsg();
+                  } }
+                  onBlur={ (e) => {
+                    handleBlur(e);
+                    clearUserMsg();
+                  } }
+                  placeholder="Numéro de la lex / doc à ajouter"
+                  label="Numéro"
+                  name="number"
+                  type="text"
+                  component={ CustomInput }
+              />
+              <ErrorMessage name="number" component={ CustomError }/>
+
+              <Field
+                  onChange={ (e) => {
+                    handleChange(e);
+                    clearUserMsg();
+                  } }
+                  onBlur={ (e) => {
+                    handleBlur(e);
+                    clearUserMsg();
+                  } }
+                  placeholder="Titre en français de la lex / doc à ajouter"
                   label="Titre en français"
                   name="titleFr"
                   type="text"
@@ -325,7 +352,7 @@ const LexForm = ({
                     handleBlur(e);
                     clearUserMsg();
                   } }
-                  placeholder="Titre en anglais de la lex à ajouter"
+                  placeholder="Titre en anglais de la lex / doc à ajouter"
                   label="Titre en anglais"
                   name="titleEn"
                   type="text"
@@ -342,7 +369,7 @@ const LexForm = ({
                     handleBlur(e);
                     clearUserMsg();
                   } }
-                  placeholder="URL en français de la lex à ajouter"
+                  placeholder="URL en français de la lex / doc à ajouter"
                   label="URL en français"
                   name="urlFr"
                   type="text"
@@ -359,7 +386,7 @@ const LexForm = ({
                     handleBlur(e);
                     clearUserMsg();
                   } }
-                  placeholder="URL en anglais de la lex à ajouter"
+                  placeholder="URL en anglais de la lex / doc à ajouter"
                   label="URL en anglais"
                   name="urlEn"
                   type="text"
@@ -488,7 +515,7 @@ const LexForm = ({
                     </option>
                 )) }
               </Field>
-              <ErrorMessage name="category" component={ CustomError }/>
+              <ErrorMessage name="categoryId" component={ CustomError }/>
 
               <Field
                   onChange={ (e) => {
@@ -510,7 +537,7 @@ const LexForm = ({
                     </option>
                 )) }
               </Field>
-              <ErrorMessage name="responsible" component={ CustomError }/>
+              <ErrorMessage name="responsibleId" component={ CustomError }/>
 
               <label>Sélectionner une sous-rubrique</label>
               <div className="form-group clearfix">
@@ -544,6 +571,7 @@ const LexForm = ({
 export default withTracker(() => {
   const handles = [
     Meteor.subscribe("lexes"),
+    Meteor.subscribe("types"),
     Meteor.subscribe("categories"),
     Meteor.subscribe("subcategories"),
     Meteor.subscribe("responsibles"),

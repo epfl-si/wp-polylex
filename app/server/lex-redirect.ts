@@ -8,18 +8,24 @@ let LexRedirect = new Restivus({
 });
 
 // Maps to:
-// - /lex/:id, e.g. https://polylex-admin.epfl.ch/lex/1.0.1
+// - /lex/:number, e.g. https://polylex-admin.epfl.ch/lex/1.0.1
+// - /lex/:number?type=DOC, e.g. https://polylex-admin.epfl.ch/lex/1.0.1?type=DOC
 LexRedirect.addRoute(
-  ":id", {
+  ":number", {
     authRequired: false
   }, {
     get: function() {
+      let number = this.urlParams.number
+      let type = this.queryParams?.type?.toString().toUpperCase() === "DOC" ? "DOC" : "LEX"
+
       let lex = Lexes.findOne({ // Let's assume the lex is not abrogated
         isAbrogated: {$ne: true},
-        lex: this.urlParams.id
+        type: type,
+        number: number
       }) ?? Lexes.findOne({ // If no lex found, let's try with an abrogated one
         isAbrogated: true,
-        lex: this.urlParams.id
+        type: type,
+        number: number
       })
 
       if (lex && lex.urlFr) {
@@ -38,7 +44,7 @@ LexRedirect.addRoute(
         headers: {
           'Content-Type': 'text/plain',
         },
-        body: 'Lex not found!'
+        body: `${type} not found!`
       }
     }
   }

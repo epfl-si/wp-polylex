@@ -111,7 +111,7 @@ const removeResponsible = new PolylexValidatedMethod({
     if (lexesByResponsible > 0) {
       throw new Meteor.Error(
         "Remove responsible",
-        "Ce responsable ne peut pas être supprimé car il est encore responsable d'au moins une lex."
+        "Ce responsable ne peut pas être supprimé car il est encore responsable d'au moins une lex / doc."
       );
     }
 

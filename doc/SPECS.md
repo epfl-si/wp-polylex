@@ -2,10 +2,10 @@
 
 ## Validation du formulaire du LEX
 
-### Validation du champ LEX
+### Validation des champs Type et Numéro
 
-* Un lex doit être au format x.x.x ou x.x.x.x avec x un nombre entier.
-* Un lex doit être unique.
+* Un numéro doit être au format x.x.x ou x.x.x.x avec x un nombre entier.
+* Un numéro au sein d'un même type doit être unique.
 
 ### Validation des URLs
 
@@ -15,7 +15,8 @@
 ### Validation des champs obligatoires
 
 Les champs obligatoires sont :
-* Lex
+* Type
+* Numéro
 * Titre en FR et EN
 * URL en FR et EN
 * Description en FR et EN

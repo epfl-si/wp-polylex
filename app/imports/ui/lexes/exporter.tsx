@@ -36,7 +36,8 @@ export const exporter = (lexes: Lex[]) => {
         // Define fields to export
         fields: [
             "_id",
-            "lex",
+            "type",
+            "number",
             "titleFr",
             "titleEn",
             "urlFr",

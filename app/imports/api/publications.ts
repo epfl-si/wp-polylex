@@ -1,4 +1,5 @@
 import {
+  Types,
   Categories,
   Subcategories,
   Responsibles,
@@ -8,7 +9,11 @@ import {Lexes} from "/imports/api/collections/lexes";
 
 if (Meteor.isServer) {
   Meteor.publish("lexes", function () {
-    return Lexes.find({}, { sort: { lex: 1, abrogationDate: 1 } });
+    return Lexes.find({}, { sort: { number: 1, type: 1, abrogationDate: 1 } });
+  });
+
+  Meteor.publish("types", function () {
+    return Types.find();
   });
 
   Meteor.publish("categories", function () {

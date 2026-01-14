@@ -126,7 +126,7 @@ const removeSubcategory = new PolylexValidatedMethod({
     if (lexesBySubcategory > 0) {
       throw new Meteor.Error(
         "Remove subcategory",
-        "Cette sous-catégorie ne peut pas être supprimée car elle est encore liée à, au moins, une lex."
+        "Cette sous-catégorie ne peut pas être supprimée car elle est encore liée à, au moins, une lex / doc."
       );
     }
 
