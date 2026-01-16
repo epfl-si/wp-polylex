@@ -307,6 +307,7 @@ const LexForm = ({
                     </option>
                 )) }
               </Field>
+              <ErrorMessage name="type" component={ CustomError }/>
 
               <Field
                   onChange={ (e) => {
