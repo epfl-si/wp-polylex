@@ -53,14 +53,11 @@ Pour commencer, si ce n'est déjà fait, on doit changer le numéro de version :
 Puis,
 - `./ansible/polysible [--prod]`
 
-## Autentification Tequila et rôle
+## Autentification Entra ID et rôle
 
-**Note: l'authentification Tequila n'est plus d'actualité.**
-
-- Pour se connecter à l'application, il se faut s'authentifier Tequila.
+- Pour se connecter à l'application, il se faut s'authentifier avec Entra ID.
 - Pour obtenir le rôle 'admin' il faut appartenir au groupe 'wp-polylex-admins' de l'application groups.epfl.ch
 - Pour obtenir le rôle 'editor' il faut appartenir au groupe 'wp-polylex-editors' de l'application groups.epfl.ch
-
 
 ## Exécuter les tests en local
 
