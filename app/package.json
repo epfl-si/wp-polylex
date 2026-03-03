@@ -24,7 +24,7 @@
     "papaparse": "^5.5.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.21.0",
+    "react-router-dom": "^6.30.3",
     "react-select": "^5.8.0",
     "react-switch": "^7.0.0",
     "simpl-schema": "^1.13.1"
