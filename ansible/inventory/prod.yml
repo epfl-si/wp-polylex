@@ -9,5 +9,5 @@ all:
   vars:
     route:
       host: polylex-admin.epfl.ch
-      availability: public
+      availability: private
     tag: 2.0.1
